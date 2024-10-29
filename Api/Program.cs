@@ -12,6 +12,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+
 app.UseHsts();
 app.UseHttpsRedirection();
 
@@ -19,5 +20,8 @@ app.UseStaticFiles();
 
 app.UseRouting();
 app.MapControllers();
+
+app.UseAuthentication();
+app.UseAuthorization();
 
 app.Run();

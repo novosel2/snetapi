@@ -12,3 +12,4 @@ D:\All\Coding\aspnetcore\Social Network\Infrastructure\obj\Debug\net8.0\refint\I
 D:\All\Coding\aspnetcore\Social Network\Infrastructure\obj\Debug\net8.0\Infrastructure.pdb
 D:\All\Coding\aspnetcore\Social Network\Infrastructure\obj\Debug\net8.0\Infrastructure.genruntimeconfig.cache
 D:\All\Coding\aspnetcore\Social Network\Infrastructure\obj\Debug\net8.0\ref\Infrastructure.dll
+D:\All\Coding\aspnetcore\Social Network\Infrastructure\obj\Debug\net8.0\Infrastructure.sourcelink.json

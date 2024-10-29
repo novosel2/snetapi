@@ -5,7 +5,7 @@ using Microsoft.Extensions.Configuration;
 
 namespace Infrastructure.Data
 {
-    public class AuthDbContext : IdentityDbContext<IdentityUser<Guid>, IdentityRole<Guid>, Guid>
+    public class AuthDbContext : IdentityDbContext<IdentityUser>
     {
         private readonly IConfiguration _config;
 
@@ -19,14 +19,18 @@ namespace Infrastructure.Data
             base.OnModelCreating(builder);
 
             List<IdentityRole> roles = new List<IdentityRole>();
+            List<string>? roleNames = _config.GetSection("IdentityRoles").Get<List<string>>();
 
-            foreach (var role in _config.GetSection("IdentityRoles").GetChildren())
+            if (roleNames != null)
             {
-                roles.Add(new IdentityRole
+                foreach (var roleName in roleNames)
                 {
-                    Name = role.ToString(),
-                    NormalizedName = role.ToString()!.ToUpper()
-                });
+                    roles.Add(new IdentityRole
+                    {
+                        Name = roleName,
+                        NormalizedName = roleName.ToUpper()
+                    });
+                }
             }
 
             builder.Entity<IdentityRole>().HasData(roles);

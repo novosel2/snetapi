@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "RA5exATcS8cYvIQ1zX/sTJeFdE0xigmRHea5vP7QoefWUreeBPgsbI/d/nkqIqO0Re6NrUcnHEYcKHav0uez7Q==",
+  "dgSpecHash": "bTeOcDf+Mua6E/5vP4dhUZAyIk6czbAoCOzJ6bFKJWFYyYmKokrWCIf+UG7zFPP61DjU1y1aryN+BlLpLLQL+A==",
   "success": true,
   "projectFilePath": "D:\\All\\Coding\\aspnetcore\\Social Network\\Infrastructure\\Infrastructure.csproj",
   "expectedPackageFiles": [
@@ -29,6 +29,7 @@
     "C:\\Users\\mateo\\.nuget\\packages\\microsoft.extensions.caching.abstractions\\8.0.0\\microsoft.extensions.caching.abstractions.8.0.0.nupkg.sha512",
     "C:\\Users\\mateo\\.nuget\\packages\\microsoft.extensions.caching.memory\\8.0.1\\microsoft.extensions.caching.memory.8.0.1.nupkg.sha512",
     "C:\\Users\\mateo\\.nuget\\packages\\microsoft.extensions.configuration.abstractions\\8.0.0\\microsoft.extensions.configuration.abstractions.8.0.0.nupkg.sha512",
+    "C:\\Users\\mateo\\.nuget\\packages\\microsoft.extensions.configuration.binder\\8.0.2\\microsoft.extensions.configuration.binder.8.0.2.nupkg.sha512",
     "C:\\Users\\mateo\\.nuget\\packages\\microsoft.extensions.dependencyinjection\\8.0.1\\microsoft.extensions.dependencyinjection.8.0.1.nupkg.sha512",
     "C:\\Users\\mateo\\.nuget\\packages\\microsoft.extensions.dependencyinjection.abstractions\\8.0.2\\microsoft.extensions.dependencyinjection.abstractions.8.0.2.nupkg.sha512",
     "C:\\Users\\mateo\\.nuget\\packages\\microsoft.extensions.dependencymodel\\8.0.2\\microsoft.extensions.dependencymodel.8.0.2.nupkg.sha512",
