@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
+using Microsoft.Extensions.Logging;
 
 namespace Api.Filters.ExceptionFilters
 {
@@ -23,10 +24,15 @@ namespace Api.Filters.ExceptionFilters
             var exception = context.Exception;
             var problemDetails = new ProblemDetails();
 
-            if (context.Exception is RegisterFailedException)
+            if (exception is RegisterFailedException)
             {
-                _logger.LogError(context.Exception.Message);
+                _logger.LogError(exception.Message);
                 problemDetails = CreateProblemDetails(500, "Register Failed", exception.Message);
+            }
+            else if (exception is UnauthorizedException)
+            {
+                _logger.LogError(exception.Message);
+                problemDetails = CreateProblemDetails(401, "Invalid information", exception.Message);
             }
             else
             {

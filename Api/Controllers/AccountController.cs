@@ -23,5 +23,13 @@ namespace Api.Controllers
 
             return Ok(userResponse);
         }
+
+        [HttpPost("login")]
+        public async Task<IActionResult> LoginUser([FromForm]LoginUserDto loginUserDto)
+        {
+            UserResponseDto userResponse = await _accountService.LoginUserAsync(loginUserDto);
+
+            return Ok(userResponse);
+        }
     }
 }
