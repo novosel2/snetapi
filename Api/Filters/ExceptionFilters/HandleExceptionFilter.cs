@@ -30,7 +30,7 @@ namespace Api.Filters.ExceptionFilters
             }
             else
             {
-                throw context.Exception;
+                return;
             }
 
             context.Result = new ObjectResult(problemDetails);
