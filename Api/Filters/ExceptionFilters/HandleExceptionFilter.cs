@@ -27,7 +27,7 @@ namespace Api.Filters.ExceptionFilters
             if (exception is RegisterFailedException)
             {
                 _logger.LogError(exception.Message);
-                problemDetails = CreateProblemDetails(500, "Register Failed", exception.Message);
+                problemDetails = CreateProblemDetails(400, "Register Failed", exception.Message);
             }
             else if (exception is UnauthorizedException)
             {

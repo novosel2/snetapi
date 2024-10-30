@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Core.Data.Entities.Identity;
+using Microsoft.AspNetCore.Identity;
 using System.ComponentModel.DataAnnotations;
 
 namespace Core.Data.Dto.Account
@@ -19,9 +20,9 @@ namespace Core.Data.Dto.Account
         [Required]
         public string ConfirmPassword { get; set; } = string.Empty;
 
-        public IdentityUser ToIdentityUser()
+        public AppUser ToAppUser()
         {
-            return new IdentityUser()
+            return new AppUser()
             {
                 UserName = Username,
                 Email = Email

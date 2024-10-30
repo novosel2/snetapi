@@ -9,6 +9,6 @@ namespace Infrastructure.Data
         {
         }
 
-        public DbSet<Profile> UserProfiles { get; set; }
+        public DbSet<Profile> Profiles { get; set; }
     }
 }

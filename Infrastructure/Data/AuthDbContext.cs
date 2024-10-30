@@ -1,11 +1,12 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Core.Data.Entities.Identity;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 
 namespace Infrastructure.Data
 {
-    public class AuthDbContext : IdentityDbContext<IdentityUser>
+    public class AuthDbContext : IdentityDbContext<AppUser, AppRole, Guid>
     {
         private readonly IConfiguration _config;
 
@@ -18,14 +19,14 @@ namespace Infrastructure.Data
         {
             base.OnModelCreating(builder);
 
-            List<IdentityRole> roles = new List<IdentityRole>();
+            List<AppRole> roles = new List<AppRole>();
             List<string>? roleNames = _config.GetSection("IdentityRoles").Get<List<string>>();
 
             if (roleNames != null)
             {
                 foreach (var roleName in roleNames)
                 {
-                    roles.Add(new IdentityRole
+                    roles.Add(new AppRole
                     {
                         Name = roleName,
                         NormalizedName = roleName.ToUpper()
@@ -33,7 +34,7 @@ namespace Infrastructure.Data
                 }
             }
 
-            builder.Entity<IdentityRole>().HasData(roles);
+            builder.Entity<AppRole>().HasData(roles);
         }
     }
 }

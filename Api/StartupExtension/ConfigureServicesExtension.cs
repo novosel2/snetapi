@@ -1,4 +1,5 @@
 ﻿using Api.Filters.ExceptionFilters;
+using Core.Data.Entities.Identity;
 using Core.IRepositories;
 using Core.IServices;
 using Core.Services;
@@ -56,7 +57,7 @@ namespace Api.StartupExtension
             services.AddDbContext<AppDbContext>(options
                 => options.UseSqlServer(config.GetConnectionString("AppConnection")));
 
-            services.AddIdentity<IdentityUser, IdentityRole>(options =>
+            services.AddIdentity<AppUser, AppRole>(options =>
             {
                 options.Password.RequiredLength = 8;
                 options.Password.RequireDigit = true;

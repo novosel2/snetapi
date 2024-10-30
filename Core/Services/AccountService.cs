@@ -1,5 +1,6 @@
 ﻿using Core.Data.Dto.Account;
 using Core.Data.Entities;
+using Core.Data.Entities.Identity;
 using Core.Exceptions;
 using Core.IRepositories;
 using Core.IServices;
@@ -10,12 +11,12 @@ namespace Core.Services
 {
     public class AccountService : IAccountService
     {
-        private readonly UserManager<IdentityUser> _userManager;
-        private readonly SignInManager<IdentityUser> _signInManager;
+        private readonly UserManager<AppUser> _userManager;
+        private readonly SignInManager<AppUser> _signInManager;
         private readonly ITokenService _tokenService;
         private readonly IProfileRepository _profileRepository;
 
-        public AccountService(UserManager<IdentityUser> userManager, SignInManager<IdentityUser> signInManager, 
+        public AccountService(UserManager<AppUser> userManager, SignInManager<AppUser> signInManager, 
             ITokenService tokenService, IProfileRepository profileRepository)
         {
             _userManager = userManager;
@@ -24,124 +25,102 @@ namespace Core.Services
             _profileRepository = profileRepository;
         }
 
+        // Register user to the database, create and return User Response with JWT
         public async Task<UserResponseDto> RegisterUserAsync(RegisterUserDto registerUserDto)
         {
-            var user = registerUserDto.ToIdentityUser();
+            AppUser appUser = registerUserDto.ToAppUser();
+            await AddUserAsync(appUser, registerUserDto.Password);
 
-            await AddUserAsync(user, registerUserDto.Password);
-            await AddUserProfileAsync(user.Id);
+            Profile profile = await GetProfileAsync(appUser.Id);
+            string token = _tokenService.CreateToken(appUser);
 
-            var userResponse = await GetUserResponse(user.Id, user);
+            UserResponseDto userResponse = UserResponseDto.CreateUserResonse(appUser, profile, token);
 
             return userResponse;
         }
 
+        // Creates a JWT for user that requested it
         public async Task<UserResponseDto> LoginUserAsync(LoginUserDto loginUserDto)
         {
-            IdentityUser? user;
-            string name = loginUserDto.Name;
-
-            // Try to find user based on name input
-            if (name.Contains('@'))
+            AppUser? appUser;
+            
+            // Check if user name input is EMAIL or USERNAME
+            if (loginUserDto.Name.Contains('@'))
             {
-                user = await _userManager.FindByEmailAsync(name);
-            } 
+                appUser = await _userManager.FindByEmailAsync(loginUserDto.Name);
+            }
             else
             {
-                user = await _userManager.FindByNameAsync(name);
-            }
-           
-            if (user == null)
-            {
-                throw new UnauthorizedException("Email/Username or Password is invalid.");
+                appUser = await _userManager.FindByNameAsync(loginUserDto.Name);
             }
 
-            // Try to sign user in with login information
-            var result = await _signInManager.CheckPasswordSignInAsync(user, loginUserDto.Password, false);
-            if (!result.Succeeded)
+            // Check if user exists
+            if (appUser == null)
             {
-                throw new UnauthorizedException("Email/Username or Password is invalid.");
+                throw new UnauthorizedException("Email/Username or Password is invalid");
             }
 
-            UserResponseDto userResponse = await GetUserResponse(user.Id, user);
+            // Check if login information is correct
+            var loginResult = await _signInManager.CheckPasswordSignInAsync(appUser, loginUserDto.Password, false);
+            if (!loginResult.Succeeded)
+            {
+                throw new UnauthorizedException("Email/Username or Password is invalid");
+            }
+
+            Profile profile = await GetProfileAsync(appUser.Id);
+            string token = _tokenService.CreateToken(appUser);
+
+            UserResponseDto userResponse = UserResponseDto.CreateUserResonse(appUser, profile, token);
 
             return userResponse;
         }
 
-        private async Task AddUserAsync(IdentityUser identityUser, string password)
+        // ADD USER TO DATABASE
+        private async Task AddUserAsync(AppUser appUser, string password)
         {
             // ADD USER
-
-            var userCreated = await _userManager.CreateAsync(identityUser, password);
+            var userCreated = await _userManager.CreateAsync(appUser, password);
 
             if (!userCreated.Succeeded)
             {
-                string err = string.Join(" --- ", userCreated.Errors.Select(err => err.Description));
+                string err = string.Join(" | ", userCreated.Errors.Select(err => err.Description));
                 throw new RegisterFailedException(err);
             }
 
-
             // ADD ROLE TO USER
-
-            var user = await _userManager.FindByEmailAsync(identityUser.Email!);
-            var roleAssigned = await _userManager.AddToRoleAsync(user!, "user");
+            var roleAssigned = await _userManager.AddToRoleAsync(appUser, "user");
 
             if (!roleAssigned.Succeeded)
             {
-                string err = string.Join(" --- ", roleAssigned.Errors.Select(err => err.Description));
+                string err = string.Join(" | ", userCreated.Errors.Select(err => err.Description));
                 throw new AddToRoleFailedException(err);
             }
         }
 
-        private async Task AddUserProfileAsync(string id)
+        // ADD USER PROFILE TO DATABASE
+        private async Task<Profile> GetProfileAsync(Guid id)
         {
-            Profile userProfile = new Profile()
+            Profile profile;
+
+            if (await _profileRepository.ProfileExistsAsync(id))
             {
-                Id = Guid.Parse(id)
+                profile = await _profileRepository.GetProfileByIdAsync(id);
+                return profile;
+            }
+
+            profile = new Profile()
+            {
+                Id = id
             };
 
-            await _profileRepository.AddUserProfileAsync(userProfile);
+            await _profileRepository.AddProfileAsync(profile);
 
             if (! await _profileRepository.IsSavedAsync())
             {
-                try
-                {
-                    var user = await _userManager.FindByIdAsync(id.ToString());
-                    await _userManager.DeleteAsync(user!);
-                } catch (Exception) { }
-
-                throw new DbSavingFailedException("Failed to create User Profile for User");
-            }
-        }
-
-        private async Task<UserResponseDto> GetUserResponse(string id, IdentityUser? user)
-        {
-            if (user == null)
-            {
-                user = await _userManager.FindByIdAsync(id);
-            }
-            if (user == null)
-            {
-                throw new NotFoundException($"User not found, ID: {id}");
+                throw new DbSavingFailedException("Failed to save profile to database.");
             }
 
-            if (! await _profileRepository.UserProfileExistsAsync(Guid.Parse(id)))
-            {
-                await AddUserProfileAsync(id);
-            }
-
-            Profile profile = await _profileRepository.GetUserProfileByIdAsync(Guid.Parse(id));
-
-            var userResponse = new UserResponseDto()
-            {
-                Id = Guid.Parse(id),
-                Username = user.UserName!,
-                Email = user.Email!,
-                Token = _tokenService.CreateToken(user),
-                Profile = profile.ToProfileResponse()
-            };
-
-            return userResponse;
+            return profile;
         }
     }
 }

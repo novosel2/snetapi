@@ -22,7 +22,7 @@ namespace Infrastructure.Migrations.AppDb
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("Core.Data.Entities.UserProfile", b =>
+            modelBuilder.Entity("Core.Data.Entities.Profile", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -36,7 +36,7 @@ namespace Infrastructure.Migrations.AppDb
 
                     b.HasKey("Id");
 
-                    b.ToTable("UserProfiles");
+                    b.ToTable("Profiles");
                 });
 #pragma warning restore 612, 618
         }

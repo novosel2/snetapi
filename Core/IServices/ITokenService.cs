@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Core.Data.Entities.Identity;
+using Microsoft.AspNetCore.Identity;
 
 namespace Core.IServices
 {
@@ -9,6 +10,6 @@ namespace Core.IServices
         /// </summary>
         /// <param name="user">User that requested JWT</param>
         /// <returns>Json Web Token as a string</returns>
-        public string CreateToken(IdentityUser user);
+        public string CreateToken(AppUser appUser);
     }
 }

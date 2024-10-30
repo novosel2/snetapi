@@ -14,19 +14,19 @@ namespace Infrastructure.Repositories
             _db = db;
         }
 
-        public async Task<Profile> GetUserProfileByIdAsync(Guid id)
+        public async Task<Profile> GetProfileByIdAsync(Guid id)
         {
-            return await _db.UserProfiles.FirstAsync(up => up.Id == id);
+            return await _db.Profiles.FirstAsync(up => up.Id == id);
         }
 
-        public async Task AddUserProfileAsync(Profile profile)
+        public async Task AddProfileAsync(Profile profile)
         {
-            await _db.UserProfiles.AddAsync(profile);
+            await _db.Profiles.AddAsync(profile);
         }
 
-        public async Task<bool> UserProfileExistsAsync(Guid id)
+        public async Task<bool> ProfileExistsAsync(Guid id)
         {
-            return await _db.UserProfiles.AnyAsync(up => up.Id == id);
+            return await _db.Profiles.AnyAsync(up => up.Id == id);
         }
 
         public async Task<bool> IsSavedAsync()

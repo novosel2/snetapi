@@ -9,20 +9,20 @@ namespace Core.IRepositories
         /// </summary>
         /// <param name="id">Id we want to find</param>
         /// <returns>User Profile</returns>
-        public Task<Profile> GetUserProfileByIdAsync(Guid id);
+        public Task<Profile> GetProfileByIdAsync(Guid id);
 
         /// <summary>
         /// Checks if UserProfile exists
         /// </summary>
         /// <param name="id">Id we want to check</param>
         /// <returns>True if exists, false if not</returns>
-        public Task<bool> UserProfileExistsAsync(Guid id);
+        public Task<bool> ProfileExistsAsync(Guid id);
 
         /// <summary>
         /// Adds a user profile to database
         /// </summary>
         /// <param name="profile">Profile we want to add</param>
-        public Task AddUserProfileAsync(Profile profile);
+        public Task AddProfileAsync(Profile profile);
 
         /// <summary>
         /// Checks if any changes are saved to database
