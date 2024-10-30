@@ -195,7 +195,11 @@
         "frameworks": {
           "net8.0": {
             "targetAlias": "net8.0",
-            "projectReferences": {}
+            "projectReferences": {
+              "D:\\All\\Coding\\aspnetcore\\Social Network\\Core\\Core.csproj": {
+                "projectPath": "D:\\All\\Coding\\aspnetcore\\Social Network\\Core\\Core.csproj"
+              }
+            }
           }
         },
         "warningProperties": {

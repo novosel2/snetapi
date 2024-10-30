@@ -13,3 +13,6 @@ D:\All\Coding\aspnetcore\Social Network\Infrastructure\obj\Debug\net8.0\Infrastr
 D:\All\Coding\aspnetcore\Social Network\Infrastructure\obj\Debug\net8.0\Infrastructure.genruntimeconfig.cache
 D:\All\Coding\aspnetcore\Social Network\Infrastructure\obj\Debug\net8.0\ref\Infrastructure.dll
 D:\All\Coding\aspnetcore\Social Network\Infrastructure\obj\Debug\net8.0\Infrastructure.sourcelink.json
+D:\All\Coding\aspnetcore\Social Network\Infrastructure\bin\Debug\net8.0\Core.dll
+D:\All\Coding\aspnetcore\Social Network\Infrastructure\bin\Debug\net8.0\Core.pdb
+D:\All\Coding\aspnetcore\Social Network\Infrastructure\obj\Debug\net8.0\Infrastructure.csproj.CopyComplete

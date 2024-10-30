@@ -31,5 +31,13 @@ namespace Api.Controllers
 
             return Ok(userResponse);
         }
+
+        //[HttpPut("update-profile")]
+        //public async Task<IActionResult> UpdateProfile([FromForm]UpdateProfileDto updateProfileDto)
+        //{
+        //    UserResponseDto userResponse = await _accountService.UpdateProfileAsync(updateProfileDto);
+
+        //    return userResponse;
+        //}
     }
 }

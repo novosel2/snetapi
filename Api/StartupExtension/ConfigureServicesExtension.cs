@@ -1,7 +1,9 @@
 ﻿using Api.Filters.ExceptionFilters;
+using Core.IRepositories;
 using Core.IServices;
 using Core.Services;
 using Infrastructure.Data;
+using Infrastructure.Repositories;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
@@ -51,6 +53,8 @@ namespace Api.StartupExtension
 
             services.AddDbContext<AuthDbContext>(options 
                 => options.UseSqlServer(config.GetConnectionString("AuthConnection")));
+            services.AddDbContext<AppDbContext>(options
+                => options.UseSqlServer(config.GetConnectionString("AppConnection")));
 
             services.AddIdentity<IdentityUser, IdentityRole>(options =>
             {
@@ -86,6 +90,8 @@ namespace Api.StartupExtension
 
             services.AddScoped<IAccountService, AccountService>();
             services.AddScoped<ITokenService, TokenService>();
+
+            services.AddScoped<IProfileRepository, ProfileRepository>();
 
             return services;
         }
