@@ -20,5 +20,12 @@ namespace Api.Controllers
         {
             return Ok("Everythin gud :)");
         }
+
+        [HttpGet("auth")]
+        [AllowAnonymous]
+        public IActionResult GetNoAuth()
+        {
+            return Ok("goood boyoyy.");
+        }
     }
 }

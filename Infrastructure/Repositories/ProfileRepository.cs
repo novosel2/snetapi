@@ -24,6 +24,12 @@ namespace Infrastructure.Repositories
             await _db.Profiles.AddAsync(profile);
         }
 
+        public void UpdateProfile(Profile existingProfile, Profile updatedProfile)
+        {
+            _db.Profiles.Entry(existingProfile).CurrentValues.SetValues(updatedProfile);
+            _db.Profiles.Entry(existingProfile).State = EntityState.Modified;
+        }
+
         public async Task<bool> ProfileExistsAsync(Guid id)
         {
             return await _db.Profiles.AnyAsync(up => up.Id == id);

@@ -7,6 +7,7 @@ using Infrastructure.Data;
 using Infrastructure.Repositories;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Cors.Infrastructure;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -19,6 +20,14 @@ namespace Api.StartupExtension
     {
         public static IServiceCollection ConfigureServices(this IServiceCollection services, IConfiguration config)
         {
+            services.AddCors(options =>
+            {
+                options.AddPolicy("newPolicy", builder =>
+                {
+                    builder.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod();
+                });
+            });
+
             services.AddControllers(options =>
             {
                 options.Filters.Add(typeof(HandleExceptionFilter));

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Core.Data.Entities;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -14,5 +15,15 @@ namespace Core.Data.Dto.Account
 
         [Required] 
         public string LastName { get; set; } = string.Empty;
+
+        public Profile ToProfile(Guid profileId)
+        {
+            return new Profile()
+            {
+                Id = profileId,
+                FirstName = FirstName,
+                LastName = LastName
+            };
+        }
     }
 }

@@ -75,6 +75,31 @@ namespace Core.Services
             return userResponse;
         }
 
+        // Updates Profile with new information
+        public async Task<UserResponseDto> UpdateProfileAsync(Guid profileId, UpdateProfileDto updateProfileDto)
+        {
+            AppUser? appUser = await _userManager.FindByIdAsync(profileId.ToString());
+            
+            if (appUser == null)
+            {
+                throw new NotFoundException($"User not found, ID: {profileId}");
+            }
+
+            Profile profile = await GetProfileAsync(profileId);
+            Profile updatedProfile = updateProfileDto.ToProfile(profileId);
+
+            _profileRepository.UpdateProfile(profile, updatedProfile);
+
+            if (! await _profileRepository.IsSavedAsync())
+            {
+                throw new DbSavingFailedException("Failed to save Profile Update changes.");
+            }
+
+            var userResponse = UserResponseDto.CreateUserResonse(appUser, updatedProfile);
+
+            return userResponse;
+        }
+
         // ADD USER TO DATABASE
         private async Task AddUserAsync(AppUser appUser, string password)
         {

@@ -12,11 +12,11 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-
 app.UseHsts();
 app.UseHttpsRedirection();
 
 app.UseStaticFiles();
+app.UseCors("newPolicy");
 
 app.UseRouting();
 app.MapControllers();
