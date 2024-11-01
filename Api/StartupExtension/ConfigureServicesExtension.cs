@@ -98,6 +98,7 @@ namespace Api.StartupExtension
                 };
             });
 
+            services.AddScoped<IProfileService, ProfileService>();
             services.AddScoped<IAccountService, AccountService>();
             services.AddScoped<ITokenService, TokenService>();
 

@@ -13,25 +13,27 @@ namespace Core.Services
     {
         private readonly UserManager<AppUser> _userManager;
         private readonly SignInManager<AppUser> _signInManager;
+        private readonly IProfileService _profileService;
         private readonly ITokenService _tokenService;
-        private readonly IProfileRepository _profileRepository;
 
         public AccountService(UserManager<AppUser> userManager, SignInManager<AppUser> signInManager, 
-            ITokenService tokenService, IProfileRepository profileRepository)
+            ITokenService tokenService, IProfileService profileService)
         {
             _userManager = userManager;
             _signInManager = signInManager;
+            _profileService = profileService;
             _tokenService = tokenService;
-            _profileRepository = profileRepository;
         }
+
 
         // Register user to the database, create and return User Response with JWT
         public async Task<UserResponseDto> RegisterUserAsync(RegisterUserDto registerUserDto)
         {
             AppUser appUser = registerUserDto.ToAppUser();
             await AddUserAsync(appUser, registerUserDto.Password);
+            await _profileService.AddProfileAsync(appUser);
 
-            Profile profile = await GetProfileAsync(appUser.Id);
+            Profile profile = await _profileService.GetProfileByUserIdAsync(appUser.Id);
             string token = _tokenService.CreateToken(appUser);
 
             UserResponseDto userResponse = UserResponseDto.CreateUserResonse(appUser, profile, token);
@@ -67,7 +69,7 @@ namespace Core.Services
                 throw new UnauthorizedException("Email/Username or Password is invalid");
             }
 
-            Profile profile = await GetProfileAsync(appUser.Id);
+            Profile profile = await _profileService.GetProfileByUserIdAsync(appUser.Id);
             string token = _tokenService.CreateToken(appUser);
 
             UserResponseDto userResponse = UserResponseDto.CreateUserResonse(appUser, profile, token);
@@ -78,21 +80,13 @@ namespace Core.Services
         // Updates Profile with new information
         public async Task<UserResponseDto> UpdateProfileAsync(Guid profileId, UpdateProfileDto updateProfileDto)
         {
-            AppUser? appUser = await _userManager.FindByIdAsync(profileId.ToString());
-            
+            Profile updatedProfile = await _profileService.UpdateProfileAsync(profileId, updateProfileDto);
+
+            AppUser? appUser = await _userManager.FindByIdAsync(updatedProfile.UserId.ToString());
+
             if (appUser == null)
             {
                 throw new NotFoundException($"User not found, ID: {profileId}");
-            }
-
-            Profile profile = await GetProfileAsync(profileId);
-            Profile updatedProfile = updateProfileDto.ToProfile(profileId);
-
-            _profileRepository.UpdateProfile(profile, updatedProfile);
-
-            if (! await _profileRepository.IsSavedAsync())
-            {
-                throw new DbSavingFailedException("Failed to save Profile Update changes.");
             }
 
             var userResponse = UserResponseDto.CreateUserResonse(appUser, updatedProfile);
@@ -120,32 +114,6 @@ namespace Core.Services
                 string err = string.Join(" | ", userCreated.Errors.Select(err => err.Description));
                 throw new AddToRoleFailedException(err);
             }
-        }
-
-        // ADD USER PROFILE TO DATABASE
-        private async Task<Profile> GetProfileAsync(Guid id)
-        {
-            Profile profile;
-
-            if (await _profileRepository.ProfileExistsAsync(id))
-            {
-                profile = await _profileRepository.GetProfileByIdAsync(id);
-                return profile;
-            }
-
-            profile = new Profile()
-            {
-                Id = id
-            };
-
-            await _profileRepository.AddProfileAsync(profile);
-
-            if (! await _profileRepository.IsSavedAsync())
-            {
-                throw new DbSavingFailedException("Failed to save profile to database.");
-            }
-
-            return profile;
         }
     }
 }

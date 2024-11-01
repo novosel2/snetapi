@@ -12,6 +12,13 @@ namespace Core.IRepositories
         public Task<Profile> GetProfileByIdAsync(Guid id);
 
         /// <summary>
+        /// Get user profile by user id
+        /// </summary>
+        /// <param name="userId">User ID</param>
+        /// <returns>User Profile</returns>
+        public Task<Profile> GetProfileByUserIdAsync(Guid userId);
+
+        /// <summary>
         /// Adds a user profile to database
         /// </summary>
         /// <param name="profile">Profile we want to add</param>
@@ -29,7 +36,7 @@ namespace Core.IRepositories
         /// </summary>
         /// <param name="id">Id we want to check</param>
         /// <returns>True if exists, false if not</returns>
-        public Task<bool> ProfileExistsAsync(Guid id);
+        public Task<bool> ProfileExistsAsync(Guid id, string type = "profile");
 
         /// <summary>
         /// Checks if any changes are saved to database

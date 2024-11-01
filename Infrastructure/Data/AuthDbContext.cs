@@ -1,4 +1,5 @@
-﻿using Core.Data.Entities.Identity;
+﻿using Core.Data.Entities;
+using Core.Data.Entities.Identity;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
@@ -14,6 +15,8 @@ namespace Infrastructure.Data
         { 
             _config = config;
         }
+
+        public DbSet<Profile> Profiles { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -35,6 +38,12 @@ namespace Infrastructure.Data
             }
 
             builder.Entity<AppRole>().HasData(roles);
+
+            builder.Entity<Profile>()
+                .HasOne(p => p.User)
+                .WithOne(u => u.Profile)
+                .HasForeignKey<Profile>(p => p.UserId)
+                .OnDelete(DeleteBehavior.Cascade);
         }
     }
 }

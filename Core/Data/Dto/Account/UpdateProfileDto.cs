@@ -16,13 +16,14 @@ namespace Core.Data.Dto.Account
         [Required] 
         public string LastName { get; set; } = string.Empty;
 
-        public Profile ToProfile(Guid profileId)
+        public Profile ToProfile(Guid profileId, Guid userId)
         {
             return new Profile()
             {
                 Id = profileId,
                 FirstName = FirstName,
-                LastName = LastName
+                LastName = LastName,
+                UserId = userId
             };
         }
     }

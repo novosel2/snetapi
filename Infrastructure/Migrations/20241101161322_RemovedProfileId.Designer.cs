@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(AuthDbContext))]
-    [Migration("20241030100649_InitialMigration")]
-    partial class InitialMigration
+    [Migration("20241101161322_RemovedProfileId")]
+    partial class RemovedProfileId
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -55,13 +55,13 @@ namespace Infrastructure.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("0f12d9bb-8000-44ed-bbce-f78d389b95a5"),
+                            Id = new Guid("6215f055-38d2-4723-a258-2ad0c7cd57ee"),
                             Name = "user",
                             NormalizedName = "USER"
                         },
                         new
                         {
-                            Id = new Guid("ef34d895-1f74-4f40-a113-73fe8d5e5db9"),
+                            Id = new Guid("a3f45cef-1f78-4715-8b19-f94b572bbab3"),
                             Name = "admin",
                             NormalizedName = "ADMIN"
                         });
@@ -133,6 +133,29 @@ namespace Infrastructure.Migrations
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.ToTable("AspNetUsers", (string)null);
+                });
+
+            modelBuilder.Entity("Core.Data.Entities.Profile", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("FirstName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("LastName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId")
+                        .IsUnique();
+
+                    b.ToTable("Profiles");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<System.Guid>", b =>
@@ -238,6 +261,17 @@ namespace Infrastructure.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("Core.Data.Entities.Profile", b =>
+                {
+                    b.HasOne("Core.Data.Entities.Identity.AppUser", "User")
+                        .WithOne("Profile")
+                        .HasForeignKey("Core.Data.Entities.Profile", "UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<System.Guid>", b =>
                 {
                     b.HasOne("Core.Data.Entities.Identity.AppRole", null)
@@ -287,6 +321,11 @@ namespace Infrastructure.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("Core.Data.Entities.Identity.AppUser", b =>
+                {
+                    b.Navigation("Profile");
                 });
 #pragma warning restore 612, 618
         }
