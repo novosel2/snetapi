@@ -17,12 +17,5 @@ namespace Core.IServices
         /// <param name="loginUserDto">User information</param>
         /// <returns>User response with user information and token</returns>
         public Task<UserResponseDto> LoginUserAsync(LoginUserDto loginUserDto);
-
-        /// <summary>
-        /// Updates profile with new information
-        /// </summary>
-        /// <param name="updateProfileDto">New information</param>
-        /// <returns>User Response with new information</returns>
-        public Task<UserResponseDto> UpdateProfileAsync(Guid profileId, UpdateProfileDto updateProfileDto);
     }
 }

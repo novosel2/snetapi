@@ -77,23 +77,6 @@ namespace Core.Services
             return userResponse;
         }
 
-        // Updates Profile with new information
-        public async Task<UserResponseDto> UpdateProfileAsync(Guid profileId, UpdateProfileDto updateProfileDto)
-        {
-            Profile updatedProfile = await _profileService.UpdateProfileAsync(profileId, updateProfileDto);
-
-            AppUser? appUser = await _userManager.FindByIdAsync(updatedProfile.UserId.ToString());
-
-            if (appUser == null)
-            {
-                throw new NotFoundException($"User not found, ID: {profileId}");
-            }
-
-            var userResponse = UserResponseDto.CreateUserResonse(appUser, updatedProfile);
-
-            return userResponse;
-        }
-
         // ADD USER TO DATABASE
         private async Task AddUserAsync(AppUser appUser, string password)
         {

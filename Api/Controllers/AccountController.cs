@@ -11,14 +11,18 @@ namespace Api.Controllers
     public class AccountController : ControllerBase
     {
         private readonly IAccountService _accountService;
+        private readonly IProfileService _profileService;
         private readonly IConfiguration _config;
 
-        public AccountController(IAccountService accountService, IConfiguration config)
+        public AccountController(IAccountService accountService, IProfileService profileService, IConfiguration config)
         {
             _accountService = accountService;
+            _profileService = profileService;
             _config = config;
         }
 
+
+        // POST: /api/account/register
         [HttpPost("register")]
         public async Task<IActionResult> RegisterUser(RegisterUserDto registerUserDto)
         {
@@ -29,6 +33,7 @@ namespace Api.Controllers
             return Ok(userResponse);
         }
 
+        // POST: /api/account/login
         [HttpPost("login")]
         public async Task<IActionResult> LoginUser(LoginUserDto loginUserDto)
         {
@@ -37,13 +42,14 @@ namespace Api.Controllers
             return Ok(userResponse);
         }
 
-        [HttpPut("update-profile/{profileId}")]
+        // PUT /api/account/update-profile/4ed6d09a-1f46-4670-8d6f-b1fcd8d92ccc
         [Authorize]
+        [HttpPut("update-profile/{profileId}")]
         public async Task<IActionResult> UpdateProfile(Guid profileId, UpdateProfileDto updateProfileDto)
         {
-            UserResponseDto userResponse = await _accountService.UpdateProfileAsync(profileId, updateProfileDto);
+            ProfileResponseDto profileResponseDto = await _profileService.UpdateProfileAsync(profileId, updateProfileDto);
 
-            return Ok(userResponse);
+            return Ok(profileResponseDto);
         }
     }
 }

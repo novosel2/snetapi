@@ -67,7 +67,7 @@ namespace Core.Services
         }
 
         // Update profile with new information
-        public async Task<Profile> UpdateProfileAsync(Guid profileId, UpdateProfileDto updateProfileDto)
+        public async Task<ProfileResponseDto> UpdateProfileAsync(Guid profileId, UpdateProfileDto updateProfileDto)
         {
             if (! await _profileRepository.ProfileExistsAsync(profileId))
             {
@@ -84,7 +84,7 @@ namespace Core.Services
                 throw new DbSavingFailedException("Failed to update profile.");
             }
 
-            return updatedProfile;
+            return updatedProfile.ToProfileResponse();
         }
     }
 }

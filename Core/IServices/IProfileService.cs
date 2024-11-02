@@ -36,6 +36,6 @@ namespace Core.IServices
         /// </summary>
         /// <param name="updateProfileDto">New information</param>
         /// <returns>User Response with new information</returns>
-        public Task<Profile> UpdateProfileAsync(Guid profileId, UpdateProfileDto updateProfileDto);
+        public Task<ProfileResponseDto> UpdateProfileAsync(Guid profileId, UpdateProfileDto updateProfileDto);
     }
 }
