@@ -27,7 +27,7 @@ namespace Core.Services
 
 
         // Register user to the database, create and return User Response with JWT
-        public async Task<UserResponseDto> RegisterUserAsync(RegisterUserDto registerUserDto)
+        public async Task<UserResponse> RegisterUserAsync(RegisterUserDto registerUserDto)
         {
             AppUser appUser = registerUserDto.ToAppUser();
             await AddUserAsync(appUser, registerUserDto.Password);
@@ -36,13 +36,13 @@ namespace Core.Services
             Profile profile = await _profileService.GetProfileByUserIdAsync(appUser.Id);
             string token = _tokenService.CreateToken(appUser);
 
-            UserResponseDto userResponse = UserResponseDto.CreateUserResonse(appUser, profile, token);
+            UserResponse userResponse = UserResponse.CreateUserResonse(appUser, profile, token);
 
             return userResponse;
         }
 
         // Creates a JWT for user that requested it
-        public async Task<UserResponseDto> LoginUserAsync(LoginUserDto loginUserDto)
+        public async Task<UserResponse> LoginUserAsync(LoginUserDto loginUserDto)
         {
             AppUser? appUser;
             
@@ -72,9 +72,40 @@ namespace Core.Services
             Profile profile = await _profileService.GetProfileByUserIdAsync(appUser.Id);
             string token = _tokenService.CreateToken(appUser);
 
-            UserResponseDto userResponse = UserResponseDto.CreateUserResonse(appUser, profile, token);
+            UserResponse userResponse = UserResponse.CreateUserResonse(appUser, profile, token);
 
             return userResponse;
+        }
+
+        // Deletes a user from the database
+        public async Task DeleteUserAsync(Guid userId, Guid currentUserId)
+        {
+            if (currentUserId != userId)
+            {
+                throw new ForbiddenException("You don't have permission to delete this user.");
+            }
+
+            using var transaction = await _profileService.StartTransactionAsync();
+
+            try
+            {
+                AppUser? user = await _userManager.FindByIdAsync(userId.ToString());
+
+                if (user == null)
+                {
+                    throw new NotFoundException($"User not found, ID: {userId}");
+                }
+
+                await _profileService.DeleteProfileAsync(userId);
+                await _userManager.DeleteAsync(user);
+
+                await transaction.CommitAsync();
+            }
+            catch (Exception)
+            {
+                transaction.Rollback();
+                throw;
+            }
         }
 
         // ADD USER TO DATABASE
@@ -95,8 +126,9 @@ namespace Core.Services
             if (!roleAssigned.Succeeded)
             {
                 string err = string.Join(" | ", userCreated.Errors.Select(err => err.Description));
-                throw new AddToRoleFailedException(err);
+                throw new RoleAssignFailedException(err);
             }
         }
+
     }
 }

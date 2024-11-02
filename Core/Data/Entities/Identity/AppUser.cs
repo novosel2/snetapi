@@ -13,8 +13,6 @@ namespace Core.Data.Entities.Identity
         public override string Email { get; set; } = string.Empty;
         public override string UserName { get; set; } = string.Empty;
 
-        public Profile? Profile { get; set; }
-
         public AppUser()
         {
             Id = Guid.NewGuid();

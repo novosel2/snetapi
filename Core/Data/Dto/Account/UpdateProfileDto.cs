@@ -11,6 +11,9 @@ namespace Core.Data.Dto.Account
     public class UpdateProfileDto
     {
         [Required]
+        public string Username { get; set; } = string.Empty;
+
+        [Required]
         public string FirstName { get; set; } = string.Empty;
 
         [Required] 
@@ -21,6 +24,7 @@ namespace Core.Data.Dto.Account
             return new Profile()
             {
                 Id = profileId,
+                Username = Username,
                 FirstName = FirstName,
                 LastName = LastName,
                 UserId = userId

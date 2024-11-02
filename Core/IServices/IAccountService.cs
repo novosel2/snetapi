@@ -9,13 +9,19 @@ namespace Core.IServices
         /// </summary>
         /// <param name="registerUserDto">Register information</param>
         /// <returns>User response with user information and token</returns>
-        public Task<UserResponseDto> RegisterUserAsync(RegisterUserDto registerUserDto);
+        public Task<UserResponse> RegisterUserAsync(RegisterUserDto registerUserDto);
 
         /// <summary>
         /// Creates a token for the user and returns the whole user
         /// </summary>
         /// <param name="loginUserDto">User information</param>
         /// <returns>User response with user information and token</returns>
-        public Task<UserResponseDto> LoginUserAsync(LoginUserDto loginUserDto);
+        public Task<UserResponse> LoginUserAsync(LoginUserDto loginUserDto);
+
+        /// <summary>
+        /// Deletes a user from the database
+        /// </summary>
+        /// <param name="userId">ID of user we want to delete</param>
+        public Task DeleteUserAsync(Guid userId, Guid currentUserId);
     }
 }

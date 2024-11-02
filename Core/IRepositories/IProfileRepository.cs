@@ -1,4 +1,5 @@
 ﻿using Core.Data.Entities;
+using Microsoft.EntityFrameworkCore.Storage;
 
 namespace Core.IRepositories
 {
@@ -29,7 +30,13 @@ namespace Core.IRepositories
         /// </summary>
         /// <param name="existingProfile">Existing profile in database</param>
         /// <param name="updatedProfile">Profile with new information</param>
-        public void UpdateProfile(Profile existingProfile, Profile updatedProfile);
+        public Task UpdateProfileAsync(Profile existingProfile, Profile updatedProfile);
+
+        /// <summary>
+        /// Deletes profile from database based on it's User ID
+        /// </summary>
+        /// <param name="userId">ID of user we want to delete profile from</param>
+        public Task DeleteProfileAsync(Profile profile);
 
         /// <summary>
         /// Checks if UserProfile exists
@@ -43,5 +50,10 @@ namespace Core.IRepositories
         /// </summary>
         /// <returns>Returns true if any changes are saved, false if not</returns>
         public Task<bool> IsSavedAsync();
+
+        /// <summary>
+        /// Starts the transaction
+        /// </summary>
+        public Task<IDbContextTransaction> StartTransactionAsync();
     }
 }

@@ -4,17 +4,17 @@ using Microsoft.AspNetCore.Identity;
 
 namespace Core.Data.Dto.Account
 {
-    public class UserResponseDto
+    public class UserResponse
     {
         public Guid Id { get; set; }
         public string Username { get; set; } = string.Empty;
         public string Email { get; set; } = string.Empty;
         public string? Token { get; set; }
-        public ProfileResponseDto Profile { get; set; } = new ProfileResponseDto();
+        public ProfileResponse Profile { get; set; } = new ProfileResponse();
 
-        public static UserResponseDto CreateUserResonse(AppUser appUser, Profile profile, string? token = null)
+        public static UserResponse CreateUserResonse(AppUser appUser, Profile profile, string? token = null)
         {
-            return new UserResponseDto
+            return new UserResponse
             {
                 Id = appUser.Id,
                 Username = appUser.UserName,

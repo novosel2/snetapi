@@ -34,6 +34,26 @@ namespace Api.Filters.ExceptionFilters
                 _logger.LogError(exception.Message);
                 problemDetails = CreateProblemDetails(401, "Invalid information", exception.Message);
             }
+            else if (exception is ForbiddenException)
+            {
+                _logger.LogError(exception.Message);
+                problemDetails = CreateProblemDetails(403, "Forbidden request", exception.Message);
+            }
+            else if (exception is DbSavingFailedException)
+            {
+                _logger.LogError(exception.Message);
+                problemDetails = CreateProblemDetails(500, "Database saving failed", exception.Message);
+            }
+            else if (exception is NotFoundException)
+            {
+                _logger.LogError(exception.Message);
+                problemDetails = CreateProblemDetails(404, "Not found", exception.Message);
+            }
+            else if (exception is RoleAssignFailedException)
+            {
+                _logger.LogError(exception.Message);
+                problemDetails = CreateProblemDetails(500, "Role Assign failed", exception.Message);
+            }
             else
             {
                 return;

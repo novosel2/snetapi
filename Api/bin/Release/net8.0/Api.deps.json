@@ -996,7 +996,8 @@
       },
       "Core/1.0.0": {
         "dependencies": {
-          "Microsoft.AspNetCore.Authentication.JwtBearer": "8.0.10"
+          "Microsoft.AspNetCore.Authentication.JwtBearer": "8.0.10",
+          "Microsoft.EntityFrameworkCore": "8.0.10"
         },
         "runtime": {
           "Core.dll": {}

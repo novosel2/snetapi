@@ -16,8 +16,6 @@ namespace Infrastructure.Data
             _config = config;
         }
 
-        public DbSet<Profile> Profiles { get; set; }
-
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
@@ -38,12 +36,6 @@ namespace Infrastructure.Data
             }
 
             builder.Entity<AppRole>().HasData(roles);
-
-            builder.Entity<Profile>()
-                .HasOne(p => p.User)
-                .WithOne(u => u.Profile)
-                .HasForeignKey<Profile>(p => p.UserId)
-                .OnDelete(DeleteBehavior.Cascade);
         }
     }
 }

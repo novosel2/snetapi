@@ -1,6 +1,7 @@
 ﻿using Core.Data.Dto.Account;
 using Core.Data.Entities;
 using Core.Data.Entities.Identity;
+using Microsoft.EntityFrameworkCore.Storage;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -36,6 +37,18 @@ namespace Core.IServices
         /// </summary>
         /// <param name="updateProfileDto">New information</param>
         /// <returns>User Response with new information</returns>
-        public Task<ProfileResponseDto> UpdateProfileAsync(Guid profileId, UpdateProfileDto updateProfileDto);
+        public Task<ProfileResponse> UpdateProfileAsync(Guid profileId, UpdateProfileDto updateProfileDto, Guid currentUserId);
+
+        /// <summary>
+        /// Deletes profile based on it's User ID
+        /// </summary>
+        /// <param name="userId">ID of user we want to delete profile from</param>
+        public Task DeleteProfileAsync(Guid userId);
+
+        /// <summary>
+        /// Starts a transaction
+        /// </summary>
+        /// <returns>Transaction</returns>
+        public Task<IDbContextTransaction> StartTransactionAsync();
     }
 }

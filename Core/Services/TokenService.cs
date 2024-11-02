@@ -25,6 +25,7 @@ namespace Core.Services
         {
             List<Claim> claims = new List<Claim>()
             {
+                new Claim(JwtRegisteredClaimNames.NameId, appUser.Id.ToString()),
                 new Claim(JwtRegisteredClaimNames.Name, appUser.Email),
                 new Claim(JwtRegisteredClaimNames.GivenName, appUser.UserName)
             };

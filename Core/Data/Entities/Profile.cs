@@ -10,28 +10,21 @@ namespace Core.Data.Entities
         [Key]
         public Guid Id { get; set; }
 
+        [Required]
+        public string Username { get; set; } = string.Empty;
+
         public string? FirstName { get; set; }
 
         public string? LastName { get; set; }
 
-        [ForeignKey(nameof(User))]
         public Guid UserId { get; set; }
 
-        public AppUser User { get; set; }
-
-        public Profile()
+        public ProfileResponse ToProfileResponse()
         {
-            User = new AppUser()
-            {
-                Id = UserId
-            };
-        }
-
-        public ProfileResponseDto ToProfileResponse()
-        {
-            return new ProfileResponseDto()
+            return new ProfileResponse()
             {
                 Id = Id,
+                Username = Username,
                 FirstName = FirstName,
                 LastName = LastName
             };

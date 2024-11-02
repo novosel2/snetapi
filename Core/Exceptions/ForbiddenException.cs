@@ -6,17 +6,17 @@ using System.Threading.Tasks;
 
 namespace Core.Exceptions
 {
-    public class UnauthorizedException : Exception
+    public class ForbiddenException : Exception
     {
-        public UnauthorizedException()
+        public ForbiddenException()
         {
         }
 
-        public UnauthorizedException(string? message) : base(message)
+        public ForbiddenException(string? message) : base(message)
         {
         }
 
-        public UnauthorizedException(string? message, Exception? innerException) : base(message, innerException)
+        public ForbiddenException(string? message, Exception? innerException) : base(message, innerException)
         {
         }
     }

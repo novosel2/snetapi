@@ -1,15 +1,17 @@
 ﻿using Core.Data.Entities;
+using Core.Exceptions;
 using Core.IRepositories;
 using Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage;
 
 namespace Infrastructure.Repositories
 {
     public class ProfileRepository : IProfileRepository
     {
-        private readonly AuthDbContext _db;
+        private readonly AppDbContext _db;
 
-        public ProfileRepository(AuthDbContext db)
+        public ProfileRepository(AppDbContext db)
         {
             _db = db;
         }
@@ -31,13 +33,34 @@ namespace Infrastructure.Repositories
         public async Task AddProfileAsync(Profile profile)
         {
             await _db.Profiles.AddAsync(profile);
+
+            if (! await IsSavedAsync())
+            {
+                throw new DbSavingFailedException("Failed to save added profile.");
+            }
         }
 
         // Update existing profile with updated information
-        public void UpdateProfile(Profile existingProfile, Profile updatedProfile)
+        public async Task UpdateProfileAsync(Profile existingProfile, Profile updatedProfile)
         {
             _db.Profiles.Entry(existingProfile).CurrentValues.SetValues(updatedProfile);
             _db.Profiles.Entry(existingProfile).State = EntityState.Modified;
+
+            if (! await IsSavedAsync())
+            {
+                throw new DbSavingFailedException("Failed to save updated profile.");
+            }
+        }
+
+        // Delete profile from database
+        public async Task DeleteProfileAsync(Profile profile)
+        {
+            _db.Profiles.Remove(profile);
+
+            if (!await IsSavedAsync())
+            {
+                throw new DbSavingFailedException("Failed to save profile deletion.");
+            }
         }
 
         // Check if profile with id exists
@@ -59,6 +82,12 @@ namespace Infrastructure.Repositories
             int saved = await _db.SaveChangesAsync();
 
             return saved > 0;
+        }
+
+        // Starts a transaction in db
+        public async Task<IDbContextTransaction> StartTransactionAsync()
+        {
+            return await _db.Database.BeginTransactionAsync();
         }
     }
 }
