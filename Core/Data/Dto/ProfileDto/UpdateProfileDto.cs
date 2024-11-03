@@ -1,12 +1,7 @@
 ﻿using Core.Data.Entities;
-using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace Core.Data.Dto.Account
+namespace Core.Data.Dto.ProfileDto
 {
     public class UpdateProfileDto
     {
@@ -16,18 +11,17 @@ namespace Core.Data.Dto.Account
         [Required]
         public string FirstName { get; set; } = string.Empty;
 
-        [Required] 
+        [Required]
         public string LastName { get; set; } = string.Empty;
 
-        public Profile ToProfile(Guid profileId, Guid userId)
+        public Profile ToProfile(Guid userId)
         {
             return new Profile()
             {
-                Id = profileId,
+                Id = userId,
                 Username = Username,
                 FirstName = FirstName,
                 LastName = LastName,
-                UserId = userId
             };
         }
     }

@@ -1,8 +1,9 @@
-﻿using Core.Data.Entities;
+﻿using Core.Data.Dto.ProfileDto;
+using Core.Data.Entities;
 using Core.Data.Entities.Identity;
 using Microsoft.AspNetCore.Identity;
 
-namespace Core.Data.Dto.Account
+namespace Core.Data.Dto.AccountDto
 {
     public class UserResponse
     {

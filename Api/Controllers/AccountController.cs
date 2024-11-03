@@ -1,4 +1,5 @@
-﻿using Core.Data.Dto.Account;
+﻿using Core.Data.Dto.AccountDto;
+using Core.Data.Dto.ProfileDto;
 using Core.IServices;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -12,31 +13,25 @@ namespace Api.Controllers
     public class AccountController : ControllerBase
     {
         private readonly IAccountService _accountService;
-        private readonly IProfileService _profileService;
-        private readonly IConfiguration _config;
 
-        public AccountController(IAccountService accountService, IProfileService profileService, IConfiguration config)
+        public AccountController(IAccountService accountService)
         {
             _accountService = accountService;
-            _profileService = profileService;
-            _config = config;
         }
 
 
-        // POST: /api/account/register
+        // POST: /api/account/register/
 
         [HttpPost("register")]
         public async Task<IActionResult> RegisterUser(RegisterUserDto registerUserDto)
         {
-            Console.WriteLine(_config["ConnectionStrings:AuthConnection"]);
-
             UserResponse userResponse = await _accountService.RegisterUserAsync(registerUserDto);
 
             return Ok(userResponse);
         }
 
 
-        // POST: /api/account/login
+        // POST: /api/account/login/
 
         [HttpPost("login")]
         public async Task<IActionResult> LoginUser(LoginUserDto loginUserDto)
@@ -47,29 +42,15 @@ namespace Api.Controllers
         }
 
 
-        // PUT /api/account/update-profile/4ed6d09a-1f46-4670-8d6f-b1fcd8d92ccc
+        // DELETE /api/account/delete-user/
 
         [Authorize]
-        [HttpPut("update-profile/{profileId}")]
-        public async Task<IActionResult> UpdateProfile(Guid profileId, UpdateProfileDto updateProfileDto)
+        [HttpDelete("delete-user")]
+        public async Task<IActionResult> DeleteUser()
         {
-            Guid currentUserId = Guid.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
+            Guid _userId = Guid.Parse(User.FindFirst(ClaimTypes.NameIdentifier)!.Value.ToString());
 
-            ProfileResponse profileResponseDto = await _profileService.UpdateProfileAsync(profileId, updateProfileDto, currentUserId);
-
-            return Ok(profileResponseDto);
-        }
-
-
-        // DELETE /api/account/delete-user/4ed6d09a-1f46-4670-8d6f-b1fcd8d92ccc
-
-        [Authorize]
-        [HttpDelete("delete-profile/{userId}")]
-        public async Task<IActionResult> DeleteProfile(Guid userId)
-        {
-            Guid currentUserId = Guid.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
-
-            await _accountService.DeleteUserAsync(userId, currentUserId);
+            await _accountService.DeleteUserAsync(_userId);
 
             return Ok("User successfully deleted.");
         }

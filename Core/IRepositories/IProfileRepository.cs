@@ -6,18 +6,17 @@ namespace Core.IRepositories
     public interface IProfileRepository
     {
         /// <summary>
+        /// Get all profiles
+        /// </summary>
+        /// <returns>List of profiles</returns>
+        public Task<List<Profile>> GetProfilesAsync();
+
+        /// <summary>
         /// Gets user profile by id
         /// </summary>
         /// <param name="id">Id we want to find</param>
         /// <returns>User Profile</returns>
         public Task<Profile> GetProfileByIdAsync(Guid id);
-
-        /// <summary>
-        /// Get user profile by user id
-        /// </summary>
-        /// <param name="userId">User ID</param>
-        /// <returns>User Profile</returns>
-        public Task<Profile> GetProfileByUserIdAsync(Guid userId);
 
         /// <summary>
         /// Adds a user profile to database
@@ -30,30 +29,30 @@ namespace Core.IRepositories
         /// </summary>
         /// <param name="existingProfile">Existing profile in database</param>
         /// <param name="updatedProfile">Profile with new information</param>
-        public Task UpdateProfileAsync(Profile existingProfile, Profile updatedProfile);
+        public void UpdateProfile(Profile existingProfile, Profile updatedProfile);
 
         /// <summary>
         /// Deletes profile from database based on it's User ID
         /// </summary>
-        /// <param name="userId">ID of user we want to delete profile from</param>
-        public Task DeleteProfileAsync(Profile profile);
+        /// <param name="profile">Profile of user we want to delete</param>
+        public void DeleteProfile(Profile profile);
 
         /// <summary>
         /// Checks if UserProfile exists
         /// </summary>
         /// <param name="id">Id we want to check</param>
         /// <returns>True if exists, false if not</returns>
-        public Task<bool> ProfileExistsAsync(Guid id, string type = "profile");
-
-        /// <summary>
-        /// Checks if any changes are saved to database
-        /// </summary>
-        /// <returns>Returns true if any changes are saved, false if not</returns>
-        public Task<bool> IsSavedAsync();
+        public Task<bool> ProfileExistsAsync(Guid id);
 
         /// <summary>
         /// Starts the transaction
         /// </summary>
         public Task<IDbContextTransaction> StartTransactionAsync();
+
+        /// <summary>
+        /// Check if any changes are saved to database
+        /// </summary>
+        /// <returns>True if changes are saved, false if not</returns>
+        public Task<bool> IsSavedAsync();
     }
 }

@@ -1,11 +1,13 @@
-﻿using Core.Data.Dto.Account;
+﻿using Core.Data.Dto.AccountDto;
 using Core.Data.Entities;
 using Core.Data.Entities.Identity;
 using Core.Exceptions;
 using Core.IRepositories;
 using Core.IServices;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using System.ComponentModel.DataAnnotations;
+using System.Security.Claims;
 
 namespace Core.Services
 {
@@ -17,7 +19,7 @@ namespace Core.Services
         private readonly ITokenService _tokenService;
 
         public AccountService(UserManager<AppUser> userManager, SignInManager<AppUser> signInManager, 
-            ITokenService tokenService, IProfileService profileService)
+            ITokenService tokenService, IProfileService profileService, IHttpContextAccessor httpContextAccessor)
         {
             _userManager = userManager;
             _signInManager = signInManager;
@@ -31,9 +33,8 @@ namespace Core.Services
         {
             AppUser appUser = registerUserDto.ToAppUser();
             await AddUserAsync(appUser, registerUserDto.Password);
-            await _profileService.AddProfileAsync(appUser);
-
-            Profile profile = await _profileService.GetProfileByUserIdAsync(appUser.Id);
+            Profile profile = await _profileService.AddProfileAsync(appUser);
+            
             string token = _tokenService.CreateToken(appUser);
 
             UserResponse userResponse = UserResponse.CreateUserResonse(appUser, profile, token);
@@ -69,7 +70,7 @@ namespace Core.Services
                 throw new UnauthorizedException("Email/Username or Password is invalid");
             }
 
-            Profile profile = await _profileService.GetProfileByUserIdAsync(appUser.Id);
+            Profile profile = (await _profileService.GetProfileByIdAsync(appUser.Id)).ToProfile();
             string token = _tokenService.CreateToken(appUser);
 
             UserResponse userResponse = UserResponse.CreateUserResonse(appUser, profile, token);
@@ -78,25 +79,20 @@ namespace Core.Services
         }
 
         // Deletes a user from the database
-        public async Task DeleteUserAsync(Guid userId, Guid currentUserId)
+        public async Task DeleteUserAsync(Guid currentUserId)
         {
-            if (currentUserId != userId)
-            {
-                throw new ForbiddenException("You don't have permission to delete this user.");
-            }
-
             using var transaction = await _profileService.StartTransactionAsync();
 
             try
             {
-                AppUser? user = await _userManager.FindByIdAsync(userId.ToString());
+                AppUser? user = await _userManager.FindByIdAsync(currentUserId.ToString());
 
                 if (user == null)
                 {
-                    throw new NotFoundException($"User not found, ID: {userId}");
+                    throw new NotFoundException($"User not found, ID: {currentUserId}");
                 }
 
-                await _profileService.DeleteProfileAsync(userId);
+                await _profileService.DeleteProfileAsync(currentUserId);
                 await _userManager.DeleteAsync(user);
 
                 await transaction.CommitAsync();

@@ -32,7 +32,9 @@ namespace Api.StartupExtension
             {
                 options.Filters.Add(typeof(HandleExceptionFilter));
             });
+
             services.AddLogging();
+
             services.AddSwaggerGen(option =>
             {
                 option.SwaggerDoc("v1", new OpenApiInfo { Title = "To-Do API", Version = "v1" });
@@ -101,8 +103,10 @@ namespace Api.StartupExtension
             services.AddScoped<IProfileService, ProfileService>();
             services.AddScoped<IAccountService, AccountService>();
             services.AddScoped<ITokenService, TokenService>();
+            services.AddScoped<IPostsService, PostsService>();
 
             services.AddScoped<IProfileRepository, ProfileRepository>();
+            services.AddScoped<IPostsRepository, PostsRepository>();
 
             return services;
         }

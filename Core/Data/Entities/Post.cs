@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using Core.Data.Dto.PostDto;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Core.Data.Entities
 {
@@ -18,8 +14,28 @@ namespace Core.Data.Entities
 
         [Required]
         [ForeignKey(nameof(UserProfile))]
-        public Guid ProfileId { get; set; }
+        public Guid UserId { get; set; }
+        public Profile? UserProfile { get; set; }
 
-        public Profile UserProfile { get; set; } = new Profile();
+        public PostResponse ToPostResponse(bool includeProfile = true)
+        {
+            if (!includeProfile)
+            {
+                return new PostResponse()
+                {
+                    Id = Id,
+                    Content = Content
+                };
+            }
+            else
+            {
+                return new PostResponse()
+                {
+                    Id = Id,
+                    Content = Content,
+                    UserProfile = UserProfile!.ToProfileResponse()
+                };
+            }
+        }
     }
 }

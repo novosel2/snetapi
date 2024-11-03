@@ -1,4 +1,4 @@
-﻿using Core.Data.Dto.Account;
+﻿using Core.Data.Dto.ProfileDto;
 using Core.Data.Entities.Identity;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -16,8 +16,6 @@ namespace Core.Data.Entities
         public string? FirstName { get; set; }
 
         public string? LastName { get; set; }
-
-        public Guid UserId { get; set; }
 
         public ProfileResponse ToProfileResponse()
         {

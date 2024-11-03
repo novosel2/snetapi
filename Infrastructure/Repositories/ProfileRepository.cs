@@ -17,63 +17,41 @@ namespace Infrastructure.Repositories
         }
 
         
+        // Return all profiles from database
+        public async Task<List<Profile>> GetProfilesAsync()
+        {
+            return await _db.Profiles.ToListAsync();
+        }
+
         // Return profile from database based on ID
         public async Task<Profile> GetProfileByIdAsync(Guid id)
         {
             return await _db.Profiles.FirstAsync(up => up.Id == id);
         }
 
-        // Return profile from database based on User ID
-        public async Task<Profile> GetProfileByUserIdAsync(Guid userId)
-        {
-            return await _db.Profiles.FirstAsync(p => p.UserId == userId);
-        }
-
         // Add profile to the database
         public async Task AddProfileAsync(Profile profile)
         {
             await _db.Profiles.AddAsync(profile);
-
-            if (! await IsSavedAsync())
-            {
-                throw new DbSavingFailedException("Failed to save added profile.");
-            }
         }
 
         // Update existing profile with updated information
-        public async Task UpdateProfileAsync(Profile existingProfile, Profile updatedProfile)
+        public void UpdateProfile(Profile existingProfile, Profile updatedProfile)
         {
             _db.Profiles.Entry(existingProfile).CurrentValues.SetValues(updatedProfile);
             _db.Profiles.Entry(existingProfile).State = EntityState.Modified;
-
-            if (! await IsSavedAsync())
-            {
-                throw new DbSavingFailedException("Failed to save updated profile.");
-            }
         }
 
         // Delete profile from database
-        public async Task DeleteProfileAsync(Profile profile)
+        public void DeleteProfile(Profile profile)
         {
             _db.Profiles.Remove(profile);
-
-            if (!await IsSavedAsync())
-            {
-                throw new DbSavingFailedException("Failed to save profile deletion.");
-            }
         }
 
         // Check if profile with id exists
-        public async Task<bool> ProfileExistsAsync(Guid id, string type = "profile")
+        public async Task<bool> ProfileExistsAsync(Guid id)
         {
-            if (type == "profile")
-            {
-                return await _db.Profiles.AnyAsync(p => p.Id == id);
-            }
-            else
-            {
-                return await _db.Profiles.AnyAsync(p => p.UserId == id);
-            }
+            return await _db.Profiles.AnyAsync(p => p.Id == id);
         }
 
         // Check if any changes are saved

@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Core.Data.Dto.Account
+namespace Core.Data.Dto.AccountDto
 {
     public class LoginUserDto
     {

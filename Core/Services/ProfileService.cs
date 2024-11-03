@@ -1,11 +1,13 @@
-﻿using Core.Data.Dto.Account;
+﻿using Core.Data.Dto.ProfileDto;
 using Core.Data.Entities;
 using Core.Data.Entities.Identity;
 using Core.Exceptions;
 using Core.IRepositories;
 using Core.IServices;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore.Storage;
+using System.Security.Claims;
 
 namespace Core.Services
 {
@@ -14,71 +16,73 @@ namespace Core.Services
         private readonly IProfileRepository _profileRepository;
         private readonly UserManager<AppUser> _userManager;
 
-        public ProfileService(IProfileRepository profileRepository, UserManager<AppUser> userManager)
+        public ProfileService(IProfileRepository profileRepository, UserManager<AppUser> userManager, IHttpContextAccessor httpContextAccessor)
         {
             _profileRepository = profileRepository;
             _userManager = userManager;
         }
 
-
-        // Get profile by id
-        public async Task<Profile> GetProfileByIdAsync(Guid profileId)
+        
+        // Get all profiles
+        public async Task<List<ProfileResponse>> GetProfilesAsync()
         {
-            if (! await _profileRepository.ProfileExistsAsync(profileId))
-            {
-                throw new NotFoundException($"Profile not found, ID: {profileId}");
-            }
+            List<Profile> profiles = await _profileRepository.GetProfilesAsync();
 
-            Profile profile = await _profileRepository.GetProfileByIdAsync(profileId);
+            var profileResponses = profiles.Select(p => p.ToProfileResponse()).ToList();
 
-            return profile;
+            return profileResponses;
         }
 
-        // Get profile by user id
-        public async Task<Profile> GetProfileByUserIdAsync(Guid userId)
+        // Get profile by id
+        public async Task<ProfileResponse> GetProfileByIdAsync(Guid userId)
         {
-            if (! await _profileRepository.ProfileExistsAsync(userId, "user"))
+            if (! await _profileRepository.ProfileExistsAsync(userId))
             {
-                throw new NotFoundException($"Profile not found, User ID: {userId}");
+                throw new NotFoundException($"Profile not found, ID: {userId}");
             }
 
-            Profile profile = await _profileRepository.GetProfileByUserIdAsync(userId);
+            Profile profile = await _profileRepository.GetProfileByIdAsync(userId);
 
-            return profile;
+            return profile.ToProfileResponse();
         }
 
         // Add profile
-        public async Task AddProfileAsync(AppUser appUser)
+        public async Task<Profile> AddProfileAsync(AppUser appUser)
         {
             Profile profile = new Profile()
             {
-                Id = Guid.NewGuid(),
+                Id = appUser.Id,
                 Username = appUser.UserName,
-                UserId = appUser.Id
             };
 
             await _profileRepository.AddProfileAsync(profile);
+
+            if (!await _profileRepository.IsSavedAsync())
+            {
+                throw new DbSavingFailedException("Failed to save added profile.");
+            }
+
+            return profile;
         }
 
         // Update profile with new information
-        public async Task<ProfileResponse> UpdateProfileAsync(Guid profileId, UpdateProfileDto updateProfileDto, Guid currentUserId)
+        public async Task<ProfileResponse> UpdateProfileAsync(UpdateProfileDto updateProfileDto, Guid currentUserId)
         {
-            Profile existingProfile = await GetProfileByIdAsync(profileId);
+            Profile existingProfile = await GetProfile(currentUserId);
             string oldUsername = existingProfile.Username;
 
-            // Check if current user is the same as the profiles owner
-            if (currentUserId != existingProfile.UserId)
+            Profile updatedProfile = updateProfileDto.ToProfile(currentUserId);
+
+            _profileRepository.UpdateProfile(existingProfile, updatedProfile);
+
+            if (!await _profileRepository.IsSavedAsync())
             {
-                throw new ForbiddenException("You don't have permission to update this user.");
+                throw new DbSavingFailedException("Failed to save updated profile.");
             }
-
-            Profile updatedProfile = updateProfileDto.ToProfile(profileId, existingProfile.UserId);
-
-            await _profileRepository.UpdateProfileAsync(existingProfile, updatedProfile);
 
             if (updatedProfile.Username != oldUsername)
             {
-                AppUser user = ( await _userManager.FindByIdAsync(existingProfile.UserId.ToString()) )!;
+                AppUser user = ( await _userManager.FindByIdAsync(currentUserId.ToString()) )!;
 
                 await _userManager.SetUserNameAsync(user, updatedProfile.Username);
             }
@@ -87,17 +91,34 @@ namespace Core.Services
         }
 
         // Deletes profile from database
-        public async Task DeleteProfileAsync(Guid userId)
+        public async Task DeleteProfileAsync(Guid currentUserId)
         {
-            Profile profile = await GetProfileByUserIdAsync(userId);
+            Profile profile = await GetProfile(currentUserId);
 
-            await _profileRepository.DeleteProfileAsync(profile);
+            _profileRepository.DeleteProfile(profile);
+
+            if (!await _profileRepository.IsSavedAsync())
+            {
+                throw new DbSavingFailedException("Failed to save profile deletion.");
+            }
         }
 
         // Starts a transaction in database
         public async Task<IDbContextTransaction> StartTransactionAsync()
         {
             return await _profileRepository.StartTransactionAsync();
+        }
+
+        private async Task<Profile> GetProfile(Guid currentUserId)
+        {
+            if (!await _profileRepository.ProfileExistsAsync(currentUserId))
+            {
+                throw new NotFoundException($"Profile not found, ID: {currentUserId}");
+            }
+
+            Profile profile = await _profileRepository.GetProfileByIdAsync(currentUserId);
+
+            return profile;
         }
     }
 }

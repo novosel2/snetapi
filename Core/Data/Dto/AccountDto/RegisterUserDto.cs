@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Identity;
 using System.ComponentModel.DataAnnotations;
 
-namespace Core.Data.Dto.Account
+namespace Core.Data.Dto.AccountDto
 {
     public class RegisterUserDto
     { 
@@ -15,6 +15,7 @@ namespace Core.Data.Dto.Account
 
         [Required]
         [Compare("ConfirmPassword")]
+
         public string Password { get; set; } = string.Empty;
 
         [Required]

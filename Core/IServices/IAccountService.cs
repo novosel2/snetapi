@@ -1,4 +1,4 @@
-﻿using Core.Data.Dto.Account;
+﻿using Core.Data.Dto.AccountDto;
 
 namespace Core.IServices
 {
@@ -21,7 +21,6 @@ namespace Core.IServices
         /// <summary>
         /// Deletes a user from the database
         /// </summary>
-        /// <param name="userId">ID of user we want to delete</param>
-        public Task DeleteUserAsync(Guid userId, Guid currentUserId);
+        public Task DeleteUserAsync(Guid currentUserId);
     }
 }

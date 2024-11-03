@@ -1,4 +1,4 @@
-﻿using Core.Data.Dto.Account;
+﻿using Core.Data.Dto.ProfileDto;
 using Core.Data.Entities;
 using Core.Data.Entities.Identity;
 using Microsoft.EntityFrameworkCore.Storage;
@@ -13,37 +13,35 @@ namespace Core.IServices
     public interface IProfileService
     {
         /// <summary>
+        /// Get all profiles from database
+        /// </summary>
+        /// <returns>List of profile responses</returns>
+        public Task<List<ProfileResponse>> GetProfilesAsync();
+
+        /// <summary>
         /// Get profile by profile id
         /// </summary>
         /// <param name="profileId">Profile id</param>
         /// <returns>User profile with specified profile id</returns>
-        public Task<Profile> GetProfileByIdAsync(Guid profileId);
-
-        /// <summary>
-        /// Get profile by user id
-        /// </summary>
-        /// <param name="userId">User id</param>
-        /// <returns>User profile with specified user id</returns>
-        public Task<Profile> GetProfileByUserIdAsync(Guid userId);
+        public Task<ProfileResponse> GetProfileByIdAsync(Guid profileId);
 
         /// <summary>
         /// Add profile to database
         /// </summary>
         /// <param name="appUser">User that is owner of this profile</param>
-        public Task AddProfileAsync(AppUser appUser);
+        public Task<Profile> AddProfileAsync(AppUser appUser);
 
         /// <summary>
         /// Updates profile with new information
         /// </summary>
         /// <param name="updateProfileDto">New information</param>
         /// <returns>User Response with new information</returns>
-        public Task<ProfileResponse> UpdateProfileAsync(Guid profileId, UpdateProfileDto updateProfileDto, Guid currentUserId);
+        public Task<ProfileResponse> UpdateProfileAsync(UpdateProfileDto updateProfileDto, Guid currentUserId);
 
         /// <summary>
         /// Deletes profile based on it's User ID
         /// </summary>
-        /// <param name="userId">ID of user we want to delete profile from</param>
-        public Task DeleteProfileAsync(Guid userId);
+        public Task DeleteProfileAsync(Guid currentUserId);
 
         /// <summary>
         /// Starts a transaction
