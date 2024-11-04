@@ -13,6 +13,9 @@ namespace Core.Data.Entities
         public string Content { get; set; } = string.Empty;
 
         [Required]
+        public DateTime CreatedOn { get; set; } = DateTime.UtcNow;
+
+        [Required]
         [ForeignKey(nameof(UserProfile))]
         public Guid UserId { get; set; }
         public Profile? UserProfile { get; set; }
@@ -33,6 +36,7 @@ namespace Core.Data.Entities
                 {
                     Id = Id,
                     Content = Content,
+                    CreatedOn = CreatedOn,
                     UserProfile = UserProfile!.ToProfileResponse()
                 };
             }

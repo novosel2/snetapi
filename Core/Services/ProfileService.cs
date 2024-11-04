@@ -109,6 +109,8 @@ namespace Core.Services
             return await _profileRepository.StartTransactionAsync();
         }
 
+
+
         private async Task<Profile> GetProfile(Guid currentUserId)
         {
             if (!await _profileRepository.ProfileExistsAsync(currentUserId))
