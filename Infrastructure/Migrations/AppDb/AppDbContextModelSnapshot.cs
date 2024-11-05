@@ -45,6 +45,22 @@ namespace Infrastructure.Migrations.AppDb
                     b.ToTable("Posts");
                 });
 
+            modelBuilder.Entity("Core.Data.Entities.PostReaction", b =>
+                {
+                    b.Property<Guid>("PostId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("Reaction")
+                        .HasColumnType("int");
+
+                    b.HasKey("PostId", "UserId");
+
+                    b.ToTable("PostReactions");
+                });
+
             modelBuilder.Entity("Core.Data.Entities.Profile", b =>
                 {
                     b.Property<Guid>("Id")
@@ -75,6 +91,22 @@ namespace Infrastructure.Migrations.AppDb
                         .IsRequired();
 
                     b.Navigation("UserProfile");
+                });
+
+            modelBuilder.Entity("Core.Data.Entities.PostReaction", b =>
+                {
+                    b.HasOne("Core.Data.Entities.Post", "Post")
+                        .WithMany("Reactions")
+                        .HasForeignKey("PostId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Post");
+                });
+
+            modelBuilder.Entity("Core.Data.Entities.Post", b =>
+                {
+                    b.Navigation("Reactions");
                 });
 #pragma warning restore 612, 618
         }

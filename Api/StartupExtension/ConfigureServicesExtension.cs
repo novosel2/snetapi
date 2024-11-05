@@ -33,6 +33,7 @@ namespace Api.StartupExtension
                 options.Filters.Add(typeof(HandleExceptionFilter));
             });
 
+            services.AddHttpContextAccessor();
             services.AddLogging();
 
             services.AddSwaggerGen(option =>
@@ -104,9 +105,12 @@ namespace Api.StartupExtension
             services.AddScoped<IAccountService, AccountService>();
             services.AddScoped<ITokenService, TokenService>();
             services.AddScoped<IPostsService, PostsService>();
+            services.AddScoped<ICurrentUserService, CurrentUserService>();
+            services.AddScoped<IPostReactionsService, PostReactionsService>();
 
             services.AddScoped<IProfileRepository, ProfileRepository>();
             services.AddScoped<IPostsRepository, PostsRepository>();
+            services.AddScoped<IPostReactionsRepository, PostReactionsRepository>();
 
             return services;
         }

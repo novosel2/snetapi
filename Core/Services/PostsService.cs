@@ -16,10 +16,12 @@ namespace Core.Services
     public class PostsService : IPostsService
     {
         private readonly IPostsRepository _postRepository;
+        private readonly Guid _currentUserId;
 
-        public PostsService(IPostsRepository postRepository, IHttpContextAccessor httpContextAccessor)
+        public PostsService(IPostsRepository postRepository, ICurrentUserService currentUserService)
         {
             _postRepository = postRepository;
+            _currentUserId = currentUserService.UserId ?? throw new UnauthorizedException("Unauthorized access.");
         }
 
         // Get all posts from database
@@ -27,7 +29,7 @@ namespace Core.Services
         {
             List<Post> posts = await _postRepository.GetPostsAsync();
 
-            var postResponses = posts.Select(p => p.ToPostResponse(includeProfile: true)).ToList();
+            var postResponses = posts.Select(p => p.ToPostResponse(_currentUserId)).ToList();
 
             return postResponses;
         }
@@ -42,7 +44,7 @@ namespace Core.Services
 
             Post post = await _postRepository.GetPostByIdAsync(postId);
 
-            var postResponse = post.ToPostResponse();
+            var postResponse = post.ToPostResponse(_currentUserId);
 
             return postResponse;
         }
@@ -52,15 +54,15 @@ namespace Core.Services
         {
             List<Post> posts = await _postRepository.GetPostsByUserIdAsync(userId);
 
-            var postResponses = posts.Select(p => p.ToPostResponse(includeProfile: false)).ToList();
+            var postResponses = posts.Select(p => p.ToPostResponse(_currentUserId, includeProfile: false)).ToList();
 
             return postResponses;
         }
 
         // Add post to database
-        public async Task AddPostAsync(PostAddRequest postAddRequest, Guid currentUserId)
+        public async Task AddPostAsync(PostAddRequest postAddRequest)
         {
-            Post post = postAddRequest.ToPost(currentUserId);
+            Post post = postAddRequest.ToPost(_currentUserId);
 
             await _postRepository.AddPostAsync(post);
 
@@ -71,17 +73,17 @@ namespace Core.Services
         }
 
         // Update post with updated information
-        public async Task UpdatePostAsync(Guid existingPostId, PostUpdateRequest postUpdateRequest, Guid currentUserId)
+        public async Task UpdatePostAsync(Guid existingPostId, PostUpdateRequest postUpdateRequest)
         {
             if (! await _postRepository.PostExistsAsync(existingPostId))
             {
                 throw new NotFoundException($"Post not found, ID: {existingPostId}");
             }
 
-            Post existingPost = await _postRepository.GetPostByIdAsync(currentUserId);
-            Post updatedPost = postUpdateRequest.ToPost(existingPostId, currentUserId);
+            Post existingPost = await _postRepository.GetPostByIdAsync(_currentUserId);
+            Post updatedPost = postUpdateRequest.ToPost(existingPostId, _currentUserId);
 
-            if (existingPost.UserId != currentUserId)
+            if (existingPost.UserId != _currentUserId)
             {
                 throw new ForbiddenException("You do not have permission to update this post.");
             }
@@ -95,7 +97,7 @@ namespace Core.Services
         }
 
         // Delete post from database
-        public async Task DeletePostAsync(Guid postId, Guid currentUserId)
+        public async Task DeletePostAsync(Guid postId)
         {
             if (! await _postRepository.PostExistsAsync(postId))
             {
@@ -104,7 +106,7 @@ namespace Core.Services
 
             Post post = await _postRepository.GetPostByIdAsync(postId);
 
-            if (post.UserId != currentUserId)
+            if (post.UserId != _currentUserId)
             {
                 throw new ForbiddenException("You do not have permission to delete this post.");
             }

@@ -1,5 +1,6 @@
 ﻿using Core.Data.Dto.AccountDto;
 using Core.Data.Dto.ProfileDto;
+using Core.Exceptions;
 using Core.IServices;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -48,11 +49,9 @@ namespace Api.Controllers
         [HttpDelete("delete-user")]
         public async Task<IActionResult> DeleteUser()
         {
-            Guid _userId = Guid.Parse(User.FindFirst(ClaimTypes.NameIdentifier)!.Value.ToString());
+            await _accountService.DeleteUserAsync();
 
-            await _accountService.DeleteUserAsync(_userId);
-
-            return Ok("User successfully deleted.");
+            return Ok();
         }
     }
 }

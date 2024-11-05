@@ -18,19 +18,28 @@ namespace Infrastructure.Repositories
         // Get posts from database
         public async Task<List<Post>> GetPostsAsync()
         {
-            return await _db.Posts.Include("UserProfile").ToListAsync();
+            return await _db.Posts
+                .Include("UserProfile")
+                .Include("Reactions")
+                .ToListAsync();
         }
 
         // Get post by id
         public async Task<Post> GetPostByIdAsync(Guid postId)
         {
-            return await _db.Posts.Include("UserProfile").FirstAsync(p => p.Id == postId);
+            return await _db.Posts
+                .Include("UserProfile")
+                .Include("Reactions")
+                .FirstAsync(p => p.Id == postId);
         }
 
         // Get posts by user id
         public async Task<List<Post>> GetPostsByUserIdAsync(Guid userId)
         {
-            return await _db.Posts.Where(p => p.UserId == userId).ToListAsync();
+            return await _db.Posts
+                .Include("Reactions")
+                .Where(p => p.UserId == userId)
+                .ToListAsync();
         }
 
         // Add post to database

@@ -15,11 +15,13 @@ namespace Core.Services
     {
         private readonly IProfileRepository _profileRepository;
         private readonly UserManager<AppUser> _userManager;
+        private readonly Guid _currentUserId;
 
-        public ProfileService(IProfileRepository profileRepository, UserManager<AppUser> userManager, IHttpContextAccessor httpContextAccessor)
+        public ProfileService(IProfileRepository profileRepository, UserManager<AppUser> userManager, ICurrentUserService currentUserService)
         {
             _profileRepository = profileRepository;
             _userManager = userManager;
+            _currentUserId = currentUserService.UserId.GetValueOrDefault();
         }
 
         
@@ -66,12 +68,12 @@ namespace Core.Services
         }
 
         // Update profile with new information
-        public async Task<ProfileResponse> UpdateProfileAsync(UpdateProfileDto updateProfileDto, Guid currentUserId)
+        public async Task<ProfileResponse> UpdateProfileAsync(UpdateProfileDto updateProfileDto)
         {
-            Profile existingProfile = await GetProfile(currentUserId);
+            Profile existingProfile = await GetProfile(_currentUserId);
             string oldUsername = existingProfile.Username;
 
-            Profile updatedProfile = updateProfileDto.ToProfile(currentUserId);
+            Profile updatedProfile = updateProfileDto.ToProfile(_currentUserId);
 
             _profileRepository.UpdateProfile(existingProfile, updatedProfile);
 
@@ -82,7 +84,7 @@ namespace Core.Services
 
             if (updatedProfile.Username != oldUsername)
             {
-                AppUser user = ( await _userManager.FindByIdAsync(currentUserId.ToString()) )!;
+                AppUser user = ( await _userManager.FindByIdAsync(_currentUserId.ToString()) )!;
 
                 await _userManager.SetUserNameAsync(user, updatedProfile.Username);
             }
@@ -91,9 +93,9 @@ namespace Core.Services
         }
 
         // Deletes profile from database
-        public async Task DeleteProfileAsync(Guid currentUserId)
+        public async Task DeleteProfileAsync()
         {
-            Profile profile = await GetProfile(currentUserId);
+            Profile profile = await GetProfile(_currentUserId);
 
             _profileRepository.DeleteProfile(profile);
 

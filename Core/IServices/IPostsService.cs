@@ -34,18 +34,18 @@ namespace Core.IServices
         /// Adds post to database
         /// </summary>
         /// <param name="postAddRequest">Post we want to add</param>
-        public Task AddPostAsync(PostAddRequest postAddRequest, Guid currentUserId);
+        public Task AddPostAsync(PostAddRequest postAddRequest);
 
         /// <summary>
         /// Updates post with new information
         /// </summary>
         /// <param name="existingPostId">Existing post id we want to update</param>
-        public Task UpdatePostAsync(Guid existingPostId, PostUpdateRequest updatedPost, Guid currentUserId);
+        public Task UpdatePostAsync(Guid existingPostId, PostUpdateRequest updatedPost);
 
         /// <summary>
         /// Deletes a post from database
         /// </summary>
         /// <param name="postId">Post id we want to delete</param>
-        public Task DeletePostAsync(Guid postId, Guid currentUserId);
+        public Task DeletePostAsync(Guid postId);
     }
 }

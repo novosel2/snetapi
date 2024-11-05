@@ -21,6 +21,6 @@ namespace Core.IServices
         /// <summary>
         /// Deletes a user from the database
         /// </summary>
-        public Task DeleteUserAsync(Guid currentUserId);
+        public Task DeleteUserAsync();
     }
 }

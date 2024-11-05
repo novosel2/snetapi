@@ -1,4 +1,5 @@
 ﻿using Core.Data.Dto.PostDto;
+using Core.Enums;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -20,26 +21,26 @@ namespace Core.Data.Entities
         public Guid UserId { get; set; }
         public Profile? UserProfile { get; set; }
 
-        public PostResponse ToPostResponse(bool includeProfile = true)
+        public List<PostReaction> Reactions { get; set; } = [];
+
+        public PostResponse ToPostResponse(Guid currentUserId, bool includeProfile = true)
         {
-            if (!includeProfile)
+            var postResponse = new PostResponse()
             {
-                return new PostResponse()
-                {
-                    Id = Id,
-                    Content = Content
-                };
-            }
-            else
+                Id = Id,
+                Content = Content,
+                CreatedOn = CreatedOn,
+                Likes = Reactions.Count(r => r.Reaction == ReactionType.Like),
+                Dislikes = Reactions.Count(r => r.Reaction == ReactionType.Dislike),
+                UserReacted = Reactions.Any(r => r.UserId == currentUserId) ? Reactions.First(r => r.UserId == currentUserId).Reaction : ReactionType.NoReaction
+            };
+
+            if (includeProfile)
             {
-                return new PostResponse()
-                {
-                    Id = Id,
-                    Content = Content,
-                    CreatedOn = CreatedOn,
-                    UserProfile = UserProfile!.ToProfileResponse()
-                };
+                postResponse.UserProfile = UserProfile!.ToProfileResponse();
             }
+
+            return postResponse;
         }
     }
 }

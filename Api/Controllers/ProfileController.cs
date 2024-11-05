@@ -46,9 +46,7 @@ namespace Api.Controllers
         [HttpPut("update-profile")]
         public async Task<IActionResult> UpdateProfile(UpdateProfileDto updateProfileDto)
         {
-            Guid _userId = Guid.Parse(User.FindFirst(ClaimTypes.NameIdentifier)!.Value.ToString());
-
-            ProfileResponse profileResponse = await _profileService.UpdateProfileAsync(updateProfileDto, _userId);
+            ProfileResponse profileResponse = await _profileService.UpdateProfileAsync(updateProfileDto);
 
             return Ok(profileResponse);
         }

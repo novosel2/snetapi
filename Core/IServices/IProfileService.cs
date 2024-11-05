@@ -36,12 +36,12 @@ namespace Core.IServices
         /// </summary>
         /// <param name="updateProfileDto">New information</param>
         /// <returns>User Response with new information</returns>
-        public Task<ProfileResponse> UpdateProfileAsync(UpdateProfileDto updateProfileDto, Guid currentUserId);
+        public Task<ProfileResponse> UpdateProfileAsync(UpdateProfileDto updateProfileDto);
 
         /// <summary>
         /// Deletes profile based on it's User ID
         /// </summary>
-        public Task DeleteProfileAsync(Guid currentUserId);
+        public Task DeleteProfileAsync();
 
         /// <summary>
         /// Starts a transaction

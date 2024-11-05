@@ -1,8 +1,8 @@
 ﻿using Core.Data.Dto.PostDto;
+using Core.Enums;
 using Core.IServices;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.Security.Claims;
 
 namespace Api.Controllers
 {
@@ -12,10 +12,12 @@ namespace Api.Controllers
     public class PostsController : ControllerBase
     {
         private readonly IPostsService _postsService;
+        private readonly IPostReactionsService _postReactionsService;
 
-        public PostsController(IPostsService postsService)
+        public PostsController(IPostsService postsService, IPostReactionsService postReactionsService)
         {
             _postsService = postsService;
+            _postReactionsService = postReactionsService;
         }
 
 
@@ -57,11 +59,9 @@ namespace Api.Controllers
         [HttpPost("add-post")]
         public async Task<IActionResult> AddPost(PostAddRequest postAddRequest)
         {
-            Guid _userId = Guid.Parse(User.FindFirst(ClaimTypes.NameIdentifier)!.Value.ToString());
+            await _postsService.AddPostAsync(postAddRequest);
 
-            await _postsService.AddPostAsync(postAddRequest, _userId);
-
-            return Ok("Post successfully added.");
+            return Ok();
         }
 
 
@@ -70,11 +70,9 @@ namespace Api.Controllers
         [HttpPut("update-post/{postId}")]
         public async Task<IActionResult> UpdatePost(Guid postId, PostUpdateRequest postUpdateRequest)
         {
-            Guid _userId = Guid.Parse(User.FindFirst(ClaimTypes.NameIdentifier)!.Value.ToString());
+            await _postsService.UpdatePostAsync(postId, postUpdateRequest);
 
-            await _postsService.UpdatePostAsync(postId, postUpdateRequest, _userId);
-
-            return Ok("Post successfully updated.");
+            return Ok();
         }
 
 
@@ -83,11 +81,40 @@ namespace Api.Controllers
         [HttpDelete("delete-post/{postId}")]
         public async Task<IActionResult> DeletePost(Guid postId)
         {
-            Guid _userId = Guid.Parse(User.FindFirst(ClaimTypes.NameIdentifier)!.Value.ToString());
+            await _postsService.DeletePostAsync(postId);
 
-            await _postsService.DeletePostAsync(postId, _userId);
+            return Ok();
+        }
 
-            return Ok("Post successfully deleted.");
+
+        // POST: /api/posts/reactions/add/31faddd4-c910-45c2-a68b-bf67b5abaa77/
+
+        [HttpPost("reactions/add/{postId}")]
+        public async Task<IActionResult> AddPostReaction(Guid postId, ReactionType reaction)
+        {
+            await _postReactionsService.AddPostReactionAsync(postId, reaction);
+
+            return Ok();
+        }
+
+        // PUT: /api/posts/reactions/update/31faddd4-c910-45c2-a68b-bf67b5abaa77/
+
+        [HttpPut("reactions/update/{postId}")]
+        public async Task<IActionResult> UpdatePostReaction(Guid postId)
+        {
+            await _postReactionsService.UpdatePostReaction(postId);
+
+            return Ok();
+        }
+
+        // DELETE /api/posts/reactions/remove/31faddd4-c910-45c2-a68b-bf67b5abaa77/
+
+        [HttpDelete("reactions/delete/{postId}")]
+        public async Task<IActionResult> DeletePostReaction(Guid postId)
+        {
+            await _postReactionsService.DeletePostReaction(postId);
+
+            return Ok();
         }
     }
 }

@@ -17,14 +17,16 @@ namespace Core.Services
         private readonly SignInManager<AppUser> _signInManager;
         private readonly IProfileService _profileService;
         private readonly ITokenService _tokenService;
+        private readonly Guid _currentUserId;
 
         public AccountService(UserManager<AppUser> userManager, SignInManager<AppUser> signInManager, 
-            ITokenService tokenService, IProfileService profileService, IHttpContextAccessor httpContextAccessor)
+            ITokenService tokenService, IProfileService profileService, ICurrentUserService currentUserService)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _profileService = profileService;
             _tokenService = tokenService;
+            _currentUserId = currentUserService.UserId.GetValueOrDefault();
         }
 
 
@@ -79,20 +81,20 @@ namespace Core.Services
         }
 
         // Deletes a user from the database
-        public async Task DeleteUserAsync(Guid currentUserId)
+        public async Task DeleteUserAsync()
         {
             using var transaction = await _profileService.StartTransactionAsync();
 
             try
             {
-                AppUser? user = await _userManager.FindByIdAsync(currentUserId.ToString());
+                AppUser? user = await _userManager.FindByIdAsync(_currentUserId.ToString());
 
                 if (user == null)
                 {
-                    throw new NotFoundException($"User not found, ID: {currentUserId}");
+                    throw new NotFoundException($"User not found, ID: {_currentUserId}");
                 }
 
-                await _profileService.DeleteProfileAsync(currentUserId);
+                await _profileService.DeleteProfileAsync();
                 await _userManager.DeleteAsync(user);
 
                 await transaction.CommitAsync();
