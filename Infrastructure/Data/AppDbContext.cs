@@ -33,6 +33,23 @@ namespace Infrastructure.Data
                 .HasOne(pr => pr.Post)
                 .WithMany(p => p.Reactions)
                 .HasForeignKey(pr => pr.PostId);
+
+            modelBuilder.Entity<Comment>()
+                .HasOne(c => c.Post)
+                .WithMany(p => p.Comments)
+                .HasForeignKey(c => c.PostId);
+
+            modelBuilder.Entity<CommentReaction>()
+                .HasKey(cr => new
+                {
+                    cr.CommentId,
+                    cr.UserId
+                });
+
+            modelBuilder.Entity<CommentReaction>()
+                .HasOne(cr => cr.Comment)
+                .WithMany(c => c.Reactions)
+                .HasForeignKey(cr => cr.CommentId);
         }
     }
 }

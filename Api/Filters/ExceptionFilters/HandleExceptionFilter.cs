@@ -54,6 +54,11 @@ namespace Api.Filters.ExceptionFilters
                 _logger.LogError(exception.Message);
                 problemDetails = CreateProblemDetails(500, "Role Assign failed", exception.Message);
             }
+            else if (exception is AlreadyExistsException)
+            {
+                _logger.LogError(exception.Message);
+                problemDetails = CreateProblemDetails(400, "Already exists", exception.Message);
+            }
             else
             {
                 return;

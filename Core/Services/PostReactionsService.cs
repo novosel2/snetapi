@@ -21,6 +21,11 @@ namespace Core.Services
 
         public async Task AddPostReactionAsync(Guid postId, ReactionType reaction)
         {
+            if (await _postReactionsRepository.PostReactionExistsAsync(UserId, postId))
+            {
+                throw new AlreadyExistsException($"Post reaction on post already exists.");
+            }
+
             var postReaction = new PostReaction()
             {
                 PostId = postId,

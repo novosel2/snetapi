@@ -21,7 +21,15 @@ namespace Core.Data.Entities
         public Guid UserId { get; set; }
         public Profile? UserProfile { get; set; }
 
+        public List<Comment> Comments { get; set; } = [];
         public List<PostReaction> Reactions { get; set; } = [];
+
+        public Post()
+        {
+            TimeZoneInfo cetZone = TimeZoneInfo.FindSystemTimeZoneById("Central European Standard Time");
+
+            CreatedOn = TimeZoneInfo.ConvertTimeFromUtc(CreatedOn, cetZone);
+        }
 
         public PostResponse ToPostResponse(Guid currentUserId, bool includeProfile = true)
         {

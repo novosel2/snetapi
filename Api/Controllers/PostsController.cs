@@ -12,12 +12,10 @@ namespace Api.Controllers
     public class PostsController : ControllerBase
     {
         private readonly IPostsService _postsService;
-        private readonly IPostReactionsService _postReactionsService;
 
-        public PostsController(IPostsService postsService, IPostReactionsService postReactionsService)
+        public PostsController(IPostsService postsService)
         {
             _postsService = postsService;
-            _postReactionsService = postReactionsService;
         }
 
 
@@ -82,37 +80,6 @@ namespace Api.Controllers
         public async Task<IActionResult> DeletePost(Guid postId)
         {
             await _postsService.DeletePostAsync(postId);
-
-            return Ok();
-        }
-
-
-        // POST: /api/posts/reactions/add/31faddd4-c910-45c2-a68b-bf67b5abaa77/
-
-        [HttpPost("reactions/add/{postId}")]
-        public async Task<IActionResult> AddPostReaction(Guid postId, ReactionType reaction)
-        {
-            await _postReactionsService.AddPostReactionAsync(postId, reaction);
-
-            return Ok();
-        }
-
-        // PUT: /api/posts/reactions/update/31faddd4-c910-45c2-a68b-bf67b5abaa77/
-
-        [HttpPut("reactions/update/{postId}")]
-        public async Task<IActionResult> UpdatePostReaction(Guid postId)
-        {
-            await _postReactionsService.UpdatePostReaction(postId);
-
-            return Ok();
-        }
-
-        // DELETE /api/posts/reactions/remove/31faddd4-c910-45c2-a68b-bf67b5abaa77/
-
-        [HttpDelete("reactions/delete/{postId}")]
-        public async Task<IActionResult> DeletePostReaction(Guid postId)
-        {
-            await _postReactionsService.DeletePostReaction(postId);
 
             return Ok();
         }
