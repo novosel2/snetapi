@@ -6,19 +6,20 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Core.Data.Dto.PostDto
+namespace Core.Data.Dto.CommentDto
 {
-    public class PostAddRequest
+    public class CommentAddRequest
     {
         [Required]
         public string Content { get; set; } = string.Empty;
 
-        public Post ToPost(Guid currentUserId)
+        public Comment ToComment(Guid currentUserId, Guid postId)
         {
-            return new Post()
+            return new Comment()
             {
                 Content = Content,
-                UserId = currentUserId
+                UserId = currentUserId,
+                PostId = postId
             };
         }
     }

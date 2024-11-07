@@ -54,7 +54,7 @@ namespace Core.Services
         {
             List<Post> posts = await _postRepository.GetPostsByUserIdAsync(userId);
 
-            var postResponses = posts.Select(p => p.ToPostResponse(_currentUserId, includeProfile: false)).ToList();
+            var postResponses = posts.Select(p => p.ToPostResponse(_currentUserId)).ToList();
 
             return postResponses;
         }

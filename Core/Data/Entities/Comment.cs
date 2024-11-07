@@ -27,7 +27,7 @@ namespace Core.Data.Entities
 
         [Required]
         public Guid UserId { get; set; }
-        public Profile UserProfile { get; set; } = new Profile();
+        public Profile? UserProfile { get; set; }
 
         public List<CommentReaction> Reactions { get; set; } = [];
 
@@ -44,7 +44,7 @@ namespace Core.Data.Entities
                 Id = Id,
                 Content = Content,
                 CreatedOn = CreatedOn,
-                UserProfile = UserProfile.ToProfileResponse(),
+                UserProfile = UserProfile!.ToProfileResponse(),
                 Likes = Reactions.Count(r => r.Reaction is ReactionType.Like),
                 Dislikes = Reactions.Count(r => r.Reaction is ReactionType.Dislike),
                 UserReacted = Reactions.Any(r => r.UserId == currentUserId) ? Reactions.First(r => r.UserId == currentUserId).Reaction : ReactionType.NoReaction

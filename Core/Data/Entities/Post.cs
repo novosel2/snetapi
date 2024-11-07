@@ -31,7 +31,7 @@ namespace Core.Data.Entities
             CreatedOn = TimeZoneInfo.ConvertTimeFromUtc(CreatedOn, cetZone);
         }
 
-        public PostResponse ToPostResponse(Guid currentUserId, bool includeProfile = true)
+        public PostResponse ToPostResponse(Guid currentUserId)
         {
             var postResponse = new PostResponse()
             {
@@ -41,13 +41,9 @@ namespace Core.Data.Entities
                 Likes = Reactions.Count(r => r.Reaction == ReactionType.Like),
                 Dislikes = Reactions.Count(r => r.Reaction == ReactionType.Dislike),
                 UserReacted = Reactions.Any(r => r.UserId == currentUserId) ? Reactions.First(r => r.UserId == currentUserId).Reaction : ReactionType.NoReaction,
-                Comments = Comments.Select(c => c.ToCommentResponse(currentUserId)).ToList()
+                Comments = Comments.Select(c => c.ToCommentResponse(currentUserId)).ToList(),
+                UserProfile = UserProfile!.ToProfileResponse()
             };
-
-            if (includeProfile)
-            {
-                postResponse.UserProfile = UserProfile!.ToProfileResponse();
-            }
 
             return postResponse;
         }

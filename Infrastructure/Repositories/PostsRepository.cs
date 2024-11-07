@@ -23,6 +23,7 @@ namespace Infrastructure.Repositories
                 .Include(p => p.UserProfile)
                 .Include(p => p.Reactions)
                 .Include(p => p.Comments).ThenInclude(c => c.UserProfile)
+                .Include(p => p.Comments).ThenInclude(c => c.Reactions)
                 .ToListAsync();
         }
 
@@ -33,6 +34,7 @@ namespace Infrastructure.Repositories
                 .Include(p => p.UserProfile)
                 .Include(p => p.Reactions)
                 .Include(p => p.Comments).ThenInclude(c => c.UserProfile)
+                .Include(p => p.Comments).ThenInclude(c => c.Reactions)
                 .FirstAsync(p => p.Id == postId);
         }
 
@@ -40,8 +42,10 @@ namespace Infrastructure.Repositories
         public async Task<List<Post>> GetPostsByUserIdAsync(Guid userId)
         {
             return await _db.Posts
+                .Include(p => p.UserProfile)
                 .Include(p => p.Reactions)
                 .Include(p => p.Comments).ThenInclude(c => c.UserProfile)
+                .Include(p => p.Comments).ThenInclude(c => c.Reactions)
                 .Where(p => p.UserId == userId)
                 .ToListAsync();
         }

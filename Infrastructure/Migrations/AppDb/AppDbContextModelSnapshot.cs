@@ -47,7 +47,7 @@ namespace Infrastructure.Migrations.AppDb
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Comments");
+                    b.ToTable("Comments", (string)null);
                 });
 
             modelBuilder.Entity("Core.Data.Entities.CommentReaction", b =>
@@ -63,7 +63,7 @@ namespace Infrastructure.Migrations.AppDb
 
                     b.HasKey("CommentId", "UserId");
 
-                    b.ToTable("CommentReactions");
+                    b.ToTable("CommentReactions", (string)null);
                 });
 
             modelBuilder.Entity("Core.Data.Entities.Post", b =>
@@ -86,7 +86,7 @@ namespace Infrastructure.Migrations.AppDb
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Posts");
+                    b.ToTable("Posts", (string)null);
                 });
 
             modelBuilder.Entity("Core.Data.Entities.PostReaction", b =>
@@ -102,7 +102,7 @@ namespace Infrastructure.Migrations.AppDb
 
                     b.HasKey("PostId", "UserId");
 
-                    b.ToTable("PostReactions");
+                    b.ToTable("PostReactions", (string)null);
                 });
 
             modelBuilder.Entity("Core.Data.Entities.Profile", b =>
@@ -123,7 +123,7 @@ namespace Infrastructure.Migrations.AppDb
 
                     b.HasKey("Id");
 
-                    b.ToTable("Profiles");
+                    b.ToTable("Profiles", (string)null);
                 });
 
             modelBuilder.Entity("Core.Data.Entities.Comment", b =>

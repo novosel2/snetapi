@@ -17,7 +17,7 @@ namespace Core.Data.Dto.CommentDto
 
         public DateTime CreatedOn { get; set; }
 
-        public ProfileResponse UserProfile { get; set; } = new ProfileResponse();
+        public ProfileResponse? UserProfile { get; set; }
 
         public int Likes { get; set; }
         public int Dislikes { get; set; }
