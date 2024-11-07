@@ -15,9 +15,9 @@ namespace Core.Data.Dto.CommentDto
 
         public string Content { get; set; } = string.Empty;
 
-        public Guid PostId { get; set; }
+        public DateTime CreatedOn { get; set; }
 
-        public ProfileResponse User { get; set; } = new ProfileResponse();
+        public ProfileResponse UserProfile { get; set; } = new ProfileResponse();
 
         public int Likes { get; set; }
         public int Dislikes { get; set; }

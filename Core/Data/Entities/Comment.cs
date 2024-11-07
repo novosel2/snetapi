@@ -1,4 +1,6 @@
 ﻿using Core.Data.Dto.CommentDto;
+using Core.Data.Dto.ProfileDto;
+using Core.Enums;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -25,7 +27,7 @@ namespace Core.Data.Entities
 
         [Required]
         public Guid UserId { get; set; }
-        public Profile? Profile { get; set; }
+        public Profile UserProfile { get; set; } = new Profile();
 
         public List<CommentReaction> Reactions { get; set; } = [];
 
@@ -35,11 +37,17 @@ namespace Core.Data.Entities
             CreatedOn = TimeZoneInfo.ConvertTimeFromUtc(CreatedOn, cetZone);
         }
 
-        public CommentResponse ToCommentResponse()
+        public CommentResponse ToCommentResponse(Guid currentUserId)
         {
             return new CommentResponse()
             {
-
+                Id = Id,
+                Content = Content,
+                CreatedOn = CreatedOn,
+                UserProfile = UserProfile.ToProfileResponse(),
+                Likes = Reactions.Count(r => r.Reaction is ReactionType.Like),
+                Dislikes = Reactions.Count(r => r.Reaction is ReactionType.Dislike),
+                UserReacted = Reactions.Any(r => r.UserId == currentUserId) ? Reactions.First(r => r.UserId == currentUserId).Reaction : ReactionType.NoReaction
             };
         }
     }

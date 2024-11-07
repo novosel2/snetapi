@@ -3,6 +3,7 @@ using Core.Exceptions;
 using Core.IRepositories;
 using Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
+using System.Data;
 
 namespace Infrastructure.Repositories
 {
@@ -19,8 +20,9 @@ namespace Infrastructure.Repositories
         public async Task<List<Post>> GetPostsAsync()
         {
             return await _db.Posts
-                .Include("UserProfile")
-                .Include("Reactions")
+                .Include(p => p.UserProfile)
+                .Include(p => p.Reactions)
+                .Include(p => p.Comments).ThenInclude(c => c.UserProfile)
                 .ToListAsync();
         }
 
@@ -28,8 +30,9 @@ namespace Infrastructure.Repositories
         public async Task<Post> GetPostByIdAsync(Guid postId)
         {
             return await _db.Posts
-                .Include("UserProfile")
-                .Include("Reactions")
+                .Include(p => p.UserProfile)
+                .Include(p => p.Reactions)
+                .Include(p => p.Comments).ThenInclude(c => c.UserProfile)
                 .FirstAsync(p => p.Id == postId);
         }
 
@@ -37,7 +40,8 @@ namespace Infrastructure.Repositories
         public async Task<List<Post>> GetPostsByUserIdAsync(Guid userId)
         {
             return await _db.Posts
-                .Include("Reactions")
+                .Include(p => p.Reactions)
+                .Include(p => p.Comments).ThenInclude(c => c.UserProfile)
                 .Where(p => p.UserId == userId)
                 .ToListAsync();
         }

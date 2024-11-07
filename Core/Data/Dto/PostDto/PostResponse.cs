@@ -1,4 +1,5 @@
-﻿using Core.Data.Dto.ProfileDto;
+﻿using Core.Data.Dto.CommentDto;
+using Core.Data.Dto.ProfileDto;
 using Core.Enums;
 using System;
 using System.Collections.Generic;
@@ -22,5 +23,7 @@ namespace Core.Data.Dto.PostDto
         public int Dislikes { get; set; } = 0;
 
         public ReactionType UserReacted { get; set; } = ReactionType.NoReaction;
+
+        public List<CommentResponse> Comments { get; set; } = [];
     }
 }
