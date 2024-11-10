@@ -108,11 +108,13 @@ namespace Api.StartupExtension
             services.AddScoped<ICurrentUserService, CurrentUserService>();
             services.AddScoped<IPostReactionsService, PostReactionsService>();
             services.AddScoped<ICommentsService, CommentsService>();
+            services.AddScoped<ICommentReactionsService, CommentReactionsService>();
 
             services.AddScoped<IProfileRepository, ProfileRepository>();
             services.AddScoped<IPostsRepository, PostsRepository>();
             services.AddScoped<IPostReactionsRepository, PostReactionsRepository>();
             services.AddScoped<ICommentsRepository, CommentsRepository>();
+            services.AddScoped<ICommentReactionsRepository, CommentReactionsRepository>();
 
             return services;
         }

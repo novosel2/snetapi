@@ -30,7 +30,7 @@ namespace Infrastructure.Repositories
         // Adds post reaction to database
         public async Task AddPostReactionAsync(PostReaction postReaction)
         {
-            await _db.AddAsync(postReaction);
+            await _db.PostReactions.AddAsync(postReaction);
         }
 
         // Updates post reaction in database
