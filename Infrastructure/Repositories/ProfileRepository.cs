@@ -48,6 +48,12 @@ namespace Infrastructure.Repositories
             _db.Profiles.Remove(profile);
         }
 
+        // Check if existing picture url and new url differ
+        public async Task<bool> IsUrlDifferentAsync(Guid userId, string pictureUrl)
+        {
+            return ! await _db.Profiles.AnyAsync(p => p.Id == userId && p.PictureUrl == pictureUrl);
+        }
+
         // Check if profile with id exists
         public async Task<bool> ProfileExistsAsync(Guid id)
         {

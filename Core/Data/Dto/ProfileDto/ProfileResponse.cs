@@ -14,6 +14,7 @@ namespace Core.Data.Dto.ProfileDto
         public string Username { get; set; } = string.Empty;
         public string? FirstName { get; set; }
         public string? LastName { get; set; }
+        public string? PictureUrl { get; set; }
 
         public Profile ToProfile()
         {
@@ -22,7 +23,8 @@ namespace Core.Data.Dto.ProfileDto
                 Id = Id,
                 Username = Username,
                 FirstName = FirstName,
-                LastName = LastName
+                LastName = LastName,
+                PictureUrl = PictureUrl
             };
         }
     }

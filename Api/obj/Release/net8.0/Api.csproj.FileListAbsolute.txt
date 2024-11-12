@@ -152,3 +152,7 @@ D:\All\Coding\aspnetcore\Social Network\Api\obj\Release\net8.0\refint\Api.dll
 D:\All\Coding\aspnetcore\Social Network\Api\obj\Release\net8.0\Api.pdb
 D:\All\Coding\aspnetcore\Social Network\Api\obj\Release\net8.0\Api.genruntimeconfig.cache
 D:\All\Coding\aspnetcore\Social Network\Api\obj\Release\net8.0\ref\Api.dll
+D:\All\Coding\aspnetcore\Social Network\Api\bin\Release\net8.0\Azure.Storage.Blobs.dll
+D:\All\Coding\aspnetcore\Social Network\Api\bin\Release\net8.0\Azure.Storage.Common.dll
+D:\All\Coding\aspnetcore\Social Network\Api\bin\Release\net8.0\System.ClientModel.dll
+D:\All\Coding\aspnetcore\Social Network\Api\bin\Release\net8.0\System.IO.Hashing.dll

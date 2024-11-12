@@ -12,10 +12,12 @@ namespace Api.Controllers
     public class ProfileController : ControllerBase
     {
         private readonly IProfileService _profileService;
+        private readonly IBlobStorageService _blobStorageService;
 
-        public ProfileController(IProfileService profileService)
+        public ProfileController(IProfileService profileService, IBlobStorageService blobStorageService)
         {
             _profileService = profileService;
+            _blobStorageService = blobStorageService;
         }
 
 
@@ -47,6 +49,17 @@ namespace Api.Controllers
         public async Task<IActionResult> UpdateProfile(UpdateProfileDto updateProfileDto)
         {
             ProfileResponse profileResponse = await _profileService.UpdateProfileAsync(updateProfileDto);
+
+            return Ok(profileResponse);
+        }
+
+
+        // PUT: /api/profiles/update-profile-picture/
+
+        [HttpPut("update-profile-picture")]
+        public async Task<IActionResult> UpdateProfilePicture(IFormFile image)
+        {
+            ProfileResponse profileResponse = await _profileService.UpdateProfilePictureAsync(image);
 
             return Ok(profileResponse);
         }

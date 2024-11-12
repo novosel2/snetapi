@@ -6,6 +6,8 @@ D:\All\Coding\aspnetcore\Social Network\Api\obj\Release\net8.0\PubTmp\Out\Api.ru
 D:\All\Coding\aspnetcore\Social Network\Api\obj\Release\net8.0\PubTmp\Out\Api.pdb
 D:\All\Coding\aspnetcore\Social Network\Api\obj\Release\net8.0\PubTmp\Out\Azure.Core.dll
 D:\All\Coding\aspnetcore\Social Network\Api\obj\Release\net8.0\PubTmp\Out\Azure.Identity.dll
+D:\All\Coding\aspnetcore\Social Network\Api\obj\Release\net8.0\PubTmp\Out\Azure.Storage.Blobs.dll
+D:\All\Coding\aspnetcore\Social Network\Api\obj\Release\net8.0\PubTmp\Out\Azure.Storage.Common.dll
 D:\All\Coding\aspnetcore\Social Network\Api\obj\Release\net8.0\PubTmp\Out\Microsoft.AspNetCore.Authentication.JwtBearer.dll
 D:\All\Coding\aspnetcore\Social Network\Api\obj\Release\net8.0\PubTmp\Out\Microsoft.AspNetCore.Cryptography.Internal.dll
 D:\All\Coding\aspnetcore\Social Network\Api\obj\Release\net8.0\PubTmp\Out\Microsoft.AspNetCore.Cryptography.KeyDerivation.dll
@@ -39,9 +41,11 @@ D:\All\Coding\aspnetcore\Social Network\Api\obj\Release\net8.0\PubTmp\Out\Micros
 D:\All\Coding\aspnetcore\Social Network\Api\obj\Release\net8.0\PubTmp\Out\Swashbuckle.AspNetCore.Swagger.dll
 D:\All\Coding\aspnetcore\Social Network\Api\obj\Release\net8.0\PubTmp\Out\Swashbuckle.AspNetCore.SwaggerGen.dll
 D:\All\Coding\aspnetcore\Social Network\Api\obj\Release\net8.0\PubTmp\Out\Swashbuckle.AspNetCore.SwaggerUI.dll
+D:\All\Coding\aspnetcore\Social Network\Api\obj\Release\net8.0\PubTmp\Out\System.ClientModel.dll
 D:\All\Coding\aspnetcore\Social Network\Api\obj\Release\net8.0\PubTmp\Out\System.Configuration.ConfigurationManager.dll
 D:\All\Coding\aspnetcore\Social Network\Api\obj\Release\net8.0\PubTmp\Out\System.Drawing.Common.dll
 D:\All\Coding\aspnetcore\Social Network\Api\obj\Release\net8.0\PubTmp\Out\System.IdentityModel.Tokens.Jwt.dll
+D:\All\Coding\aspnetcore\Social Network\Api\obj\Release\net8.0\PubTmp\Out\System.IO.Hashing.dll
 D:\All\Coding\aspnetcore\Social Network\Api\obj\Release\net8.0\PubTmp\Out\System.Memory.Data.dll
 D:\All\Coding\aspnetcore\Social Network\Api\obj\Release\net8.0\PubTmp\Out\System.Runtime.Caching.dll
 D:\All\Coding\aspnetcore\Social Network\Api\obj\Release\net8.0\PubTmp\Out\System.Security.Cryptography.ProtectedData.dll

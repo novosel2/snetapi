@@ -106,6 +106,7 @@ namespace Api.StartupExtension
             services.AddScoped<IPostReactionsService, PostReactionsService>();
             services.AddScoped<ICommentsService, CommentsService>();
             services.AddScoped<ICommentReactionsService, CommentReactionsService>();
+            services.AddSingleton<IBlobStorageService, BlobStorageService>();
 
             services.AddScoped<IProfileRepository, ProfileRepository>();
             services.AddScoped<IPostsRepository, PostsRepository>();

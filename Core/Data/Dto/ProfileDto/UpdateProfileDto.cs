@@ -1,4 +1,5 @@
 ﻿using Core.Data.Entities;
+using Microsoft.AspNetCore.Http;
 using System.ComponentModel.DataAnnotations;
 
 namespace Core.Data.Dto.ProfileDto
@@ -21,7 +22,7 @@ namespace Core.Data.Dto.ProfileDto
                 Id = userId,
                 Username = Username,
                 FirstName = FirstName,
-                LastName = LastName,
+                LastName = LastName
             };
         }
     }

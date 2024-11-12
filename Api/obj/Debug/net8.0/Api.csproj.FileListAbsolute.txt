@@ -152,3 +152,7 @@ D:\All\Coding\aspnetcore\Social Network\Api\bin\Debug\net8.0\Microsoft.Extension
 D:\All\Coding\aspnetcore\Social Network\Api\bin\Debug\net8.0\Microsoft.AspNetCore.Authentication.JwtBearer.dll
 D:\All\Coding\aspnetcore\Social Network\Api\bin\Debug\net8.0\Core.dll
 D:\All\Coding\aspnetcore\Social Network\Api\bin\Debug\net8.0\Core.pdb
+D:\All\Coding\aspnetcore\Social Network\Api\bin\Debug\net8.0\Azure.Storage.Blobs.dll
+D:\All\Coding\aspnetcore\Social Network\Api\bin\Debug\net8.0\Azure.Storage.Common.dll
+D:\All\Coding\aspnetcore\Social Network\Api\bin\Debug\net8.0\System.ClientModel.dll
+D:\All\Coding\aspnetcore\Social Network\Api\bin\Debug\net8.0\System.IO.Hashing.dll

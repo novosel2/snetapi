@@ -59,6 +59,11 @@ namespace Api.Filters.ExceptionFilters
                 _logger.LogError(exception.Message);
                 problemDetails = CreateProblemDetails(400, "Already exists", exception.Message);
             }
+            else if (exception is UnsupportedFileTypeException)
+            {
+                _logger.LogError(exception.Message);
+                problemDetails = CreateProblemDetails(400, "Unsupported file type", exception.Message);
+            }
             else
             {
                 return;

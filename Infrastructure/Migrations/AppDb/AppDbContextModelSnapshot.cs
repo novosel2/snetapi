@@ -47,7 +47,7 @@ namespace Infrastructure.Migrations.AppDb
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Comments", (string)null);
+                    b.ToTable("Comments");
                 });
 
             modelBuilder.Entity("Core.Data.Entities.CommentReaction", b =>
@@ -63,7 +63,7 @@ namespace Infrastructure.Migrations.AppDb
 
                     b.HasKey("CommentId", "UserId");
 
-                    b.ToTable("CommentReactions", (string)null);
+                    b.ToTable("CommentReactions");
                 });
 
             modelBuilder.Entity("Core.Data.Entities.Post", b =>
@@ -86,7 +86,7 @@ namespace Infrastructure.Migrations.AppDb
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Posts", (string)null);
+                    b.ToTable("Posts");
                 });
 
             modelBuilder.Entity("Core.Data.Entities.PostReaction", b =>
@@ -102,7 +102,7 @@ namespace Infrastructure.Migrations.AppDb
 
                     b.HasKey("PostId", "UserId");
 
-                    b.ToTable("PostReactions", (string)null);
+                    b.ToTable("PostReactions");
                 });
 
             modelBuilder.Entity("Core.Data.Entities.Profile", b =>
@@ -117,13 +117,16 @@ namespace Infrastructure.Migrations.AppDb
                     b.Property<string>("LastName")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("PictureUrl")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Username")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
-                    b.ToTable("Profiles", (string)null);
+                    b.ToTable("Profiles");
                 });
 
             modelBuilder.Entity("Core.Data.Entities.Comment", b =>
@@ -134,7 +137,7 @@ namespace Infrastructure.Migrations.AppDb
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Core.Data.Entities.Profile", "User")
+                    b.HasOne("Core.Data.Entities.Profile", "UserProfile")
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.NoAction)
@@ -142,7 +145,7 @@ namespace Infrastructure.Migrations.AppDb
 
                     b.Navigation("Post");
 
-                    b.Navigation("User");
+                    b.Navigation("UserProfile");
                 });
 
             modelBuilder.Entity("Core.Data.Entities.CommentReaction", b =>

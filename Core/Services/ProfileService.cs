@@ -14,12 +14,14 @@ namespace Core.Services
     public class ProfileService : IProfileService
     {
         private readonly IProfileRepository _profileRepository;
+        private readonly IBlobStorageService _blobStorageService;
         private readonly UserManager<AppUser> _userManager;
         private readonly Guid _currentUserId;
 
-        public ProfileService(IProfileRepository profileRepository, UserManager<AppUser> userManager, ICurrentUserService currentUserService)
+        public ProfileService(IProfileRepository profileRepository, IBlobStorageService blobStorageService, UserManager<AppUser> userManager, ICurrentUserService currentUserService)
         {
             _profileRepository = profileRepository;
+            _blobStorageService = blobStorageService;
             _userManager = userManager;
             _currentUserId = currentUserService.UserId.GetValueOrDefault();
         }
@@ -87,6 +89,34 @@ namespace Core.Services
                 AppUser user = ( await _userManager.FindByIdAsync(_currentUserId.ToString()) )!;
 
                 await _userManager.SetUserNameAsync(user, updatedProfile.Username);
+            }
+
+            return updatedProfile.ToProfileResponse();
+        }
+
+        // Update profile picture
+        public async Task<ProfileResponse> UpdateProfilePictureAsync(IFormFile image)
+        {
+            string pictureUrl = await _blobStorageService.UpdateProfilePictureByUserId(_currentUserId, image);
+
+            Profile profile = await GetProfile(_currentUserId);
+            Profile updatedProfile = new Profile()
+            {
+                Id = profile.Id,
+                FirstName = profile.FirstName,
+                LastName = profile.LastName,
+                Username = profile.Username,
+                PictureUrl = pictureUrl
+            };
+
+            if (await _profileRepository.IsUrlDifferentAsync(_currentUserId, pictureUrl))
+            {
+                _profileRepository.UpdateProfile(profile, updatedProfile);
+
+                if (! await _profileRepository.IsSavedAsync())
+                {
+                    throw new DbSavingFailedException("Failed to save new Picture Url to database.");
+                }
             }
 
             return updatedProfile.ToProfileResponse();

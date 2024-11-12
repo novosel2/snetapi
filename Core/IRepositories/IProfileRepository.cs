@@ -38,6 +38,14 @@ namespace Core.IRepositories
         public void DeleteProfile(Profile profile);
 
         /// <summary>
+        /// Checks if picture url in database and new picture url differ
+        /// </summary>
+        /// <param name="userId">User id</param>
+        /// <param name="pictureUrl">New picture url</param>
+        /// <returns>True if they differ, false if not</returns>
+        public Task<bool> IsUrlDifferentAsync(Guid userId, string pictureUrl);
+
+        /// <summary>
         /// Checks if UserProfile exists
         /// </summary>
         /// <param name="id">Id we want to check</param>

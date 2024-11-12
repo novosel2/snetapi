@@ -1,6 +1,7 @@
 ﻿using Core.Data.Dto.ProfileDto;
 using Core.Data.Entities;
 using Core.Data.Entities.Identity;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore.Storage;
 using System;
 using System.Collections.Generic;
@@ -37,6 +38,12 @@ namespace Core.IServices
         /// <param name="updateProfileDto">New information</param>
         /// <returns>User Response with new information</returns>
         public Task<ProfileResponse> UpdateProfileAsync(UpdateProfileDto updateProfileDto);
+
+        /// <summary>
+        /// Updates profile picture
+        /// </summary>
+        /// <param name="image">New profile picture</param>
+        public Task<ProfileResponse> UpdateProfilePictureAsync(IFormFile image);
 
         /// <summary>
         /// Deletes profile based on it's User ID
