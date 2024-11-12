@@ -28,6 +28,12 @@ namespace Core.Services
         public async Task<List<PostResponse>> GetPostsAsync()
         {
             List<Post> posts = await _postRepository.GetPostsAsync();
+            posts = posts.OrderByDescending(p => p.CreatedOn).ToList();
+            
+            foreach (var post in posts)
+            {
+                post.Comments = post.Comments.OrderByDescending(c => c.CreatedOn).ToList();
+            }
 
             var postResponses = posts.Select(p => p.ToPostResponse(_currentUserId)).ToList();
 

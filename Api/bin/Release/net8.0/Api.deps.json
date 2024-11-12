@@ -8,7 +8,8 @@
     ".NETCoreApp,Version=v8.0": {
       "Api/1.0.0": {
         "dependencies": {
-          "Azure.Storage.Blobs": "12.22.2",
+          "Azure.Core": "1.44.1",
+          "Azure.Storage.Blobs": "12.23.0",
           "Core": "1.0.0",
           "Infrastructure": "1.0.0",
           "Microsoft.AspNetCore.Authentication.JwtBearer": "8.0.10",
@@ -60,27 +61,27 @@
           }
         }
       },
-      "Azure.Storage.Blobs/12.22.2": {
+      "Azure.Storage.Blobs/12.23.0": {
         "dependencies": {
-          "Azure.Storage.Common": "12.21.1",
+          "Azure.Storage.Common": "12.22.0",
           "System.Text.Json": "6.0.10"
         },
         "runtime": {
           "lib/net6.0/Azure.Storage.Blobs.dll": {
-            "assemblyVersion": "12.22.2.0",
-            "fileVersion": "12.2200.224.51019"
+            "assemblyVersion": "12.23.0.0",
+            "fileVersion": "12.2300.24.56203"
           }
         }
       },
-      "Azure.Storage.Common/12.21.1": {
+      "Azure.Storage.Common/12.22.0": {
         "dependencies": {
           "Azure.Core": "1.44.1",
           "System.IO.Hashing": "6.0.0"
         },
         "runtime": {
           "lib/net6.0/Azure.Storage.Common.dll": {
-            "assemblyVersion": "12.21.1.0",
-            "fileVersion": "12.2100.124.51010"
+            "assemblyVersion": "12.22.0.0",
+            "fileVersion": "12.2200.24.56203"
           }
         }
       },
@@ -1046,7 +1047,8 @@
       },
       "Core/1.0.0": {
         "dependencies": {
-          "Azure.Storage.Blobs": "12.22.2",
+          "Azure.Core": "1.44.1",
+          "Azure.Storage.Blobs": "12.23.0",
           "Microsoft.AspNetCore.Authentication.JwtBearer": "8.0.10",
           "Microsoft.EntityFrameworkCore": "8.0.10"
         },
@@ -1056,7 +1058,7 @@
       },
       "Infrastructure/1.0.0": {
         "dependencies": {
-          "Azure.Storage.Blobs": "12.22.2",
+          "Azure.Storage.Blobs": "12.23.0",
           "Core": "1.0.0",
           "Microsoft.AspNetCore.Identity.EntityFrameworkCore": "8.0.10",
           "Microsoft.EntityFrameworkCore": "8.0.10",
@@ -1090,19 +1092,19 @@
       "path": "azure.identity/1.10.3",
       "hashPath": "azure.identity.1.10.3.nupkg.sha512"
     },
-    "Azure.Storage.Blobs/12.22.2": {
+    "Azure.Storage.Blobs/12.23.0": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-/BK63qx31dhXjnqOXB90DP8mJM+pHbti45+v/D3SiEgP2A+ekvJlGWGLVGQznriT5UAOerM+3vAAEJNKolVSIQ==",
-      "path": "azure.storage.blobs/12.22.2",
-      "hashPath": "azure.storage.blobs.12.22.2.nupkg.sha512"
+      "sha512": "sha512-wokJ5KX/iViQQ32xyCu69+Ter0aR4B9QQ+oR9NCpc/WPIanxnDErrmFfdmE7K8ZdccjHkvE/wEnqJxaF1+5wFg==",
+      "path": "azure.storage.blobs/12.23.0",
+      "hashPath": "azure.storage.blobs.12.23.0.nupkg.sha512"
     },
-    "Azure.Storage.Common/12.21.1": {
+    "Azure.Storage.Common/12.22.0": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-NgDJw/upcro33AgGf91sPIG+BU2pFTgGDBzWEp8HctGwzmbjG80eYTl4CJMIwgxVOQWnEXnQZXLY7w3k+BQ9ig==",
-      "path": "azure.storage.common/12.21.1",
-      "hashPath": "azure.storage.common.12.21.1.nupkg.sha512"
+      "sha512": "sha512-0Vm30bRpQ0fcswB0xQMhKAOSXnRygnF2f/029uPaIDLaj1/yfX4jmU0fFjJe9ojGEj/vlAmsApCEOyL9if6zHg==",
+      "path": "azure.storage.common/12.22.0",
+      "hashPath": "azure.storage.common.12.22.0.nupkg.sha512"
     },
     "Humanizer.Core/2.14.1": {
       "type": "package",
