@@ -28,7 +28,6 @@ namespace Core.Services
         public async Task<List<PostResponse>> GetPostsAsync()
         {
             List<Post> posts = await _postRepository.GetPostsAsync();
-            posts = SortPosts(posts);
 
             var postResponses = posts.Select(p => p.ToPostResponse(_currentUserId)).ToList();
 
@@ -44,7 +43,6 @@ namespace Core.Services
             }
 
             Post post = await _postRepository.GetPostByIdAsync(postId);
-            post.Comments = SortComments(post);
 
             var postResponse = post.ToPostResponse(_currentUserId);
 
@@ -119,26 +117,6 @@ namespace Core.Services
             {
                 throw new DbSavingFailedException("Failed to save post deletion.");
             }
-        }
-
-
-        private List<Comment> SortComments(Post post)
-        {
-            post.Comments = post.Comments.OrderByDescending(c => c.CreatedOn).ToList();
-            
-            return post.Comments;
-        }
-
-        private List<Post> SortPosts(List<Post> posts)
-        {
-            posts = posts.OrderByDescending(c => c.CreatedOn).ToList();
-
-            foreach (var post in posts)
-            {
-                post.Comments = SortComments(post);
-            }
-
-            return posts;
         }
     }
 }

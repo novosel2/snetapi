@@ -22,8 +22,9 @@ namespace Infrastructure.Repositories
             return await _db.Posts
                 .Include(p => p.UserProfile)
                 .Include(p => p.Reactions)
-                .Include(p => p.Comments).ThenInclude(c => c.UserProfile)
-                .Include(p => p.Comments).ThenInclude(c => c.Reactions)
+                .Include(p => p.Comments.OrderByDescending(c => c.CreatedOn).Take(3)).ThenInclude(c => c.UserProfile)
+                .Include(p => p.Comments.OrderByDescending(c => c.CreatedOn).Take(3)).ThenInclude(c => c.Reactions)
+                .OrderByDescending(p => p.CreatedOn)
                 .ToListAsync();
         }
 
@@ -33,8 +34,9 @@ namespace Infrastructure.Repositories
             return await _db.Posts
                 .Include(p => p.UserProfile)
                 .Include(p => p.Reactions)
-                .Include(p => p.Comments).ThenInclude(c => c.UserProfile)
-                .Include(p => p.Comments).ThenInclude(c => c.Reactions)
+                .Include(p => p.Comments.OrderByDescending(c => c.CreatedOn)).ThenInclude(c => c.UserProfile)
+                .Include(p => p.Comments.OrderByDescending(c => c.CreatedOn)).ThenInclude(c => c.Reactions)
+                .OrderByDescending(p => p.CreatedOn)
                 .FirstAsync(p => p.Id == postId);
         }
 
@@ -44,9 +46,10 @@ namespace Infrastructure.Repositories
             return await _db.Posts
                 .Include(p => p.UserProfile)
                 .Include(p => p.Reactions)
-                .Include(p => p.Comments).ThenInclude(c => c.UserProfile)
-                .Include(p => p.Comments).ThenInclude(c => c.Reactions)
+                .Include(p => p.Comments.OrderByDescending(c => c.CreatedOn).Take(3)).ThenInclude(c => c.UserProfile)
+                .Include(p => p.Comments.OrderByDescending(c => c.CreatedOn).Take(3)).ThenInclude(c => c.Reactions)
                 .Where(p => p.UserId == userId)
+                .OrderByDescending(p => p.CreatedOn)
                 .ToListAsync();
         }
 
