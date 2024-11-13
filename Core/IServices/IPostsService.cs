@@ -14,7 +14,7 @@ namespace Core.IServices
         /// Get all posts from database
         /// </summary>
         /// <returns>List of post responses</returns>
-        public Task<List<PostResponse>> GetPostsAsync();
+        public Task<List<PostResponse>> GetPostsAsync(int loadPage);
 
         /// <summary>
         /// Get post by specified id
@@ -28,7 +28,7 @@ namespace Core.IServices
         /// </summary>
         /// <param name="userId">Id of user we want to get posts from</param>
         /// <returns>List of post responses made by specified user</returns>
-        public Task<List<PostResponse>> GetPostsByUserIdAsync(Guid userId);
+        public Task<List<PostResponse>> GetPostsByUserIdAsync(Guid userId, int loadPage);
 
         /// <summary>
         /// Adds post to database

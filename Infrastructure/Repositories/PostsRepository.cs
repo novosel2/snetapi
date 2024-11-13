@@ -17,7 +17,7 @@ namespace Infrastructure.Repositories
         }
 
         // Get posts from database
-        public async Task<List<Post>> GetPostsAsync()
+        public async Task<List<Post>> GetPostsAsync(int loadPage)
         {
             return await _db.Posts
                 .Include(p => p.UserProfile)
@@ -25,6 +25,8 @@ namespace Infrastructure.Repositories
                 .Include(p => p.Comments.OrderByDescending(c => c.CreatedOn).Take(3)).ThenInclude(c => c.UserProfile)
                 .Include(p => p.Comments.OrderByDescending(c => c.CreatedOn).Take(3)).ThenInclude(c => c.Reactions)
                 .OrderByDescending(p => p.CreatedOn)
+                .Skip(loadPage * 20)
+                .Take(20)
                 .ToListAsync();
         }
 
@@ -41,7 +43,7 @@ namespace Infrastructure.Repositories
         }
 
         // Get posts by user id
-        public async Task<List<Post>> GetPostsByUserIdAsync(Guid userId)
+        public async Task<List<Post>> GetPostsByUserIdAsync(Guid userId, int loadPage)
         {
             return await _db.Posts
                 .Include(p => p.UserProfile)
@@ -50,6 +52,8 @@ namespace Infrastructure.Repositories
                 .Include(p => p.Comments.OrderByDescending(c => c.CreatedOn).Take(3)).ThenInclude(c => c.Reactions)
                 .Where(p => p.UserId == userId)
                 .OrderByDescending(p => p.CreatedOn)
+                .Skip(loadPage * 20)
+                .Take(20)
                 .ToListAsync();
         }
 

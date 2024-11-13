@@ -25,9 +25,9 @@ namespace Core.Services
         }
 
         // Get all posts from database
-        public async Task<List<PostResponse>> GetPostsAsync()
+        public async Task<List<PostResponse>> GetPostsAsync(int loadPage)
         {
-            List<Post> posts = await _postRepository.GetPostsAsync();
+            List<Post> posts = await _postRepository.GetPostsAsync(loadPage);
 
             var postResponses = posts.Select(p => p.ToPostResponse(_currentUserId)).ToList();
 
@@ -50,9 +50,9 @@ namespace Core.Services
         }
 
         // Get all posts by user id
-        public async Task<List<PostResponse>> GetPostsByUserIdAsync(Guid userId)
+        public async Task<List<PostResponse>> GetPostsByUserIdAsync(Guid userId, int loadPage)
         {
-            List<Post> posts = await _postRepository.GetPostsByUserIdAsync(userId);
+            List<Post> posts = await _postRepository.GetPostsByUserIdAsync(userId, loadPage);
 
             var postResponses = posts.Select(p => p.ToPostResponse(_currentUserId)).ToList();
 

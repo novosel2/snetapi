@@ -19,18 +19,18 @@ namespace Api.Controllers
         }
 
 
-        // GET: /api/posts/
+        // GET: /api/posts?page=0
 
         [HttpGet]
-        public async Task<IActionResult> GetPosts()
+        public async Task<IActionResult> GetPosts(int page)
         {
-            List<PostResponse> postResponses = await _postsService.GetPostsAsync();
+            List<PostResponse> postResponses = await _postsService.GetPostsAsync(page);
 
             return Ok(postResponses);
         }
 
 
-        // GET: /api/posts/31faddd4-c910-45c2-a68b-bf67b5abaa77/
+        // GET: /api/posts/31faddd4-c910-45c2-a68b-bf67b5abaa77
 
         [HttpGet("{postId}")]
         public async Task<IActionResult> GetPostById(Guid postId)
@@ -41,18 +41,18 @@ namespace Api.Controllers
         }
 
 
-        // GET: /api/posts/user/31faddd4-c910-45c2-a68b-bf67b5abaa77/
+        // GET: /api/posts/user/31faddd4-c910-45c2-a68b-bf67b5abaa77?page=0
 
         [HttpGet("user/{userId}")]
-        public async Task<IActionResult> GetPostsByUserId(Guid userId)
+        public async Task<IActionResult> GetPostsByUserId(Guid userId, int page)
         {
-            List<PostResponse> postResponses = await _postsService.GetPostsByUserIdAsync(userId);
+            List<PostResponse> postResponses = await _postsService.GetPostsByUserIdAsync(userId, page);
 
             return Ok(postResponses);
         }
 
 
-        // POST: /api/posts/add-post/
+        // POST: /api/posts/add-post
 
         [HttpPost("add-post")]
         public async Task<IActionResult> AddPost(PostAddRequest postAddRequest)
@@ -63,7 +63,7 @@ namespace Api.Controllers
         }
 
 
-        // PUT: /api/posts/update-post/31faddd4-c910-45c2-a68b-bf67b5abaa77/
+        // PUT: /api/posts/update-post/31faddd4-c910-45c2-a68b-bf67b5abaa77
 
         [HttpPut("update-post/{postId}")]
         public async Task<IActionResult> UpdatePost(Guid postId, PostUpdateRequest postUpdateRequest)
@@ -74,7 +74,7 @@ namespace Api.Controllers
         }
 
 
-        // DELETE: /api/posts/delete-post/31faddd4-c910-45c2-a68b-bf67b5abaa77/
+        // DELETE: /api/posts/delete-post/31faddd4-c910-45c2-a68b-bf67b5abaa77
 
         [HttpDelete("delete-post/{postId}")]
         public async Task<IActionResult> DeletePost(Guid postId)

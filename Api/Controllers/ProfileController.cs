@@ -21,7 +21,7 @@ namespace Api.Controllers
         }
 
 
-        // GET: /api/profiles/
+        // GET: /api/profiles
 
         [HttpGet]
         public async Task<IActionResult> GetProfiles()
@@ -32,7 +32,7 @@ namespace Api.Controllers
         }
 
 
-        // GET: /api/profiles/31faddd4-c910-45c2-a68b-bf67b5abaa77/
+        // GET: /api/profiles/31faddd4-c910-45c2-a68b-bf67b5abaa77
 
         [HttpGet("{userId}")]
         public async Task<IActionResult> GetProfileById(Guid userId)
@@ -43,7 +43,7 @@ namespace Api.Controllers
         }
 
 
-        // PUT: /api/profiles/update-profile/
+        // PUT: /api/profiles/update-profile
 
         [HttpPut("update-profile")]
         public async Task<IActionResult> UpdateProfile(UpdateProfileDto updateProfileDto)
@@ -54,12 +54,23 @@ namespace Api.Controllers
         }
 
 
-        // PUT: /api/profiles/update-profile-picture/
+        // PUT: /api/profiles/update-profile-picture
 
         [HttpPut("update-profile-picture")]
         public async Task<IActionResult> UpdateProfilePicture(IFormFile image)
         {
             ProfileResponse profileResponse = await _profileService.UpdateProfilePictureAsync(image);
+
+            return Ok(profileResponse);
+        }
+
+
+        // DELETE: /api/profiles/delete-profile-picture
+
+        [HttpDelete("delete-profile-picture")]
+        public async Task<IActionResult> DeleteProfilePicture()
+        {
+            ProfileResponse profileResponse = await _profileService.DeleteProfilePictureAsync();
 
             return Ok(profileResponse);
         }

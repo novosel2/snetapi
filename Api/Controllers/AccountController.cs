@@ -21,7 +21,7 @@ namespace Api.Controllers
         }
 
 
-        // POST: /api/account/register/
+        // POST: /api/account/register
 
         [HttpPost("register")]
         public async Task<IActionResult> RegisterUser(RegisterUserDto registerUserDto)
@@ -32,7 +32,7 @@ namespace Api.Controllers
         }
 
 
-        // POST: /api/account/login/
+        // POST: /api/account/login
 
         [HttpPost("login")]
         public async Task<IActionResult> LoginUser(LoginUserDto loginUserDto)
@@ -43,7 +43,7 @@ namespace Api.Controllers
         }
 
 
-        // DELETE /api/account/delete-user/
+        // DELETE /api/account/delete-user
 
         [Authorize]
         [HttpDelete("delete-user")]

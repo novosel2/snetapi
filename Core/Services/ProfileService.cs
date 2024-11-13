@@ -72,7 +72,7 @@ namespace Core.Services
         // Update profile with new information
         public async Task<ProfileResponse> UpdateProfileAsync(UpdateProfileDto updateProfileDto)
         {
-            Profile existingProfile = await GetProfile(_currentUserId);
+            Profile existingProfile = await GetProfileAsync(_currentUserId);
             string oldUsername = existingProfile.Username;
 
             Profile updatedProfile = updateProfileDto.ToProfile(_currentUserId);
@@ -99,7 +99,7 @@ namespace Core.Services
         {
             string pictureUrl = await _blobStorageService.UpdateProfilePictureByUserId(_currentUserId, image);
 
-            Profile profile = await GetProfile(_currentUserId);
+            Profile profile = await GetProfileAsync(_currentUserId);
             Profile updatedProfile = new Profile()
             {
                 Id = profile.Id,
@@ -122,11 +122,41 @@ namespace Core.Services
             return updatedProfile.ToProfileResponse();
         }
 
+        // Deletes profile picture from user and blob storage
+        public async Task<ProfileResponse> DeleteProfilePictureAsync()
+        {
+            Profile profile = await GetProfileAsync(_currentUserId);
+
+            string defaultPictureUrl = await _blobStorageService.DeleteProfilePictureByUrl(profile.PictureUrl);
+
+            Profile updatedProfile = new Profile()
+            {
+                Id = profile.Id,
+                FirstName = profile.FirstName,
+                LastName = profile.LastName,
+                Username = profile.Username,
+                PictureUrl = defaultPictureUrl
+            };
+
+            if (await _profileRepository.IsUrlDifferentAsync(_currentUserId, defaultPictureUrl))
+            {
+                _profileRepository.UpdateProfile(profile, updatedProfile);
+
+                if (!await _profileRepository.IsSavedAsync())
+                {
+                    throw new DbSavingFailedException("Failed to save new Picture Url to database.");
+                }
+            }
+
+            return updatedProfile.ToProfileResponse();
+        }
+
         // Deletes profile from database
         public async Task DeleteProfileAsync()
         {
-            Profile profile = await GetProfile(_currentUserId);
+            Profile profile = await GetProfileAsync(_currentUserId);
 
+            await _blobStorageService.DeleteProfilePictureByUrl(profile.PictureUrl);
             _profileRepository.DeleteProfile(profile);
 
             if (!await _profileRepository.IsSavedAsync())
@@ -143,7 +173,7 @@ namespace Core.Services
 
 
 
-        private async Task<Profile> GetProfile(Guid currentUserId)
+        private async Task<Profile> GetProfileAsync(Guid currentUserId)
         {
             if (!await _profileRepository.ProfileExistsAsync(currentUserId))
             {

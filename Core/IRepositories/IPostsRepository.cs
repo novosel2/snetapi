@@ -13,7 +13,7 @@ namespace Core.IRepositories
         /// Get all posts from database
         /// </summary>
         /// <returns>List of posts</returns>
-        public Task<List<Post>> GetPostsAsync();
+        public Task<List<Post>> GetPostsAsync(int loadPage);
 
         /// <summary>
         /// Get post by specified id
@@ -27,7 +27,7 @@ namespace Core.IRepositories
         /// </summary>
         /// <param name="userId">Id of user we want to get posts from</param>
         /// <returns>List of posts made by specified user</returns>
-        public Task<List<Post>> GetPostsByUserIdAsync(Guid userId);
+        public Task<List<Post>> GetPostsByUserIdAsync(Guid userId, int loadPage);
 
         /// <summary>
         /// Adds post to database

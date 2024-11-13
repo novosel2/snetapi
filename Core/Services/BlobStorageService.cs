@@ -17,6 +17,7 @@ namespace Core.Services
         private readonly string _profileContainer;
         private readonly string _postsContainer;
         private readonly string _baseUrl;
+        private readonly string _defaultPicture;
 
         public BlobStorageService(IConfiguration config)
         {
@@ -24,8 +25,10 @@ namespace Core.Services
             _profileContainer = config["AzureBlobStorage:ProfileContainer"]!;
             _postsContainer = config["AzureBlobStorage:PostsContainer"]!;
             _baseUrl = config["AzureBlobStorage:BaseUrl"]!;
+            _defaultPicture = _baseUrl + "default.jpg";
         }
 
+        // Updates a profile picture
         public async Task<string> UpdateProfilePictureByUserId(Guid userId, IFormFile image)
         {
             string extension = Path.GetExtension(image.FileName);
@@ -43,6 +46,21 @@ namespace Core.Services
             await blobClient.UploadAsync(stream, overwrite: true);
 
             return _baseUrl + blobName;
+        }
+    
+        // Deletes profile picture from user
+        public async Task<string> DeleteProfilePictureByUrl(string pictureUrl)
+        {
+            string blobName = pictureUrl.Substring(pictureUrl.LastIndexOf('/') + 1);
+
+            var blobClient = new BlobClient(_connectionString, _profileContainer, blobName);
+
+            if (new Uri(pictureUrl) != new Uri(_defaultPicture))
+            {
+                await blobClient.DeleteIfExistsAsync();
+            }
+
+            return _defaultPicture;
         }
     }
 }

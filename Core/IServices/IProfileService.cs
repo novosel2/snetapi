@@ -46,6 +46,12 @@ namespace Core.IServices
         public Task<ProfileResponse> UpdateProfilePictureAsync(IFormFile image);
 
         /// <summary>
+        /// Deletes profile picture
+        /// </summary>
+        /// <returns>Profile response</returns>
+        public Task<ProfileResponse> DeleteProfilePictureAsync();
+
+        /// <summary>
         /// Deletes profile based on it's User ID
         /// </summary>
         public Task DeleteProfileAsync();
