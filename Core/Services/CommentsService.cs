@@ -3,6 +3,7 @@ using Core.Data.Entities;
 using Core.Exceptions;
 using Core.IRepositories;
 using Core.IServices;
+using Microsoft.Extensions.Hosting;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -38,6 +39,25 @@ namespace Core.Services
 
             ++post.CommentCount;
             post.Comments.Add(comment);
+
+            if (!await _commentsRepository.IsSavedAsync())
+            {
+                throw new DbSavingFailedException("Failed to save added comment to database.");
+            }
+        }
+
+        // Adds a comment reply to database
+        public async Task AddCommentReplyAsync(Guid commentId, CommentAddRequest commentAddRequest)
+        {
+            if (!await _commentsRepository.CommentExistsAsync(commentId))
+            {
+                throw new NotFoundException($"Comment not found, Comment ID: {commentId}");
+            }
+
+            Comment parentComment = await _commentsRepository.GetCommentByIdAsync(commentId);
+            Comment commentReply = commentAddRequest.ToComment(_currentUserId, parentComment.PostId, commentId);
+
+            parentComment.CommentReplies.Add(commentReply);
 
             if (!await _commentsRepository.IsSavedAsync())
             {

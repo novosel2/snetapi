@@ -1,5 +1,4 @@
-﻿using Core.Data.Dto.PostDto;
-using Core.Data.Dto.ProfileDto;
+﻿using Core.Data.Dto.ProfileDto;
 using Core.Enums;
 using System;
 using System.Collections.Generic;
@@ -9,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Core.Data.Dto.CommentDto
 {
-    public class CommentResponse
+    public class CommentReplyDto
     {
         public Guid Id { get; set; }
 
@@ -23,7 +22,5 @@ namespace Core.Data.Dto.CommentDto
         public int Dislikes { get; set; }
 
         public ReactionType UserReacted { get; set; } = ReactionType.NoReaction;
-
-        public List<CommentReplyDto> Replies { get; set; } = [];
     }
 }

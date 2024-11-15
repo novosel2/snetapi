@@ -13,13 +13,14 @@ namespace Core.Data.Dto.CommentDto
         [Required]
         public string Content { get; set; } = string.Empty;
 
-        public Comment ToComment(Guid currentUserId, Guid postId)
+        public Comment ToComment(Guid currentUserId, Guid postId, Guid? commentId = null)
         {
             return new Comment()
             {
                 Content = Content,
                 UserId = currentUserId,
-                PostId = postId
+                PostId = postId,
+                ParentCommentId = commentId
             };
         }
     }

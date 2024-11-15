@@ -42,6 +42,11 @@ namespace Infrastructure.Data
                 .HasForeignKey(c => c.PostId);
 
             modelBuilder.Entity<Comment>()
+                .HasOne(c => c.ParentComment)
+                .WithMany(pr => pr.CommentReplies)
+                .HasForeignKey(pr => pr.ParentCommentId);
+
+            modelBuilder.Entity<Comment>()
                 .HasOne(c => c.UserProfile)
                 .WithMany()
                 .HasForeignKey(c => c.UserId)

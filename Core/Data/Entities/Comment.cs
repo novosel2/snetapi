@@ -25,11 +25,16 @@ namespace Core.Data.Entities
         public Guid PostId { get; set; }
         public Post? Post { get; set; }
 
+        public Guid? ParentCommentId { get; set; }
+        public Comment? ParentComment { get; set; }
+
         [Required]
         public Guid UserId { get; set; }
         public Profile? UserProfile { get; set; }
 
         public List<CommentReaction> Reactions { get; set; } = [];
+
+        public List<Comment> CommentReplies { get; set; } = [];
 
         public Comment()
         {
@@ -40,6 +45,21 @@ namespace Core.Data.Entities
         public CommentResponse ToCommentResponse(Guid currentUserId)
         {
             return new CommentResponse()
+            {
+                Id = Id,
+                Content = Content,
+                CreatedOn = CreatedOn,
+                UserProfile = UserProfile!.ToProfileResponse(),
+                Likes = Reactions.Count(r => r.Reaction is ReactionType.Like),
+                Dislikes = Reactions.Count(r => r.Reaction is ReactionType.Dislike),
+                UserReacted = Reactions.Any(r => r.UserId == currentUserId) ? Reactions.First(r => r.UserId == currentUserId).Reaction : ReactionType.NoReaction,
+                Replies = CommentReplies.Select(cr => cr.ToCommentReply(currentUserId)).ToList()
+            };
+        }
+
+        public CommentReplyDto ToCommentReply(Guid currentUserId)
+        {
+            return new CommentReplyDto()
             {
                 Id = Id,
                 Content = Content,

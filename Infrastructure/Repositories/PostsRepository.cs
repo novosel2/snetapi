@@ -31,13 +31,28 @@ namespace Infrastructure.Repositories
         // Get post by id
         public async Task<Post> GetPostByIdAsync(Guid postId)
         {
-            return await _db.Posts
+            var post = await _db.Posts
                 .Include(p => p.UserProfile)
                 .Include(p => p.Reactions)
-                .Include(p => p.Comments.OrderByDescending(c => c.CreatedOn)).ThenInclude(c => c.UserProfile)
-                .Include(p => p.Comments.OrderByDescending(c => c.CreatedOn)).ThenInclude(c => c.Reactions)
-                .OrderByDescending(p => p.CreatedOn)
                 .FirstAsync(p => p.Id == postId);
+
+            post.Comments = await _db.Comments
+                .Where(c => c.PostId == postId && c.ParentCommentId == null)
+                .Include(c => c.UserProfile)
+                .Include(c => c.Reactions)
+                .Include(c => c.CommentReplies)
+                    .ThenInclude(cr => cr.UserProfile)
+                .Include(c => c.CommentReplies)
+                    .ThenInclude(cr => cr.Reactions)
+                .OrderByDescending(c => c.CreatedOn)
+                .ToListAsync();
+
+            foreach (var comment in post.Comments)
+            {
+                comment.CommentReplies = comment.CommentReplies.OrderByDescending(c => c.CreatedOn).ToList();
+            }
+
+            return post;
         }
 
         // Get posts by user id

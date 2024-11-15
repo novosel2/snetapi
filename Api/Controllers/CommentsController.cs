@@ -29,6 +29,17 @@ namespace Api.Controllers
         }
 
 
+        // POST: /api/comments/add-reply/31faddd4-c910-45c2-a68b-bf67b5abaa77
+
+        [HttpPost("add-reply/{commentId}")]
+        public async Task<IActionResult> AddCommentReply(Guid commentId, CommentAddRequest commentAddRequest)
+        {
+            await _commentsService.AddCommentReplyAsync(commentId, commentAddRequest);
+
+            return Ok();
+        }
+
+
         // PUT: /api/comments/update/31faddd4-c910-45c2-a68b-bf67b5abaa77
 
         [HttpPut("update/{commentId}")]
