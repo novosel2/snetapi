@@ -23,5 +23,18 @@ namespace Core.IServices
         /// <param name="pictureUrl">Url of the picture you want to delete</param>
         /// <returns>Default profile picture Sas</returns>
         public Task<string> DeleteProfilePictureByUrl(string pictureUrl);
+
+        /// <summary>
+        /// Uploads a post file to blob storage
+        /// </summary>
+        /// <param name="postFile">File you want to add</param>
+        /// <returns>Public Sas for the post file</returns>
+        public Task<string> UploadPostFile(IFormFile postFile);
+
+        /// <summary>
+        /// Deletes post file from blob storage
+        /// </summary>
+        /// <param name="url">Url of file</param>
+        public Task DeletePostFile(string url);
     }
 }

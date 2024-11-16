@@ -22,6 +22,7 @@ namespace Infrastructure.Repositories
             return await _db.Posts
                 .Include(p => p.UserProfile)
                 .Include(p => p.Reactions)
+                .Include(p => p.FileUrls)
                 .OrderByDescending(p => p.CreatedOn)
                 .Skip(loadPage * 20)
                 .Take(20)
@@ -34,6 +35,7 @@ namespace Infrastructure.Repositories
             var post = await _db.Posts
                 .Include(p => p.UserProfile)
                 .Include(p => p.Reactions)
+                .Include(p => p.FileUrls)
                 .FirstAsync(p => p.Id == postId);
 
             post.Comments = await _db.Comments
@@ -59,9 +61,10 @@ namespace Infrastructure.Repositories
         public async Task<List<Post>> GetPostsByUserIdAsync(Guid userId, int loadPage)
         {
             return await _db.Posts
+                .Where(p => p.UserId == userId)
                 .Include(p => p.UserProfile)
                 .Include(p => p.Reactions)
-                .Where(p => p.UserId == userId)
+                .Include(p => p.FileUrls)
                 .OrderByDescending(p => p.CreatedOn)
                 .Skip(loadPage * 20)
                 .Take(20)

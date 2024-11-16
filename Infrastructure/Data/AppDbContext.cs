@@ -14,6 +14,7 @@ namespace Infrastructure.Data
         public DbSet<PostReaction> PostReactions { get; set; }
         public DbSet<Comment> Comments { get; set; }
         public DbSet<CommentReaction> CommentReactions { get; set; }
+        public DbSet<FileUrl> FileUrls { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -23,6 +24,18 @@ namespace Infrastructure.Data
                 .HasOne(p => p.UserProfile)
                 .WithMany()
                 .HasForeignKey(p => p.UserId);
+
+            modelBuilder.Entity<FileUrl>()
+                .HasKey(fu => new
+                {
+                    fu.PostId,
+                    fu.Url
+                });
+
+            modelBuilder.Entity<FileUrl>()
+                .HasOne(fu => fu.Post)
+                .WithMany(p => p.FileUrls)
+                .HasForeignKey(fu => fu.PostId);
 
             modelBuilder.Entity<PostReaction>()
                 .HasKey(pr => new 

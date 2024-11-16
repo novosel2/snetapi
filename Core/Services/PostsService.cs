@@ -16,11 +16,13 @@ namespace Core.Services
     public class PostsService : IPostsService
     {
         private readonly IPostsRepository _postRepository;
+        private readonly IBlobStorageService _blobStorageService;
         private readonly Guid _currentUserId;
 
-        public PostsService(IPostsRepository postRepository, ICurrentUserService currentUserService)
+        public PostsService(IPostsRepository postRepository, IBlobStorageService blobStorageService, ICurrentUserService currentUserService)
         {
             _postRepository = postRepository;
+            _blobStorageService = blobStorageService;
             _currentUserId = currentUserService.UserId ?? throw new UnauthorizedException("Unauthorized access.");
         }
 
@@ -63,6 +65,19 @@ namespace Core.Services
         public async Task AddPostAsync(PostAddRequest postAddRequest)
         {
             Post post = postAddRequest.ToPost(_currentUserId);
+            
+            List<FileUrl> fileUrls = [];
+            foreach (var file in postAddRequest.Files)
+            {
+                string url = await _blobStorageService.UploadPostFile(file);
+                fileUrls.Add(new FileUrl
+                {
+                    PostId = post.Id,
+                    Url = url
+                });
+            }
+
+            post.FileUrls = fileUrls;
 
             await _postRepository.AddPostAsync(post);
 
@@ -80,8 +95,26 @@ namespace Core.Services
                 throw new NotFoundException($"Post not found, ID: {existingPostId}");
             }
 
-            Post existingPost = await _postRepository.GetPostByIdAsync(_currentUserId);
+            Post existingPost = await _postRepository.GetPostByIdAsync(existingPostId);
             Post updatedPost = postUpdateRequest.ToPost(existingPostId, _currentUserId);
+
+            foreach (var existingFile in existingPost.FileUrls)
+            {
+                await _blobStorageService.DeletePostFile(existingFile.Url);
+            }
+
+            List<FileUrl> fileUrls = [];
+            foreach (var file in postUpdateRequest.Files)
+            {
+                string url = await _blobStorageService.UploadPostFile(file);
+                fileUrls.Add(new FileUrl()
+                {
+                    PostId = existingPostId,
+                    Url = url
+                });
+            }
+
+            existingPost.FileUrls = fileUrls;
 
             if (existingPost.UserId != _currentUserId)
             {

@@ -26,5 +26,7 @@ namespace Core.Data.Dto.PostDto
 
         public int CommentCount { get; set; } = 0;
         public List<CommentResponse> Comments { get; set; } = [];
+
+        public List<string> FileUrls { get; set; } = [];
     }
 }

@@ -4,6 +4,7 @@ using Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastructure.Migrations.AppDb
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241115230328_AddFileUrlsToPosts")]
+    partial class AddFileUrlsToPosts
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -71,19 +74,6 @@ namespace Infrastructure.Migrations.AppDb
                     b.ToTable("CommentReactions");
                 });
 
-            modelBuilder.Entity("Core.Data.Entities.FileUrl", b =>
-                {
-                    b.Property<Guid>("PostId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Url")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("PostId", "Url");
-
-                    b.ToTable("FileUrls");
-                });
-
             modelBuilder.Entity("Core.Data.Entities.Post", b =>
                 {
                     b.Property<Guid>("Id")
@@ -99,6 +89,9 @@ namespace Infrastructure.Migrations.AppDb
 
                     b.Property<DateTime>("CreatedOn")
                         .HasColumnType("datetime2");
+
+                    b.Property<string>("FileUrls")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<Guid>("UserId")
                         .HasColumnType("uniqueidentifier");
@@ -187,17 +180,6 @@ namespace Infrastructure.Migrations.AppDb
                     b.Navigation("Comment");
                 });
 
-            modelBuilder.Entity("Core.Data.Entities.FileUrl", b =>
-                {
-                    b.HasOne("Core.Data.Entities.Post", "Post")
-                        .WithMany("FileUrls")
-                        .HasForeignKey("PostId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Post");
-                });
-
             modelBuilder.Entity("Core.Data.Entities.Post", b =>
                 {
                     b.HasOne("Core.Data.Entities.Profile", "UserProfile")
@@ -230,8 +212,6 @@ namespace Infrastructure.Migrations.AppDb
             modelBuilder.Entity("Core.Data.Entities.Post", b =>
                 {
                     b.Navigation("Comments");
-
-                    b.Navigation("FileUrls");
 
                     b.Navigation("Reactions");
                 });

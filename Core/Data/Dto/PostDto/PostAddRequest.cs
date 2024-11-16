@@ -1,4 +1,5 @@
 ﻿using Core.Data.Entities;
+using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -12,6 +13,8 @@ namespace Core.Data.Dto.PostDto
     {
         [Required]
         public string Content { get; set; } = string.Empty;
+
+        public List<IFormFile> Files { get; set; } = [];
 
         public Post ToPost(Guid currentUserId)
         {

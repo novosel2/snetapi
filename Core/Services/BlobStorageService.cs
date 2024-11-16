@@ -62,5 +62,28 @@ namespace Core.Services
 
             return _defaultPicture;
         }
+
+        // Add post file to blob storage
+        public async Task<string> UploadPostFile(IFormFile file)
+        {
+            string blobName = Guid.NewGuid().ToString() + Path.GetExtension(file.FileName);
+
+            var blobClient = new BlobClient(_connectionString, _postsContainer, blobName);
+
+            using var stream = file.OpenReadStream();
+            await blobClient.UploadAsync(stream, overwrite: true);
+
+            return _baseUrl + blobName;
+        }
+
+        // Delete post file from blob storage
+        public async Task DeletePostFile(string url)
+        {
+            string blobName = url.Substring(url.LastIndexOf("/") + 1);
+
+            var blobClient = new BlobClient(_connectionString, _postsContainer, blobName);
+
+            await blobClient.DeleteIfExistsAsync();
+        }
     }
 }

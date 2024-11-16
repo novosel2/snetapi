@@ -25,6 +25,8 @@ namespace Core.Data.Entities
         public List<Comment> Comments { get; set; } = [];
         public List<PostReaction> Reactions { get; set; } = [];
 
+        public List<FileUrl> FileUrls { get; set; } = [];
+
         public Post()
         {
             TimeZoneInfo cetZone = TimeZoneInfo.FindSystemTimeZoneById("Central European Standard Time");
@@ -44,7 +46,8 @@ namespace Core.Data.Entities
                 UserReacted = Reactions.Any(r => r.UserId == currentUserId) ? Reactions.First(r => r.UserId == currentUserId).Reaction : ReactionType.NoReaction,
                 Comments = Comments.Select(c => c.ToCommentResponse(currentUserId)).ToList(),
                 CommentCount = CommentCount,
-                UserProfile = UserProfile!.ToProfileResponse()
+                UserProfile = UserProfile!.ToProfileResponse(),
+                FileUrls = FileUrls.Select(fu => fu.Url).ToList()
             };
 
             return postResponse;
