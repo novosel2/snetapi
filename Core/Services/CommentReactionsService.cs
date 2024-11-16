@@ -47,12 +47,8 @@ namespace Core.Services
 
         public async Task UpdateCommentReaction(Guid commentId)
         {
-            if (!await _commentReactionsRepository.CommentReactionExistsAsync(UserId, commentId))
-            {
-                throw new NotFoundException($"Post reaction not found, PostID: {commentId} UserID: {UserId}");
-            }
-
-            CommentReaction commentReaction = await _commentReactionsRepository.GetCommentReactionByIdAsync(UserId, commentId);
+            CommentReaction commentReaction = await _commentReactionsRepository.GetCommentReactionByIdAsync(UserId, commentId)
+                ?? throw new NotFoundException($"Post reaction not found, PostID: {commentId} UserID: {UserId}");
 
             _commentReactionsRepository.UpdateCommentReaction(commentReaction);
 
@@ -64,12 +60,8 @@ namespace Core.Services
 
         public async Task DeleteCommentReaction(Guid commentId)
         {
-            if (!await _commentReactionsRepository.CommentReactionExistsAsync(UserId, commentId))
-            {
-                throw new NotFoundException($"Post reaction not found, PostID: {commentId} UserID: {UserId}");
-            }
-
-            CommentReaction commentReaction = await _commentReactionsRepository.GetCommentReactionByIdAsync(UserId, commentId);
+            CommentReaction commentReaction = await _commentReactionsRepository.GetCommentReactionByIdAsync(UserId, commentId)
+                ?? throw new NotFoundException($"Post reaction not found, PostID: {commentId} UserID: {UserId}");
 
             _commentReactionsRepository.DeleteCommentReaction(commentReaction);
 

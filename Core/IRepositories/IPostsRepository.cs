@@ -20,7 +20,7 @@ namespace Core.IRepositories
         /// </summary>
         /// <param name="postId">Id of needed post</param>
         /// <returns>Post</returns>
-        public Task<Post> GetPostByIdAsync(Guid postId);
+        public Task<Post?> GetPostByIdAsync(Guid postId);
 
         /// <summary>
         /// Get all posts made by a specified user

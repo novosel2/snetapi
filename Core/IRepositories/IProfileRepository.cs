@@ -16,7 +16,7 @@ namespace Core.IRepositories
         /// </summary>
         /// <param name="id">Id we want to find</param>
         /// <returns>User Profile</returns>
-        public Task<Profile> GetProfileByIdAsync(Guid id);
+        public Task<Profile?> GetProfileByIdAsync(Guid id);
 
         /// <summary>
         /// Adds a user profile to database

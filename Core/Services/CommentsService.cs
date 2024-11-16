@@ -28,14 +28,10 @@ namespace Core.Services
         // Adds a comment to database
         public async Task AddCommentAsync(Guid postId, CommentAddRequest commentAddRequest)
         {
-            if (! await _postsRepository.PostExistsAsync(postId))
-            {
-                throw new NotFoundException($"Post not found, PostID: {postId}");
-            }
-
             Comment comment = commentAddRequest.ToComment(_currentUserId, postId);
 
-            Post post = await _postsRepository.GetPostByIdAsync(postId);
+            Post post = await _postsRepository.GetPostByIdAsync(postId)
+                ?? throw new NotFoundException($"Post not found, PostID: {postId}");
 
             ++post.CommentCount;
             post.Comments.Add(comment);
@@ -49,12 +45,9 @@ namespace Core.Services
         // Adds a comment reply to database
         public async Task AddCommentReplyAsync(Guid commentId, CommentAddRequest commentAddRequest)
         {
-            if (!await _commentsRepository.CommentExistsAsync(commentId))
-            {
-                throw new NotFoundException($"Comment not found, Comment ID: {commentId}");
-            }
+            Comment parentComment = await _commentsRepository.GetCommentByIdAsync(commentId)
+                ?? throw new NotFoundException($"Comment not found, Comment ID: {commentId}");
 
-            Comment parentComment = await _commentsRepository.GetCommentByIdAsync(commentId);
             Comment commentReply = commentAddRequest.ToComment(_currentUserId, parentComment.PostId, commentId);
 
             parentComment.CommentReplies.Add(commentReply);
@@ -68,12 +61,9 @@ namespace Core.Services
         // Updates comment in database with new information
         public async Task UpdateCommentAsync(Guid commentId, CommentUpdateRequest updatedCommentRequest)
         {
-            if (!await _commentsRepository.CommentExistsAsync(commentId))
-            {
-                throw new NotFoundException($"Comment not found, Comment ID: {commentId}");
-            }
+            Comment existingComment = await _commentsRepository.GetCommentByIdAsync(commentId)
+                ?? throw new NotFoundException($"Comment not found, Comment ID: {commentId}");
 
-            Comment existingComment = await _commentsRepository.GetCommentByIdAsync(commentId);
             Comment updatedComment = updatedCommentRequest.ToComment(existingComment.Id, _currentUserId, existingComment.PostId);
 
             if (existingComment.UserId != _currentUserId)
@@ -92,24 +82,16 @@ namespace Core.Services
         // Deletes comment from database
         public async Task DeleteCommentAsync(Guid commentId)
         {
-            if (!await _commentsRepository.CommentExistsAsync(commentId))
-            {
-                throw new NotFoundException($"Comment not found, Comment ID: {commentId}");
-            }
-
-            Comment comment = await _commentsRepository.GetCommentByIdAsync(commentId);
+            Comment comment = await _commentsRepository.GetCommentByIdAsync(commentId)
+                ?? throw new NotFoundException($"Comment not found, Comment ID: {commentId}");
 
             if (comment.UserId != _currentUserId && comment.Post!.UserId != _currentUserId)
             {
                 throw new UnauthorizedException("You do not have permission to delete this comment.");
             }
 
-            if (!await _postsRepository.PostExistsAsync(comment.PostId))
-            {
-                throw new NotFoundException($"Post not found, Post ID: {comment.PostId}");
-            }
-
-            Post post = await _postsRepository.GetPostByIdAsync(comment.PostId);
+            Post post = await _postsRepository.GetPostByIdAsync(comment.PostId)
+                ?? throw new NotFoundException($"Post not found, ID: {comment.PostId}");
 
             --post.CommentCount;
             post.Comments.Remove(comment);

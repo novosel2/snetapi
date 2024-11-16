@@ -40,12 +40,8 @@ namespace Core.Services
         // Get profile by id
         public async Task<ProfileResponse> GetProfileByIdAsync(Guid userId)
         {
-            if (! await _profileRepository.ProfileExistsAsync(userId))
-            {
-                throw new NotFoundException($"Profile not found, ID: {userId}");
-            }
-
-            Profile profile = await _profileRepository.GetProfileByIdAsync(userId);
+            Profile profile = await _profileRepository.GetProfileByIdAsync(userId) 
+                ?? throw new NotFoundException($"Profile not found, ID: {userId}");
 
             return profile.ToProfileResponse();
         }
@@ -175,12 +171,8 @@ namespace Core.Services
 
         private async Task<Profile> GetProfileAsync(Guid currentUserId)
         {
-            if (!await _profileRepository.ProfileExistsAsync(currentUserId))
-            {
-                throw new NotFoundException($"Profile not found, ID: {currentUserId}");
-            }
-
-            Profile profile = await _profileRepository.GetProfileByIdAsync(currentUserId);
+            Profile profile = await _profileRepository.GetProfileByIdAsync(currentUserId)
+                ?? throw new NotFoundException($"Profile not found, ID: {currentUserId}");
 
             return profile;
         }

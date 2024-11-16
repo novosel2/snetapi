@@ -15,7 +15,7 @@ namespace Core.IServices
         /// <param name="currentUserId">Id of current user</param>
         /// <param name="commentId">Id of comment</param>
         /// <returns>Comment reaction with specified ids</returns>
-        public Task<CommentReaction> GetCommentReactionByIdAsync(Guid currentUserId, Guid commentId);
+        public Task<CommentReaction?> GetCommentReactionByIdAsync(Guid currentUserId, Guid commentId);
 
         /// <summary>
         /// Adds a comment reaction to the database

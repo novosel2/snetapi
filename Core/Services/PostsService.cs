@@ -39,12 +39,8 @@ namespace Core.Services
         // Get post by post id
         public async Task<PostResponse> GetPostByIdAsync(Guid postId)
         {
-            if (! await _postRepository.PostExistsAsync(postId))
-            {
-                throw new NotFoundException($"Post not found, ID: {postId}");
-            }
-
-            Post post = await _postRepository.GetPostByIdAsync(postId);
+            Post post = await _postRepository.GetPostByIdAsync(postId)
+                ?? throw new NotFoundException($"Post not found, ID: {postId}");
 
             var postResponse = post.ToPostResponse(_currentUserId);
 
@@ -90,12 +86,9 @@ namespace Core.Services
         // Update post with updated information
         public async Task UpdatePostAsync(Guid existingPostId, PostUpdateRequest postUpdateRequest)
         {
-            if (! await _postRepository.PostExistsAsync(existingPostId))
-            {
-                throw new NotFoundException($"Post not found, ID: {existingPostId}");
-            }
+            Post existingPost = await _postRepository.GetPostByIdAsync(existingPostId)
+                ?? throw new NotFoundException($"Post not found, ID: {existingPostId}");
 
-            Post existingPost = await _postRepository.GetPostByIdAsync(existingPostId);
             Post updatedPost = postUpdateRequest.ToPost(existingPostId, _currentUserId);
 
             foreach (var existingFile in existingPost.FileUrls)
@@ -132,12 +125,8 @@ namespace Core.Services
         // Delete post from database
         public async Task DeletePostAsync(Guid postId)
         {
-            if (! await _postRepository.PostExistsAsync(postId))
-            {
-                throw new NotFoundException($"Post not found, ID: {postId}");
-            }
-
-            Post post = await _postRepository.GetPostByIdAsync(postId);
+            Post post = await _postRepository.GetPostByIdAsync(postId)
+                ?? throw new NotFoundException($"Post not found, ID: {postId}");
 
             if (post.UserId != _currentUserId)
             {

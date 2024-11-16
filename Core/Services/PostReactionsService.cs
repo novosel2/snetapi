@@ -43,12 +43,8 @@ namespace Core.Services
 
         public async Task UpdatePostReaction(Guid postId)
         {
-            if (!await _postReactionsRepository.PostReactionExistsAsync(UserId, postId))
-            {
-                throw new NotFoundException($"Post reaction not found, PostID: {postId} UserID: {UserId}");
-            }
-
-            PostReaction postReaction = await _postReactionsRepository.GetPostReactionByIdAsync(UserId, postId);
+            PostReaction postReaction = await _postReactionsRepository.GetPostReactionByIdAsync(UserId, postId)
+                ?? throw new NotFoundException($"Post reaction not found, PostID: {postId} UserID: {UserId}");
 
             _postReactionsRepository.UpdatePostReaction(postReaction);
 
@@ -60,12 +56,8 @@ namespace Core.Services
 
         public async Task DeletePostReaction(Guid postId)
         {
-            if (!await _postReactionsRepository.PostReactionExistsAsync(UserId, postId))
-            {
-                throw new NotFoundException($"Post reaction not found, PostID: {postId} UserID: {UserId}");
-            }
-
-            PostReaction postReaction = await _postReactionsRepository.GetPostReactionByIdAsync(UserId, postId);
+            PostReaction postReaction = await _postReactionsRepository.GetPostReactionByIdAsync(UserId, postId)
+                ?? throw new NotFoundException($"Post reaction not found, PostID: {postId} UserID: {UserId}");
 
             _postReactionsRepository.DeletePostReaction(postReaction);
 

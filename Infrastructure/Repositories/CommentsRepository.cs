@@ -21,11 +21,11 @@ namespace Infrastructure.Repositories
 
 
         // Gets comment by id
-        public async Task<Comment> GetCommentByIdAsync(Guid commentId)
+        public async Task<Comment?> GetCommentByIdAsync(Guid commentId)
         {
             return await _db.Comments
                 .Include(c => c.Post)
-                .FirstAsync(c => c.Id == commentId);
+                .FirstOrDefaultAsync(c => c.Id == commentId);
         }
 
         // Adds comment to database
@@ -48,7 +48,7 @@ namespace Infrastructure.Repositories
         }
 
         // Checks if comment with id exists
-        public async Task<bool> CommentExistsAsync(Guid commentId)
+        public async Task<bool> CommentExistsAsyn(Guid commentId)
         {
             return await _db.Comments.AnyAsync(c => c.Id == commentId);
         }

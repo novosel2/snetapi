@@ -14,7 +14,7 @@ namespace Core.IRepositories
         /// </summary>
         /// <param name="commentId">Comment id you want to get</param>
         /// <returns>Comment object</returns>
-        public Task<Comment> GetCommentByIdAsync(Guid commentId);
+        public Task<Comment?> GetCommentByIdAsync(Guid commentId);
 
         /// <summary>
         /// Adds a comment to database

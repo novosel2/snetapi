@@ -24,9 +24,9 @@ namespace Infrastructure.Repositories
         }
 
         // Return profile from database based on ID
-        public async Task<Profile> GetProfileByIdAsync(Guid id)
+        public async Task<Profile?> GetProfileByIdAsync(Guid id)
         {
-            return await _db.Profiles.FirstAsync(up => up.Id == id);
+            return await _db.Profiles.FirstOrDefaultAsync(up => up.Id == id);
         }
 
         // Add profile to the database

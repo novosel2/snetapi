@@ -30,13 +30,16 @@ namespace Infrastructure.Repositories
         }
 
         // Get post by id
-        public async Task<Post> GetPostByIdAsync(Guid postId)
+        public async Task<Post?> GetPostByIdAsync(Guid postId)
         {
             var post = await _db.Posts
                 .Include(p => p.UserProfile)
                 .Include(p => p.Reactions)
                 .Include(p => p.FileUrls)
-                .FirstAsync(p => p.Id == postId);
+                .FirstOrDefaultAsync(p => p.Id == postId);
+
+            if (post == null)
+                return null;
 
             post.Comments = await _db.Comments
                 .Where(c => c.PostId == postId && c.ParentCommentId == null)

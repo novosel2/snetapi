@@ -22,7 +22,7 @@ namespace Infrastructure.Repositories
 
 
         // Gets comment reaction by ids
-        public async Task<CommentReaction> GetCommentReactionByIdAsync(Guid currentUserId, Guid commentId)
+        public async Task<CommentReaction?> GetCommentReactionByIdAsync(Guid currentUserId, Guid commentId)
         {
             return await _db.CommentReactions.FirstAsync(pr => pr.UserId == currentUserId && pr.CommentId == commentId);
         }

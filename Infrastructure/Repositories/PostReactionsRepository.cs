@@ -22,7 +22,7 @@ namespace Infrastructure.Repositories
 
 
         // Gets post reaction by ids
-        public async Task<PostReaction> GetPostReactionByIdAsync(Guid currentUserId, Guid postId)
+        public async Task<PostReaction?> GetPostReactionByIdAsync(Guid currentUserId, Guid postId)
         {
             return await _db.PostReactions.FirstAsync(pr => pr.UserId == currentUserId && pr.PostId == postId);
         }

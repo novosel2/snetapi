@@ -15,7 +15,7 @@ namespace Core.IRepositories
         /// <param name="currentUserId">Id of current user</param>
         /// <param name="postId">Id of post</param>
         /// <returns>Post reaction with specified ids</returns>
-        public Task<PostReaction> GetPostReactionByIdAsync(Guid currentUserId, Guid postId);
+        public Task<PostReaction?> GetPostReactionByIdAsync(Guid currentUserId, Guid postId);
 
         /// <summary>
         /// Adds a post reaction to the database
