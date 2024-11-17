@@ -25,7 +25,7 @@ namespace Core.Services
             _profileContainer = config["AzureBlobStorage:ProfileContainer"]!;
             _postsContainer = config["AzureBlobStorage:PostsContainer"]!;
             _baseUrl = config["AzureBlobStorage:BaseUrl"]!;
-            _defaultPicture = _baseUrl + "default.jpg";
+            _defaultPicture = _baseUrl + _profileContainer + "/default.jpg";
         }
 
         // Updates a profile picture
@@ -45,7 +45,7 @@ namespace Core.Services
             using var stream = image.OpenReadStream();
             await blobClient.UploadAsync(stream, overwrite: true);
 
-            return _baseUrl + blobName;
+            return _baseUrl + _profileContainer + $"/{blobName}";
         }
     
         // Deletes profile picture from user
@@ -73,7 +73,7 @@ namespace Core.Services
             using var stream = file.OpenReadStream();
             await blobClient.UploadAsync(stream, overwrite: true);
 
-            return _baseUrl + blobName;
+            return _baseUrl + _postsContainer + $"/{blobName}";
         }
 
         // Delete post file from blob storage

@@ -55,7 +55,7 @@ namespace Api.Controllers
         // POST: /api/posts/add-post
 
         [HttpPost("add-post")]
-        public async Task<IActionResult> AddPost(PostAddRequest postAddRequest)
+        public async Task<IActionResult> AddPost([FromForm]PostAddRequest postAddRequest)
         {
             await _postsService.AddPostAsync(postAddRequest);
 
@@ -66,7 +66,7 @@ namespace Api.Controllers
         // PUT: /api/posts/update-post/31faddd4-c910-45c2-a68b-bf67b5abaa77
 
         [HttpPut("update-post/{postId}")]
-        public async Task<IActionResult> UpdatePost(Guid postId, PostUpdateRequest postUpdateRequest)
+        public async Task<IActionResult> UpdatePost(Guid postId, [FromForm]PostUpdateRequest postUpdateRequest)
         {
             await _postsService.UpdatePostAsync(postId, postUpdateRequest);
 

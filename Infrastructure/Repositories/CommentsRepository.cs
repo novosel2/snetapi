@@ -48,7 +48,7 @@ namespace Infrastructure.Repositories
         }
 
         // Checks if comment with id exists
-        public async Task<bool> CommentExistsAsyn(Guid commentId)
+        public async Task<bool> CommentExistsAsync(Guid commentId)
         {
             return await _db.Comments.AnyAsync(c => c.Id == commentId);
         }
