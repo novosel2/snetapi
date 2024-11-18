@@ -15,10 +15,52 @@ namespace Infrastructure.Data
         public DbSet<Comment> Comments { get; set; }
         public DbSet<CommentReaction> CommentReactions { get; set; }
         public DbSet<FileUrl> FileUrls { get; set; }
+        public DbSet<FriendRequest> FriendRequests { get; set; }
+        public DbSet<Friendship> Friendships { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
+
+            modelBuilder.Entity<FriendRequest>()
+                .HasIndex(fr => new
+                {
+                    fr.SenderId,
+                    fr.ReceiverId
+                })
+                .IsUnique();
+
+            modelBuilder.Entity<Friendship>()
+                .HasIndex(fs => new
+                {
+                    fs.SenderId,
+                    fs.ReceiverId
+                })
+                .IsUnique();
+
+            modelBuilder.Entity<Friendship>()
+                .HasOne(fs => fs.SenderUser)
+                .WithMany(u => u.FriendsAsSender)
+                .HasForeignKey(fs => fs.SenderId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<Friendship>()
+                .HasOne(fs => fs.ReceiverUser)
+                .WithMany(u => u.FriendsAsReciever)
+                .HasForeignKey(fs => fs.ReceiverId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<FriendRequest>()
+                .HasOne(fs => fs.SenderUser)
+                .WithMany(u => u.FriendRequestsAsSender)
+                .HasForeignKey(fs => fs.SenderId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<FriendRequest>()
+                .HasOne(fs => fs.ReceiverUser)
+                .WithMany(u => u.FriendRequestsAsReciever)
+                .HasForeignKey(fs => fs.ReceiverId)
+                .OnDelete(DeleteBehavior.Restrict);
 
             modelBuilder.Entity<Post>()
                 .HasOne(p => p.UserProfile)

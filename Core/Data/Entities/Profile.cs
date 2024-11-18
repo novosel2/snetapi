@@ -19,6 +19,12 @@ namespace Core.Data.Entities
 
         public string PictureUrl { get; set; } = "https://snetblobstorage.blob.core.windows.net/snetprofiles/default.jpg";
 
+        public List<Friendship> FriendsAsSender { get; set; } = [];
+        public List<Friendship> FriendsAsReciever { get; set; } = [];
+
+        public List<FriendRequest> FriendRequestsAsSender { get; set; } = [];
+        public List<FriendRequest> FriendRequestsAsReciever { get; set; } = [];
+
         public ProfileResponse ToProfileResponse()
         {
             return new ProfileResponse()

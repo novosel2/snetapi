@@ -4,6 +4,7 @@ using Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastructure.Migrations.AppDb
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241118192131_AddFriendsAndFriendRequests")]
+    partial class AddFriendsAndFriendRequests
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -90,20 +93,20 @@ namespace Infrastructure.Migrations.AppDb
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<DateTime>("CreatedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<Guid>("ReceiverId")
+                    b.Property<Guid>("RecieverId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid>("SenderId")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<DateTime>("SentOn")
+                        .HasColumnType("datetime2");
+
                     b.HasKey("Id");
 
-                    b.HasIndex("ReceiverId");
+                    b.HasIndex("RecieverId");
 
-                    b.HasIndex("SenderId", "ReceiverId")
+                    b.HasIndex("SenderId", "RecieverId")
                         .IsUnique();
 
                     b.ToTable("FriendRequests");
@@ -118,7 +121,7 @@ namespace Infrastructure.Migrations.AppDb
                     b.Property<DateTime>("CreatedOn")
                         .HasColumnType("datetime2");
 
-                    b.Property<Guid>("ReceiverId")
+                    b.Property<Guid>("RecieverId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid>("SenderId")
@@ -126,9 +129,9 @@ namespace Infrastructure.Migrations.AppDb
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ReceiverId");
+                    b.HasIndex("RecieverId");
 
-                    b.HasIndex("SenderId", "ReceiverId")
+                    b.HasIndex("SenderId", "RecieverId")
                         .IsUnique();
 
                     b.ToTable("Friendships");
@@ -250,9 +253,9 @@ namespace Infrastructure.Migrations.AppDb
 
             modelBuilder.Entity("Core.Data.Entities.FriendRequest", b =>
                 {
-                    b.HasOne("Core.Data.Entities.Profile", "ReceiverUser")
+                    b.HasOne("Core.Data.Entities.Profile", "RecieverUser")
                         .WithMany("FriendRequestsAsReciever")
-                        .HasForeignKey("ReceiverId")
+                        .HasForeignKey("RecieverId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
@@ -262,16 +265,16 @@ namespace Infrastructure.Migrations.AppDb
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.Navigation("ReceiverUser");
+                    b.Navigation("RecieverUser");
 
                     b.Navigation("SenderUser");
                 });
 
             modelBuilder.Entity("Core.Data.Entities.Friendship", b =>
                 {
-                    b.HasOne("Core.Data.Entities.Profile", "ReceiverUser")
+                    b.HasOne("Core.Data.Entities.Profile", "RecieverUser")
                         .WithMany("FriendsAsReciever")
-                        .HasForeignKey("ReceiverId")
+                        .HasForeignKey("RecieverId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
@@ -281,7 +284,7 @@ namespace Infrastructure.Migrations.AppDb
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.Navigation("ReceiverUser");
+                    b.Navigation("RecieverUser");
 
                     b.Navigation("SenderUser");
                 });
