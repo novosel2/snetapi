@@ -29,6 +29,20 @@ namespace Infrastructure.Repositories
                 .ToListAsync();
         }
 
+        // Get a single friend request by id
+        public async Task<FriendRequest?> GetFriendRequestByIdAsync(Guid friendRequestId)
+        {
+            return await _db.FriendRequests
+                .FirstOrDefaultAsync(fr => fr.Id == friendRequestId);
+        }
+
+        // Get a single friend request by sender and receiver id
+        public async Task<FriendRequest?> GetFriendRequestByIdsAsync(Guid senderId, Guid receiverId) 
+        { 
+            return await _db.FriendRequests
+                .FirstOrDefaultAsync(fr => fr.SenderId == senderId && fr.ReceiverId == receiverId || fr.SenderId == receiverId && fr.ReceiverId == senderId);
+        }
+
         // Adds a friend request to database
         public async Task AddFriendRequestAsync(FriendRequest friendRequest)
         {
@@ -41,6 +55,20 @@ namespace Infrastructure.Repositories
         {
             _db.FriendRequests
                 .Remove(friendRequest);
+        }
+
+        // Checks if a sent friend request already exists
+        public async Task<bool> SentFriendRequestExistsAsync(Guid currentUserId, Guid receiverUserId)
+        {
+            return await _db.FriendRequests
+                .AnyAsync(fr => fr.SenderId == currentUserId && fr.ReceiverId == receiverUserId);
+        }
+
+        // Checks if a received friend request already exists
+        public async Task<bool> ReceivedFriendRequestExistsAsync(Guid currentUserId, Guid senderUserId)
+        {
+            return await _db.FriendRequests
+                .AnyAsync(fr => fr.SenderId ==  senderUserId && fr.ReceiverId == currentUserId);
         }
 
         // Checks if any changes are saved to database

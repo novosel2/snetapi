@@ -1,4 +1,5 @@
 ﻿using Core.Data.Dto.FriendsDto;
+using Core.Data.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -26,5 +27,11 @@ namespace Core.IServices
         /// </summary>
         /// <param name="recieverUserId">User id you want to send friend request to</param>
         public Task AddFriendRequestAsync(Guid recieverUserId);
+
+        /// <summary>
+        /// Deletes a friend request from database
+        /// </summary>
+        /// <param name="friendRequestId">Friend request id you want to delete</param>
+        public Task DeleteFriendRequestAsync(Guid friendRequestId);
     }
 }
