@@ -83,7 +83,7 @@ namespace Core.Services
             }
         }
 
-        // Update post with updated information
+        // Update existing post with updated information
         public async Task UpdatePostAsync(Guid existingPostId, PostUpdateRequest postUpdateRequest)
         {
             Post existingPost = await _postRepository.GetPostByIdAsync(existingPostId)
