@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Core.Data.Dto.FriendsDto;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -28,6 +29,23 @@ namespace Core.Data.Entities
             TimeZoneInfo cetZone = TimeZoneInfo.FindSystemTimeZoneById("Central European Standard Time");
 
             CreatedOn = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, cetZone);
+        }
+
+        public FriendshipResponse ToFriendshipResponse(Guid userId)
+        {
+            var friendshipResponse = new FriendshipResponse()
+            {
+                Id = Id,
+                CreatedOn = CreatedOn
+            };
+
+            if (userId == ReceiverId)
+                friendshipResponse.User = SenderUser!.ToProfileResponse();
+
+            if (userId == SenderId)
+                friendshipResponse.User = ReceiverUser!.ToProfileResponse();
+
+            return friendshipResponse;
         }
     }
 }

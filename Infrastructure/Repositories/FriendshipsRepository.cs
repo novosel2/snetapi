@@ -29,6 +29,20 @@ namespace Infrastructure.Repositories
                 .ToListAsync();
         }
 
+        // Get friendship by id
+        public async Task<Friendship?> GetFriendshipByIdAsync(Guid friendshipId)
+        {
+            return await _db.Friendships.FirstOrDefaultAsync(fs => fs.Id == friendshipId);
+        }
+
+        // Get friendship by ids
+        public async Task<Friendship?> GetFriendshipByIdsAsync(Guid userId, Guid currentUserId)
+        {
+            return await _db.Friendships
+                .FirstOrDefaultAsync(fs => fs.SenderId == userId && fs.ReceiverId == currentUserId 
+                || fs.SenderId == currentUserId && fs.ReceiverId == userId);
+        }
+
         // Adds a friendship to database
         public async Task AddFriendshipAsync(Friendship friendship)
         {
@@ -39,6 +53,14 @@ namespace Infrastructure.Repositories
         public void DeleteFriendship(Friendship friendship)
         {
             _db.Friendships.Remove(friendship);
+        }
+
+        // Checks if a friendship between two users exists
+        public async Task<bool> FriendshipExistsByIdsAsync(Guid userId, Guid currentUserId)
+        {
+            return await _db.Friendships
+                .AnyAsync(fs => fs.SenderId == userId && fs.ReceiverId == currentUserId
+                || fs.SenderId == currentUserId && fs.ReceiverId == userId);
         }
 
         // Checks if any changes are saved to database

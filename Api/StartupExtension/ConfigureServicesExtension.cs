@@ -107,6 +107,7 @@ namespace Api.StartupExtension
             services.AddScoped<ICommentsService, CommentsService>();
             services.AddScoped<ICommentReactionsService, CommentReactionsService>();
             services.AddScoped<IFriendRequestsService, FriendRequestsService>();
+            services.AddScoped<IFriendshipsService, FriendshipsService>();
             services.AddSingleton<IBlobStorageService, BlobStorageService>();
 
             services.AddScoped<IProfileRepository, ProfileRepository>();

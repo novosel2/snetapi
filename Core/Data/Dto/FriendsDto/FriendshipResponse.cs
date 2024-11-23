@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Core.Data.Dto.FriendsDto
 {
-    public class FriendRequestResponse
+    public class FriendshipResponse
     {
         public Guid Id { get; set; }
 

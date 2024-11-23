@@ -11,10 +11,12 @@ namespace Api.Controllers
     public class FriendsController : ControllerBase
     {
         private readonly IFriendRequestsService _friendRequestsService;
+        private readonly IFriendshipsService _friendshipsService;
 
-        public FriendsController(IFriendRequestsService friendRequestsService)
+        public FriendsController(IFriendRequestsService friendRequestsService, IFriendshipsService friendshipsService)
         {
             _friendRequestsService = friendRequestsService;
+            _friendshipsService = friendshipsService;
         }
 
 
@@ -46,6 +48,50 @@ namespace Api.Controllers
         public async Task<IActionResult> SendFriendRequest(Guid recieverUserId)
         {
             await _friendRequestsService.AddFriendRequestAsync(recieverUserId);
+
+            return Ok();
+        }
+
+
+        // POST: /api/friends/friend-requests/accept/31faddd4-c910-45c2-a68b-bf67b5abaa77
+
+        [HttpPost("friend-requests/accept/{friendRequestId}")]
+        public async Task<IActionResult> AcceptFriendRequest(Guid friendRequestId)
+        {
+            await _friendshipsService.AddFriendshipAsync(friendRequestId);
+
+            return Ok();
+        }
+
+
+        // DELETE: /api/friends/friend-requests/decline/31faddd4-c910-45c2-a68b-bf67b5abaa77
+
+        [HttpPost("friend-requests/decline/{friendRequestId}")]
+        public async Task<IActionResult> DeclineFriendRequest(Guid friendRequestId)
+        {
+            await _friendRequestsService.DeleteFriendRequestAsync(friendRequestId);
+
+            return Ok();
+        }
+
+
+        // GET: /api/friends/31faddd4-c910-45c2-a68b-bf67b5abaa77
+
+        [HttpPost("{userId}")]
+        public async Task<IActionResult> GetFriendshipsByUserId(Guid userId)
+        {
+            List<FriendshipResponse> friendshipResponses = await _friendshipsService.GetFriendshipsByUserIdAsync(userId);
+
+            return Ok(friendshipResponses);
+        }
+
+
+        // DELETE: /api/friends/delete/31faddd4-c910-45c2-a68b-bf67b5abaa77
+
+        [HttpPost("delete/{userId}")]
+        public async Task<IActionResult> DeleteFriendship(Guid userId)
+        {
+            await _friendshipsService.DeleteFriendship(userId);
 
             return Ok();
         }
