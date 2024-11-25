@@ -25,6 +25,9 @@ namespace Core.Data.Entities
         public List<FriendRequest> FriendRequestsAsSender { get; set; } = [];
         public List<FriendRequest> FriendRequestsAsReciever { get; set; } = [];
 
+        public List<Follow> Followers { get; set; } = [];
+        public List<Follow> Following { get; set; } = [];
+
         public ProfileResponse ToProfileResponse()
         {
             return new ProfileResponse()
@@ -33,7 +36,9 @@ namespace Core.Data.Entities
                 Username = Username,
                 FirstName = FirstName,
                 LastName = LastName,
-                PictureUrl = PictureUrl
+                PictureUrl = PictureUrl,
+                Followers = Followers.Count,
+                Following = Following.Count
             };
         }
     }

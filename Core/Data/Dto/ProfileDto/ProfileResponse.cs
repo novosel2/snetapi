@@ -15,6 +15,8 @@ namespace Core.Data.Dto.ProfileDto
         public string? FirstName { get; set; }
         public string? LastName { get; set; }
         public string PictureUrl { get; set; } = string.Empty;
+        public int Followers { get; set; }
+        public int Following { get; set; }
 
         public Profile ToProfile()
         {

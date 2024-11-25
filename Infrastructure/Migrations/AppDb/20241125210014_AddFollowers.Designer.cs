@@ -4,6 +4,7 @@ using Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastructure.Migrations.AppDb
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241125210014_AddFollowers")]
+    partial class AddFollowers
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -86,14 +89,14 @@ namespace Infrastructure.Migrations.AppDb
 
             modelBuilder.Entity("Core.Data.Entities.Follow", b =>
                 {
-                    b.Property<Guid?>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid?>("FollowedId")
+                    b.Property<Guid>("FollowedId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid?>("FollowerId")
+                    b.Property<Guid>("FollowerId")
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
@@ -101,8 +104,7 @@ namespace Infrastructure.Migrations.AppDb
                     b.HasIndex("FollowedId");
 
                     b.HasIndex("FollowerId", "FollowedId")
-                        .IsUnique()
-                        .HasFilter("[FollowerId] IS NOT NULL AND [FollowedId] IS NOT NULL");
+                        .IsUnique();
 
                     b.ToTable("Follows");
                 });
@@ -276,12 +278,14 @@ namespace Infrastructure.Migrations.AppDb
                     b.HasOne("Core.Data.Entities.Profile", "Followed")
                         .WithMany("Followers")
                         .HasForeignKey("FollowedId")
-                        .OnDelete(DeleteBehavior.SetNull);
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
 
                     b.HasOne("Core.Data.Entities.Profile", "Follower")
                         .WithMany("Following")
                         .HasForeignKey("FollowerId")
-                        .OnDelete(DeleteBehavior.SetNull);
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
 
                     b.Navigation("Followed");
 

@@ -17,10 +17,31 @@ namespace Infrastructure.Data
         public DbSet<FileUrl> FileUrls { get; set; }
         public DbSet<FriendRequest> FriendRequests { get; set; }
         public DbSet<Friendship> Friendships { get; set; }
+        public DbSet<Follow> Follows { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
+
+            modelBuilder.Entity<Follow>()
+                .HasIndex(f => new
+                {
+                    f.FollowerId,
+                    f.FollowedId
+                })
+                .IsUnique();
+
+            modelBuilder.Entity<Follow>()
+                .HasOne(f => f.Follower)
+                .WithMany(p => p.Following)
+                .HasForeignKey(f => f.FollowerId)
+                .OnDelete(DeleteBehavior.SetNull);
+
+            modelBuilder.Entity<Follow>()
+                .HasOne(f => f.Followed)
+                .WithMany(p => p.Followers)
+                .HasForeignKey(f => f.FollowedId)
+                .OnDelete(DeleteBehavior.SetNull);
 
             modelBuilder.Entity<FriendRequest>()
                 .HasIndex(fr => new
