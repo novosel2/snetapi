@@ -86,14 +86,14 @@ namespace Infrastructure.Migrations.AppDb
 
             modelBuilder.Entity("Core.Data.Entities.Follow", b =>
                 {
-                    b.Property<Guid?>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid?>("FollowedId")
+                    b.Property<Guid>("FollowedId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid?>("FollowerId")
+                    b.Property<Guid>("FollowerId")
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
@@ -101,8 +101,7 @@ namespace Infrastructure.Migrations.AppDb
                     b.HasIndex("FollowedId");
 
                     b.HasIndex("FollowerId", "FollowedId")
-                        .IsUnique()
-                        .HasFilter("[FollowerId] IS NOT NULL AND [FollowedId] IS NOT NULL");
+                        .IsUnique();
 
                     b.ToTable("Follows");
                 });
@@ -276,12 +275,14 @@ namespace Infrastructure.Migrations.AppDb
                     b.HasOne("Core.Data.Entities.Profile", "Followed")
                         .WithMany("Followers")
                         .HasForeignKey("FollowedId")
-                        .OnDelete(DeleteBehavior.SetNull);
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
 
                     b.HasOne("Core.Data.Entities.Profile", "Follower")
                         .WithMany("Following")
                         .HasForeignKey("FollowerId")
-                        .OnDelete(DeleteBehavior.SetNull);
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
 
                     b.Navigation("Followed");
 
@@ -293,13 +294,13 @@ namespace Infrastructure.Migrations.AppDb
                     b.HasOne("Core.Data.Entities.Profile", "ReceiverUser")
                         .WithMany("FriendRequestsAsReciever")
                         .HasForeignKey("ReceiverId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.HasOne("Core.Data.Entities.Profile", "SenderUser")
                         .WithMany("FriendRequestsAsSender")
                         .HasForeignKey("SenderId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.Navigation("ReceiverUser");
@@ -312,13 +313,13 @@ namespace Infrastructure.Migrations.AppDb
                     b.HasOne("Core.Data.Entities.Profile", "ReceiverUser")
                         .WithMany("FriendsAsReciever")
                         .HasForeignKey("ReceiverId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.HasOne("Core.Data.Entities.Profile", "SenderUser")
                         .WithMany("FriendsAsSender")
                         .HasForeignKey("SenderId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.Navigation("ReceiverUser");

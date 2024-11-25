@@ -35,13 +35,13 @@ namespace Infrastructure.Data
                 .HasOne(f => f.Follower)
                 .WithMany(p => p.Following)
                 .HasForeignKey(f => f.FollowerId)
-                .OnDelete(DeleteBehavior.SetNull);
+                .OnDelete(DeleteBehavior.NoAction);
 
             modelBuilder.Entity<Follow>()
                 .HasOne(f => f.Followed)
                 .WithMany(p => p.Followers)
                 .HasForeignKey(f => f.FollowedId)
-                .OnDelete(DeleteBehavior.SetNull);
+                .OnDelete(DeleteBehavior.NoAction);
 
             modelBuilder.Entity<FriendRequest>()
                 .HasIndex(fr => new
@@ -63,25 +63,25 @@ namespace Infrastructure.Data
                 .HasOne(fs => fs.SenderUser)
                 .WithMany(u => u.FriendsAsSender)
                 .HasForeignKey(fs => fs.SenderId)
-                .OnDelete(DeleteBehavior.Restrict);
+                .OnDelete(DeleteBehavior.NoAction);
 
             modelBuilder.Entity<Friendship>()
                 .HasOne(fs => fs.ReceiverUser)
                 .WithMany(u => u.FriendsAsReciever)
                 .HasForeignKey(fs => fs.ReceiverId)
-                .OnDelete(DeleteBehavior.Restrict);
+                .OnDelete(DeleteBehavior.NoAction);
 
             modelBuilder.Entity<FriendRequest>()
                 .HasOne(fs => fs.SenderUser)
                 .WithMany(u => u.FriendRequestsAsSender)
                 .HasForeignKey(fs => fs.SenderId)
-                .OnDelete(DeleteBehavior.Restrict);
+                .OnDelete(DeleteBehavior.NoAction);
 
             modelBuilder.Entity<FriendRequest>()
                 .HasOne(fs => fs.ReceiverUser)
                 .WithMany(u => u.FriendRequestsAsReciever)
                 .HasForeignKey(fs => fs.ReceiverId)
-                .OnDelete(DeleteBehavior.Restrict);
+                .OnDelete(DeleteBehavior.NoAction);
 
             modelBuilder.Entity<Post>()
                 .HasOne(p => p.UserProfile)

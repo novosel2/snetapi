@@ -10,12 +10,14 @@ namespace Core.Data.Entities
     public class Follow
     {
         [Key]
-        public Guid? Id { get; set; }
+        public Guid Id { get; set; }
 
-        public Guid? FollowerId { get; set; }
+        [Required]
+        public Guid FollowerId { get; set; }
         public Profile? Follower { get; set; }
 
-        public Guid? FollowedId { get; set; }
+        [Required]
+        public Guid FollowedId { get; set; }
         public Profile? Followed { get; set; }
     }
 }

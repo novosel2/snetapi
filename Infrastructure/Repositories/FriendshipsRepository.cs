@@ -55,6 +55,16 @@ namespace Infrastructure.Repositories
             _db.Friendships.Remove(friendship);
         }
 
+        // Deletes all friendships that contain user id
+        public int DeleteFriendshipsByUser(Guid userId)
+        {
+            var friendshipsByUser = _db.Friendships.Where(fs => fs.SenderId == userId || fs.ReceiverId == userId).ToList();
+
+            _db.Friendships.RemoveRange(friendshipsByUser);
+
+            return friendshipsByUser.Count;
+        }
+
         // Checks if a friendship between two users exists
         public async Task<bool> FriendshipExistsByIdsAsync(Guid userId, Guid currentUserId)
         {

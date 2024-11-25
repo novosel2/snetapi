@@ -44,6 +44,13 @@ namespace Core.IRepositories
         public void DeleteFriendRequest(FriendRequest friendRequest);
 
         /// <summary>
+        /// Deletes all friend requests that contain user id
+        /// </summary>
+        /// <param name="userId">User id</param>
+        /// <returns>How many should be deleted</returns>
+        public int DeleteFriendRequestsByUser(Guid userId);
+
+        /// <summary>
         /// Checks if a sent friend request currently exists
         /// </summary>
         /// <param name="currentUserId">Current User id</param>

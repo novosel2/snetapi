@@ -44,6 +44,13 @@ namespace Core.IRepositories
         public void DeleteFriendship(Friendship friendship);
 
         /// <summary>
+        /// Deletes all friendships that contain user id
+        /// </summary>
+        /// <param name="userId">User id</param>
+        /// <returns>How many should be deleted</returns>
+        public int DeleteFriendshipsByUser(Guid userId);
+
+        /// <summary>
         /// Checks if friendship already exists between two users
         /// </summary>
         /// <param name="userId">User id</param>

@@ -33,5 +33,10 @@ namespace Core.IServices
         /// </summary>
         /// <param name="friendRequestId">Friend request id you want to delete</param>
         public Task DeleteFriendRequestAsync(Guid friendRequestId);
+        
+        /// <summary>
+        /// Deletes all friend request that contain this user id
+        /// </summary>
+        public Task DeleteFriendRequestsByUserAsync();
     }
 }

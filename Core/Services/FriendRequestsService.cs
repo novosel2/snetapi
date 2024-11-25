@@ -26,7 +26,7 @@ namespace Core.Services
             _profileRepository = profileRepository;
             _friendshipsRepository = friendshipsRepository;
             _friendshipsService = friendshipsService;
-            _currentUserId = currentUserService.UserId ?? throw new UnauthorizedException("Unauthorized access.");
+            _currentUserId = currentUserService.UserId.GetValueOrDefault();
         }
 
         // Get all sent friend requests for current user
@@ -108,6 +108,20 @@ namespace Core.Services
             if (!await _friendRequestsRepository.IsSavedAsync())
             {
                 throw new DbSavingFailedException($"Failed to saved friend request deletion to database, User ID: {userId} | Current User ID: {_currentUserId}");
+            }
+        }
+
+        // Deletes all friend requests that contain user id
+        public async Task DeleteFriendRequestsByUserAsync()
+        {
+            int deleted = _friendRequestsRepository.DeleteFriendRequestsByUser(_currentUserId);
+
+            if (deleted > 0)
+            {
+                if (!await _friendRequestsRepository.IsSavedAsync())
+                {
+                    throw new DbSavingFailedException("Failed to save friend requests deletion to the database.");
+                }
             }
         }
     }

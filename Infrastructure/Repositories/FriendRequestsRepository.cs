@@ -57,6 +57,16 @@ namespace Infrastructure.Repositories
                 .Remove(friendRequest);
         }
 
+        // Deletes all friend requests with user id
+        public int DeleteFriendRequestsByUser(Guid userId)
+        {
+            var friendRequestsWithUser = _db.FriendRequests.Where(fr => fr.SenderId == userId || fr.ReceiverId == userId).ToList();
+
+            _db.FriendRequests.RemoveRange(friendRequestsWithUser);
+
+            return friendRequestsWithUser.Count;
+        }
+
         // Checks if a sent friend request already exists
         public async Task<bool> SentFriendRequestExistsAsync(Guid currentUserId, Guid receiverUserId)
         {

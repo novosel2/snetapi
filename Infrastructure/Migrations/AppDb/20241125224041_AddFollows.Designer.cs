@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastructure.Migrations.AppDb
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20241125210014_AddFollowers")]
-    partial class AddFollowers
+    [Migration("20241125224041_AddFollows")]
+    partial class AddFollows
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -297,13 +297,13 @@ namespace Infrastructure.Migrations.AppDb
                     b.HasOne("Core.Data.Entities.Profile", "ReceiverUser")
                         .WithMany("FriendRequestsAsReciever")
                         .HasForeignKey("ReceiverId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.HasOne("Core.Data.Entities.Profile", "SenderUser")
                         .WithMany("FriendRequestsAsSender")
                         .HasForeignKey("SenderId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.Navigation("ReceiverUser");
@@ -316,13 +316,13 @@ namespace Infrastructure.Migrations.AppDb
                     b.HasOne("Core.Data.Entities.Profile", "ReceiverUser")
                         .WithMany("FriendsAsReciever")
                         .HasForeignKey("ReceiverId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.HasOne("Core.Data.Entities.Profile", "SenderUser")
                         .WithMany("FriendsAsSender")
                         .HasForeignKey("SenderId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.Navigation("ReceiverUser");
