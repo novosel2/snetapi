@@ -67,7 +67,7 @@ namespace Infrastructure.Data
 
             modelBuilder.Entity<Friendship>()
                 .HasOne(fs => fs.ReceiverUser)
-                .WithMany(u => u.FriendsAsReciever)
+                .WithMany(u => u.FriendsAsReceiver)
                 .HasForeignKey(fs => fs.ReceiverId)
                 .OnDelete(DeleteBehavior.NoAction);
 
@@ -79,7 +79,7 @@ namespace Infrastructure.Data
 
             modelBuilder.Entity<FriendRequest>()
                 .HasOne(fs => fs.ReceiverUser)
-                .WithMany(u => u.FriendRequestsAsReciever)
+                .WithMany(u => u.FriendRequestsAsReceiver)
                 .HasForeignKey(fs => fs.ReceiverId)
                 .OnDelete(DeleteBehavior.NoAction);
 

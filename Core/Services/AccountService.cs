@@ -18,12 +18,13 @@ namespace Core.Services
         private readonly IProfileService _profileService;
         private readonly IFriendRequestsService _friendRequestsService;
         private readonly IFriendshipsService _friendshipsService;
+        private readonly IFollowsService _followsService;
         private readonly ITokenService _tokenService;
         private readonly Guid _currentUserId;
 
         public AccountService(UserManager<AppUser> userManager, SignInManager<AppUser> signInManager, 
             ITokenService tokenService, IProfileService profileService, ICurrentUserService currentUserService,
-            IFriendRequestsService friendRequestsService, IFriendshipsService friendshipsService)
+            IFriendRequestsService friendRequestsService, IFriendshipsService friendshipsService, IFollowsService followsService)
         {
             _userManager = userManager;
             _signInManager = signInManager;
@@ -32,6 +33,8 @@ namespace Core.Services
             _currentUserId = currentUserService.UserId.GetValueOrDefault();
             _friendRequestsService = friendRequestsService;
             _friendshipsService = friendshipsService;
+            _followsService = followsService;
+
         }
 
 
@@ -99,6 +102,7 @@ namespace Core.Services
                     throw new NotFoundException($"User not found, ID: {_currentUserId}");
                 }
 
+                await _followsService.DeleteFollowsByUserId();
                 await _friendRequestsService.DeleteFriendRequestsByUserAsync();
                 await _friendshipsService.DeleteFriendshipsByUserAsync();
                 await _profileService.DeleteProfileAsync();

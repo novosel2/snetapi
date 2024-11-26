@@ -6,11 +6,12 @@ using System.Threading.Tasks;
 
 namespace Core.Enums
 {
-    public enum FriendshipStatus
+    public enum Status
     {
         None = 0,
-        Friends = 1,
-        PendingSent = 2,
-        PendingReceived = 3
+        Following = 1,
+        SentRequest = 2,
+        ReceivedRequest = 3,
+        Friends = 4
     }
 }
