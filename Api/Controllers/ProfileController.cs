@@ -43,6 +43,17 @@ namespace Api.Controllers
         }
 
 
+        // GET: /api/profiles/friendship-status/31faddd4-c910-45c2-a68b-bf67b5abaa77
+
+        [HttpGet("friendship-status/{userId}")]
+        public async Task<IActionResult> GetFriendshipStatus(Guid userId)
+        {
+            ProfileFriendshipStatusDto friendshipStatus = await _profileService.GetProfileFriendshipStatusAsync(userId);
+
+            return Ok(friendshipStatus);
+        }
+
+
         // PUT: /api/profiles/update-profile
 
         [HttpPut("update-profile")]

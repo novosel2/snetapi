@@ -9,9 +9,8 @@ namespace Core.Enums
     public enum Status
     {
         None = 0,
-        Following = 1,
-        SentRequest = 2,
-        ReceivedRequest = 3,
-        Friends = 4
+        SentRequest = 1,
+        ReceivedRequest = 2,
+        Friends = 3
     }
 }

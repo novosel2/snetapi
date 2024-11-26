@@ -29,6 +29,10 @@ namespace Infrastructure.Repositories
             return await _db.Profiles
                 .Include(p => p.Followers)
                 .Include(p => p.Following)
+                .Include(p => p.FriendRequestsAsSender)
+                .Include(p => p.FriendRequestsAsReceiver)
+                .Include(p => p.FriendsAsSender)
+                .Include(p => p.FriendsAsReceiver)
                 .FirstOrDefaultAsync(up => up.Id == id);
         }
 

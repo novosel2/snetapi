@@ -1,6 +1,7 @@
 ﻿using Core.Data.Dto.ProfileDto;
 using Core.Data.Entities;
 using Core.Data.Entities.Identity;
+using Core.Enums;
 using Core.Exceptions;
 using Core.IRepositories;
 using Core.IServices;
@@ -44,6 +45,32 @@ namespace Core.Services
                 ?? throw new NotFoundException($"Profile not found, ID: {userId}");
 
             return profile.ToProfileResponse();
+        }
+
+        // Get friendship status between current user and requested user
+        public async Task<ProfileFriendshipStatusDto> GetProfileFriendshipStatusAsync(Guid userId)
+        {
+            Profile profile = await _profileRepository.GetProfileByIdAsync(userId)
+                ?? throw new NotFoundException($"Profile not found, ID: {userId}");
+
+            ProfileFriendshipStatusDto friendshipStatus = new ProfileFriendshipStatusDto()
+            {
+                UserId = userId
+            };
+
+            if (profile.Followers.Any(f => f.FollowerId == _currentUserId))
+                friendshipStatus.IsFollowed = true;
+
+            if (profile.FriendsAsSender.Any(f => f.ReceiverId == _currentUserId) || profile.FriendsAsReceiver.Any(f => f.SenderId == _currentUserId))
+                friendshipStatus.FriendshipStatus = Status.Friends;
+
+            else if (profile.FriendRequestsAsReceiver.Any(f => f.SenderId == _currentUserId))
+                friendshipStatus.FriendshipStatus = Status.SentRequest;
+
+            else if (profile.FriendRequestsAsSender.Any(f => f.ReceiverId == _currentUserId))
+                friendshipStatus.FriendshipStatus = Status.ReceivedRequest;
+
+            return friendshipStatus;
         }
 
         // Add profile

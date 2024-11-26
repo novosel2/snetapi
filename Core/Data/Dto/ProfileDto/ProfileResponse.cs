@@ -18,7 +18,6 @@ namespace Core.Data.Dto.ProfileDto
         public string PictureUrl { get; set; } = string.Empty;
         public int Followers { get; set; }
         public int Following { get; set; }
-        public Status CurrentUserStatus { get; set; } = Status.None;
 
         public Profile ToProfile()
         {

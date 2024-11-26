@@ -108,6 +108,7 @@ namespace Api.StartupExtension
             services.AddScoped<ICommentReactionsService, CommentReactionsService>();
             services.AddScoped<IFriendRequestsService, FriendRequestsService>();
             services.AddScoped<IFriendshipsService, FriendshipsService>();
+            services.AddScoped<IFollowsService, FollowsService>();
             services.AddSingleton<IBlobStorageService, BlobStorageService>();
 
             services.AddScoped<IProfileRepository, ProfileRepository>();
@@ -117,6 +118,7 @@ namespace Api.StartupExtension
             services.AddScoped<ICommentReactionsRepository, CommentReactionsRepository>();
             services.AddScoped<IFriendRequestsRepository, FriendRequestsRepository>();
             services.AddScoped<IFriendshipsRepository, FriendshipsRepository>();
+            services.AddScoped<IFollowsRepository, FollowsRepository>();
 
             return services;
         }

@@ -77,7 +77,7 @@ namespace Api.Controllers
 
         // GET: /api/friends/31faddd4-c910-45c2-a68b-bf67b5abaa77
 
-        [HttpPost("{userId}")]
+        [HttpGet("{userId}")]
         public async Task<IActionResult> GetFriendshipsByUserId(Guid userId)
         {
             List<FriendshipResponse> friendshipResponses = await _friendshipsService.GetFriendshipsByUserIdAsync(userId);

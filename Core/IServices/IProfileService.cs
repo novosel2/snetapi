@@ -27,6 +27,13 @@ namespace Core.IServices
         public Task<ProfileResponse> GetProfileByIdAsync(Guid profileId);
 
         /// <summary>
+        /// Get friendship status between current user and requested user
+        /// </summary>
+        /// <param name="profileId">User id we want to check status</param>
+        /// <returns>Friendship status dto</returns>
+        public Task<ProfileFriendshipStatusDto> GetProfileFriendshipStatusAsync(Guid profileId);
+
+        /// <summary>
         /// Add profile to database
         /// </summary>
         /// <param name="appUser">User that is owner of this profile</param>
