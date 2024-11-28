@@ -13,11 +13,13 @@ namespace Core.Services
     public class FollowsService : IFollowsService
     {
         private readonly IFollowsRepository _followsRepository;
+        private readonly IProfileRepository _profileRepository;
         private readonly Guid _currentUserId;
 
-        public FollowsService(IFollowsRepository followsRepository, ICurrentUserService currentUserService)
+        public FollowsService(IFollowsRepository followsRepository, IProfileRepository profileRepository, ICurrentUserService currentUserService)
         {
             _followsRepository = followsRepository;
+            _profileRepository = profileRepository;
             _currentUserId = currentUserService.UserId.GetValueOrDefault();
         }
 
@@ -27,6 +29,10 @@ namespace Core.Services
             if (await _followsRepository.FollowExistsAsync(_currentUserId, followedId))
             {
                 throw new AlreadyExistsException($"Follow already exists, Current User ID: {_currentUserId} | {followedId}");
+            }
+            if (!await _profileRepository.ProfileExistsAsync(followedId))
+            {
+                throw new NotFoundException($"User not found, User ID: {followedId}");
             }
 
             Follow follow = new Follow()
@@ -44,10 +50,10 @@ namespace Core.Services
         }
 
         // Deletes a follow from the database
-        public async Task DeleteFollowAsync(Guid followId)
+        public async Task DeleteFollowAsync(Guid userId)
         {
-            Follow follow = await _followsRepository.GetFollowByIdAsync(followId)
-                ?? throw new NotFoundException($"Follow not found, Follow ID: {followId}");
+            Follow follow = await _followsRepository.GetFollowByUserIdAsync(userId)
+                ?? throw new NotFoundException($"Follow not found, User Id: {userId}");
 
             _followsRepository.DeleteFollow(follow);
 

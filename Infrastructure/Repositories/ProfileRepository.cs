@@ -20,7 +20,10 @@ namespace Infrastructure.Repositories
         // Return all profiles from database
         public async Task<List<Profile>> GetProfilesAsync()
         {
-            return await _db.Profiles.ToListAsync();
+            return await _db.Profiles
+                .Include(p => p.Followers)
+                .Include(p => p.Following)
+                .ToListAsync();
         }
 
         // Return profile from database based on ID

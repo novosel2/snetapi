@@ -17,8 +17,8 @@ namespace Core.IServices
         /// <summary>
         /// Deletes a follow from database
         /// </summary>
-        /// <param name="followId">Follow id you want to remove</param>
-        public Task DeleteFollowAsync(Guid followId);
+        /// <param name="userId">User id you want to remove follow from</param>
+        public Task DeleteFollowAsync(Guid userId);
 
         /// <summary>
         /// Deletes all follows that contain user id

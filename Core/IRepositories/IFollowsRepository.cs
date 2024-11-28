@@ -10,11 +10,11 @@ namespace Core.IRepositories
     public interface IFollowsRepository
     {
         /// <summary>
-        /// Get follow by id
+        /// Get follow by user id
         /// </summary>
-        /// <param name="followId">Follow id</param>
+        /// <param name="userId">User id</param>
         /// <returns>Follow if found, otherwise null</returns>
-        public Task<Follow?> GetFollowByIdAsync(Guid followId);
+        public Task<Follow?> GetFollowByUserIdAsync(Guid userId);
 
         /// <summary>
         /// Adds a follow to the database

@@ -19,10 +19,10 @@ namespace Infrastructure.Repositories
             _db = db;
         }
 
-        // Get follow by id
-        public async Task<Follow?> GetFollowByIdAsync(Guid followId)
+        // Get follow by user id
+        public async Task<Follow?> GetFollowByUserIdAsync(Guid userId)
         {
-            return await _db.Follows.FirstOrDefaultAsync(f => f.Id == followId);
+            return await _db.Follows.FirstOrDefaultAsync(f => f.FollowedId == userId);
         }
 
         // Add follow to database

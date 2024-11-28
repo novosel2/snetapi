@@ -2,12 +2,9 @@
 using Core.Data.Entities;
 using Core.Data.Entities.Identity;
 using Core.Exceptions;
-using Core.IRepositories;
 using Core.IServices;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
-using System.ComponentModel.DataAnnotations;
-using System.Security.Claims;
+using Microsoft.EntityFrameworkCore;
 
 namespace Core.Services
 {
@@ -55,17 +52,8 @@ namespace Core.Services
         // Creates a JWT for user that requested it
         public async Task<UserResponse> LoginUserAsync(LoginUserDto loginUserDto)
         {
-            AppUser? appUser;
-            
-            // Check if user name input is EMAIL or USERNAME
-            if (loginUserDto.Name.Contains('@'))
-            {
-                appUser = await _userManager.FindByEmailAsync(loginUserDto.Name);
-            }
-            else
-            {
-                appUser = await _userManager.FindByNameAsync(loginUserDto.Name);
-            }
+            AppUser? appUser = await _userManager.Users
+                .FirstOrDefaultAsync(u => u.Email == loginUserDto.Name || u.UserName == loginUserDto.Name);
 
             // Check if user exists
             if (appUser == null)
@@ -138,6 +126,5 @@ namespace Core.Services
                 throw new RoleAssignFailedException(err);
             }
         }
-
     }
 }
