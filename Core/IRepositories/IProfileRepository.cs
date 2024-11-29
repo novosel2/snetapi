@@ -12,6 +12,13 @@ namespace Core.IRepositories
         public Task<List<Profile>> GetProfilesAsync();
 
         /// <summary>
+        /// Gets requested number of most popular profiles
+        /// </summary>
+        /// <param name="limit">Number of popular profiles you want to get</param>
+        /// <returns>List of most popular profiles</returns>
+        public Task<List<Profile>> GetPopularAsync(int limit);
+
+        /// <summary>
         /// Gets user profile by id
         /// </summary>
         /// <param name="id">Id we want to find</param>

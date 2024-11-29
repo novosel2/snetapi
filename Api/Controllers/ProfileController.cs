@@ -32,6 +32,16 @@ namespace Api.Controllers
         }
 
 
+        // GET: /api/profiles/popular
+        [HttpGet("popular")]
+        public async Task<IActionResult> GetMostPopular(int limit = 10)
+        {
+            List<ProfileResponse> profileResponses = await _profileService.GetPopularAsync(limit);
+
+            return Ok(profileResponses);
+        }
+
+
         // GET: /api/profiles/31faddd4-c910-45c2-a68b-bf67b5abaa77
 
         [HttpGet("{userId}")]

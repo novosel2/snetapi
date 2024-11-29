@@ -20,6 +20,13 @@ namespace Core.IServices
         public Task<List<ProfileResponse>> GetProfilesAsync();
 
         /// <summary>
+        /// Gets requested number of most popular profiles
+        /// </summary>
+        /// <param name="limit">Number of popular profiles you want to get</param>
+        /// <returns>List of most popular profiles</returns>
+        public Task<List<ProfileResponse>> GetPopularAsync(int limit);
+
+        /// <summary>
         /// Get profile by profile id
         /// </summary>
         /// <param name="profileId">Profile id</param>

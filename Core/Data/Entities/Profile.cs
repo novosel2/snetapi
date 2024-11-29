@@ -35,6 +35,9 @@ namespace Core.Data.Entities
         [Required]
         public int PreviousFollowers { get; set; } = 0;
 
+        [NotMapped]
+        public double PopularityScore { get; set; }
+
         public ProfileResponse ToProfileResponse()
         {
             return new ProfileResponse()

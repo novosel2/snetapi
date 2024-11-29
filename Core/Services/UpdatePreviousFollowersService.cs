@@ -14,7 +14,7 @@ namespace Core.Services
     public class UpdatePreviousFollowersService : BackgroundService
     {
         private readonly IServiceScopeFactory _scopeFactory;
-        private readonly TimeSpan _interval = TimeSpan.FromSeconds(10);
+        private readonly TimeSpan _interval = TimeSpan.FromDays(3);
 
         public UpdatePreviousFollowersService(IServiceScopeFactory scopeFactory)
         {

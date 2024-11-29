@@ -4,6 +4,8 @@ using Core.IRepositories;
 using Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
+using Microsoft.Extensions.Hosting;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Infrastructure.Repositories
 {
@@ -23,6 +25,32 @@ namespace Infrastructure.Repositories
             return await _db.Profiles
                 .Include(p => p.Followers)
                 .Include(p => p.Following)
+                .ToListAsync();
+        }
+
+        //Gets requested number of most popular profiles
+        public async Task<List<Profile>> GetPopularAsync(int limit)
+        {
+            return await _db.Profiles
+                .Include(p => p.Followers)
+                .Include(p => p.Following)
+                .Select(user => new Profile()
+                {
+                    Id = user.Id,
+                    FirstName = user.FirstName,
+                    LastName = user.LastName,
+                    PictureUrl = user.PictureUrl,
+                    Followers = user.Followers,
+                    Following = user.Following,
+                    Username = user.Username,
+                    PreviousFollowers = user.PreviousFollowers,
+                    // PopularityScore = FollowerWeight * (CurrentFollowers / TheoreticalMaxFollowers) + GrowthWeight * ( (CurrentFollowers - PreviousFollowers) / PreviousFollowers)
+                    PopularityScore = 0.8 * ((double)user.Followers.Count / 10000) + 
+                                      0.3 * (user.PreviousFollowers > 0 ? 
+                                            (user.Followers.Count - user.PreviousFollowers) / user.PreviousFollowers : 0)
+                })
+                .OrderByDescending(p => p.PopularityScore)
+                .Take(limit)
                 .ToListAsync();
         }
 

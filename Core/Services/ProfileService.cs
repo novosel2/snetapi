@@ -33,7 +33,17 @@ namespace Core.Services
         {
             List<Profile> profiles = await _profileRepository.GetProfilesAsync();
 
-            var profileResponses = profiles.Select(p => p.ToProfileResponse()).ToList();
+            List<ProfileResponse> profileResponses = profiles.Select(p => p.ToProfileResponse()).ToList();
+
+            return profileResponses;
+        }
+
+        // Gets requested number of most popular profiles
+        public async Task<List<ProfileResponse>> GetPopularAsync(int limit)
+        {
+            List<Profile> profiles = await _profileRepository.GetPopularAsync(limit);
+
+            List<ProfileResponse> profileResponses = profiles.Select(p => p.ToProfileResponse()).ToList();
 
             return profileResponses;
         }
