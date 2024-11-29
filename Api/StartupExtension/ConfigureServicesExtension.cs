@@ -109,7 +109,6 @@ namespace Api.StartupExtension
             services.AddScoped<IFriendRequestsService, FriendRequestsService>();
             services.AddScoped<IFriendshipsService, FriendshipsService>();
             services.AddScoped<IFollowsService, FollowsService>();
-            services.AddSingleton<IBlobStorageService, BlobStorageService>();
 
             services.AddScoped<IProfileRepository, ProfileRepository>();
             services.AddScoped<IPostsRepository, PostsRepository>();
@@ -119,6 +118,9 @@ namespace Api.StartupExtension
             services.AddScoped<IFriendRequestsRepository, FriendRequestsRepository>();
             services.AddScoped<IFriendshipsRepository, FriendshipsRepository>();
             services.AddScoped<IFollowsRepository, FollowsRepository>();
+
+            services.AddSingleton<IBlobStorageService, BlobStorageService>();
+            services.AddHostedService<UpdatePreviousFollowersService>();
 
             return services;
         }
