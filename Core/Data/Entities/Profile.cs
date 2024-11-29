@@ -20,6 +20,7 @@ namespace Core.Data.Entities
         public string? FirstName { get; set; }
         public string? LastName { get; set; }
 
+        [Required]
         public string PictureUrl { get; set; } = "https://snetblobstorage.blob.core.windows.net/snetprofiles/default.jpg";
 
         public List<Friendship> FriendsAsSender { get; set; } = [];
@@ -30,6 +31,9 @@ namespace Core.Data.Entities
 
         public List<Follow> Followers { get; set; } = [];
         public List<Follow> Following { get; set; } = [];
+
+        [Required]
+        public int PreviousFollowers { get; set; } = 0;
 
         public ProfileResponse ToProfileResponse()
         {
