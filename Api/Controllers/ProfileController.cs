@@ -12,12 +12,10 @@ namespace Api.Controllers
     public class ProfileController : ControllerBase
     {
         private readonly IProfileService _profileService;
-        private readonly IBlobStorageService _blobStorageService;
 
-        public ProfileController(IProfileService profileService, IBlobStorageService blobStorageService)
+        public ProfileController(IProfileService profileService)
         {
             _profileService = profileService;
-            _blobStorageService = blobStorageService;
         }
 
 

@@ -15,13 +15,16 @@ namespace Core.Services
     public class ProfileService : IProfileService
     {
         private readonly IProfileRepository _profileRepository;
+        private readonly IFriendshipsRepository _friendshipsRepository;
         private readonly IBlobStorageService _blobStorageService;
         private readonly UserManager<AppUser> _userManager;
         private readonly Guid _currentUserId;
 
-        public ProfileService(IProfileRepository profileRepository, IBlobStorageService blobStorageService, UserManager<AppUser> userManager, ICurrentUserService currentUserService)
+        public ProfileService(IProfileRepository profileRepository, IFriendshipsRepository friendshipsRepository, 
+            IBlobStorageService blobStorageService, UserManager<AppUser> userManager, ICurrentUserService currentUserService)
         {
             _profileRepository = profileRepository;
+            _friendshipsRepository = friendshipsRepository;
             _blobStorageService = blobStorageService;
             _userManager = userManager;
             _currentUserId = currentUserService.UserId.GetValueOrDefault();
@@ -46,6 +49,14 @@ namespace Core.Services
             List<ProfileResponse> profileResponses = profiles.Select(p => p.ToProfileResponse()).ToList();
 
             return profileResponses;
+        }
+
+        // Gets a requested number of follow suggestions, based on current users friends followings
+        public async Task<List<ProfileResponse>> GetFollowSuggestionsAsync(int limit)
+        {
+            List<Friendship> currentUserFriends = await _friendshipsRepository.GetFriendshipsByUserIdAsync(_currentUserId);
+
+
         }
 
         // Get profile by id
@@ -197,13 +208,6 @@ namespace Core.Services
                 throw new DbSavingFailedException("Failed to save profile deletion.");
             }
         }
-
-        // Starts a transaction in database
-        public async Task<IDbContextTransaction> StartTransactionAsync()
-        {
-            return await _profileRepository.StartTransactionAsync();
-        }
-
 
 
         private async Task<Profile> GetProfileAsync(Guid currentUserId)

@@ -27,6 +27,14 @@ namespace Core.IServices
         public Task<List<ProfileResponse>> GetPopularAsync(int limit);
 
         /// <summary>
+        /// Gets a requested number of follow suggestions, based on current 
+        /// users friends followings
+        /// </summary>
+        /// <param name="limit">Number of suggestions you want to get</param>
+        /// <returns>List of suggested profiles</returns>
+        public Task<List<ProfileResponse>> GetFollowSuggestionsAsync(int limit);
+
+        /// <summary>
         /// Get profile by profile id
         /// </summary>
         /// <param name="profileId">Profile id</param>
@@ -69,11 +77,5 @@ namespace Core.IServices
         /// Deletes profile based on it's User ID
         /// </summary>
         public Task DeleteProfileAsync();
-
-        /// <summary>
-        /// Starts a transaction
-        /// </summary>
-        /// <returns>Transaction</returns>
-        public Task<IDbContextTransaction> StartTransactionAsync();
     }
 }
