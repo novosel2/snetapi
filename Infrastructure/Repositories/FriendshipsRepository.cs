@@ -24,8 +24,8 @@ namespace Infrastructure.Repositories
         {
             return await _db.Friendships
                 .Where(fs => fs.SenderId == userId || fs.ReceiverId == userId)
-                .Include(fs => fs.SenderUser).ThenInclude(su => su!.Following)
-                .Include(fs => fs.ReceiverUser).ThenInclude(ru => ru!.Following)
+                .Include(fs => fs.SenderUser).ThenInclude(su => su!.Following).ThenInclude(f => f.Followed)
+                .Include(fs => fs.ReceiverUser).ThenInclude(ru => ru!.Following).ThenInclude(f => f.Followed)
                 .ToListAsync();
         }
 

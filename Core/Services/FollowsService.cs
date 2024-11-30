@@ -52,8 +52,8 @@ namespace Core.Services
         // Deletes a follow from the database
         public async Task DeleteFollowAsync(Guid userId)
         {
-            Follow follow = await _followsRepository.GetFollowByUserIdAsync(userId)
-                ?? throw new NotFoundException($"Follow not found, User Id: {userId}");
+            Follow follow = await _followsRepository.GetFollowByIdsAsync(userId, _currentUserId)
+                ?? throw new NotFoundException($"Follow not found, User ID: {userId} | Current User ID: {_currentUserId}");
 
             _followsRepository.DeleteFollow(follow);
 

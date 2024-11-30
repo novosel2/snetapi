@@ -32,7 +32,7 @@ namespace Core.IServices
         /// </summary>
         /// <param name="limit">Number of suggestions you want to get</param>
         /// <returns>List of suggested profiles</returns>
-        public Task<List<ProfileResponse>> GetFollowSuggestionsAsync(int limit);
+        public Task<List<SuggestedProfileDto>> GetFollowSuggestionsAsync(int limit);
 
         /// <summary>
         /// Get profile by profile id
@@ -77,5 +77,11 @@ namespace Core.IServices
         /// Deletes profile based on it's User ID
         /// </summary>
         public Task DeleteProfileAsync();
+
+        /// <summary>
+        /// Starts a transaction
+        /// </summary>
+        /// <returns>Transaction</returns>
+        public Task<IDbContextTransaction> StartTransactionAsync();
     }
 }

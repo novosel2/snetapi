@@ -52,11 +52,64 @@ namespace Core.Services
         }
 
         // Gets a requested number of follow suggestions, based on current users friends followings
-        public async Task<List<ProfileResponse>> GetFollowSuggestionsAsync(int limit)
+        public async Task<List<SuggestedProfileDto>> GetFollowSuggestionsAsync(int limit)
         {
-            List<Friendship> currentUserFriends = await _friendshipsRepository.GetFriendshipsByUserIdAsync(_currentUserId);
+            Profile currentUser = await _profileRepository.GetProfileByIdAsync(_currentUserId)
+                ?? throw new UnauthorizedException("Unauthorized access.");
 
+            List<Friendship> currentUserFriendships = await _friendshipsRepository.GetFriendshipsByUserIdAsync(_currentUserId);
+            List<Profile> friends = new();
 
+            foreach (var friendship in currentUserFriendships)
+            {
+                if (friendship.SenderId == _currentUserId && friendship.ReceiverUser != null)
+                {
+                    friends.Add(friendship.ReceiverUser);
+                }
+                else if (friendship.ReceiverId == _currentUserId && friendship.SenderUser != null)
+                {
+                    friends.Add(friendship.SenderUser);
+                }
+            }
+
+            Dictionary<Guid, SuggestedProfileDto> suggestedUsers = new();
+
+            foreach (var friend in friends)
+            {
+                if (friend!.Following == null)
+                    continue;
+
+                foreach (var follow in friend.Following)
+                {
+                    if (follow.Followed == null || follow.Followed.Id == _currentUserId)
+                        continue;
+
+                    if (currentUser.Following.Select(f => f.FollowedId).Any(f => f == follow.FollowedId))
+                        continue;
+
+                    var followedProfile = follow.Followed.ToProfileResponse();
+
+                    if (suggestedUsers.TryGetValue(followedProfile.Id, out var existingSuggesdtion))
+                    {
+                        existingSuggesdtion.Mutual++;
+                    }
+                    else
+                    {
+                        suggestedUsers[followedProfile.Id] = new SuggestedProfileDto
+                        {
+                            Profile = followedProfile,
+                            Mutual = 1
+                        };
+                    }
+                }
+            }
+
+            List<SuggestedProfileDto> suggestedProfiles = suggestedUsers.Values
+                .OrderByDescending(s => s.Mutual)
+                .Take(limit)
+                .ToList();
+
+            return suggestedProfiles;
         }
 
         // Get profile by id
@@ -207,6 +260,12 @@ namespace Core.Services
             {
                 throw new DbSavingFailedException("Failed to save profile deletion.");
             }
+        }
+
+        // Starts a transaction in database
+        public async Task<IDbContextTransaction> StartTransactionAsync()
+        {
+            return await _profileRepository.StartTransactionAsync();
         }
 
 

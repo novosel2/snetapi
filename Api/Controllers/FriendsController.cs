@@ -55,10 +55,10 @@ namespace Api.Controllers
 
         // POST: /api/friends/friend-requests/accept/31faddd4-c910-45c2-a68b-bf67b5abaa77
 
-        [HttpPost("friend-requests/accept/{friendRequestId}")]
-        public async Task<IActionResult> AcceptFriendRequest(Guid friendRequestId)
+        [HttpPost("friend-requests/accept/{userId}")]
+        public async Task<IActionResult> AcceptFriendRequest(Guid userId)
         {
-            await _friendshipsService.AddFriendshipAsync(friendRequestId);
+            await _friendRequestsService.AddFriendRequestAsync(userId);
 
             return Ok();
         }
@@ -66,10 +66,10 @@ namespace Api.Controllers
 
         // DELETE: /api/friends/friend-requests/decline/31faddd4-c910-45c2-a68b-bf67b5abaa77
 
-        [HttpPost("friend-requests/decline/{friendRequestId}")]
-        public async Task<IActionResult> DeclineFriendRequest(Guid friendRequestId)
+        [HttpDelete("friend-requests/decline/{userId}")]
+        public async Task<IActionResult> DeclineFriendRequest(Guid userId)
         {
-            await _friendRequestsService.DeleteFriendRequestAsync(friendRequestId);
+            await _friendRequestsService.DeleteFriendRequestAsync(userId);
 
             return Ok();
         }
@@ -88,7 +88,7 @@ namespace Api.Controllers
 
         // DELETE: /api/friends/delete/31faddd4-c910-45c2-a68b-bf67b5abaa77
 
-        [HttpPost("delete/{userId}")]
+        [HttpDelete("delete/{userId}")]
         public async Task<IActionResult> DeleteFriendship(Guid userId)
         {
             await _friendshipsService.DeleteFriendship(userId);

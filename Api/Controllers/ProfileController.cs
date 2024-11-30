@@ -40,6 +40,16 @@ namespace Api.Controllers
         }
 
 
+        // GET: /api/profiles/follow-suggestions
+        [HttpGet("follow-suggestions")]
+        public async Task<IActionResult> GetFollowSuggestions(int limit = 4)
+        {
+            List<SuggestedProfileDto> suggestedUsers = await _profileService.GetFollowSuggestionsAsync(limit);
+
+            return Ok(suggestedUsers);
+        }
+
+
         // GET: /api/profiles/31faddd4-c910-45c2-a68b-bf67b5abaa77
 
         [HttpGet("{userId}")]
