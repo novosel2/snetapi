@@ -20,6 +20,13 @@ namespace Core.IServices
         public Task<List<ProfileResponse>> GetProfilesAsync();
 
         /// <summary>
+        /// Search for profiles based on search term
+        /// </summary>
+        /// <param name="searchTerm">Search term</param>
+        /// <returns>List of found profiles</returns>
+        public Task<List<ProfileResponse>> SearchProfilesAsync(string searchTerm, int limit = 6);
+
+        /// <summary>
         /// Gets requested number of most popular profiles
         /// </summary>
         /// <param name="limit">Number of popular profiles you want to get</param>

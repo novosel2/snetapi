@@ -30,6 +30,17 @@ namespace Api.Controllers
         }
 
 
+        // GET: /api/profiles/search?searchTerm=John+Doe&limit=6
+
+        [HttpGet("search")]
+        public async Task<IActionResult> SearchProfilesAsync(string searchTerm, int limit = 6)
+        {
+            List<ProfileResponse> profileResponses = await _profileService.SearchProfilesAsync(searchTerm, limit);
+
+            return Ok(profileResponses);
+        }
+
+
         // GET: /api/profiles/popular
         [HttpGet("popular")]
         public async Task<IActionResult> GetMostPopular(int limit = 10)

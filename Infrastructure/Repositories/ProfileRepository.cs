@@ -5,6 +5,7 @@ using Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.Extensions.Hosting;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Infrastructure.Repositories
@@ -26,6 +27,26 @@ namespace Infrastructure.Repositories
                 .Include(p => p.Followers)
                 .Include(p => p.Following)
                 .ToListAsync();
+        }
+
+        // Search for profiles based on search term
+        public async Task<List<Profile>> SearchProfilesAsync(string searchTerm, int limit = 6)
+        {
+            if (string.IsNullOrWhiteSpace(searchTerm))
+                return new List<Profile>();
+
+            var terms = searchTerm.Split(' ', StringSplitOptions.RemoveEmptyEntries);
+            var query = _db.Profiles.AsQueryable();
+
+            foreach (var term in terms)
+            {
+                query = query.Where(u =>
+                    EF.Functions.Like(u.FirstName, $"%{term}%") ||
+                    EF.Functions.Like(u.LastName, $"%{term}%") ||
+                    EF.Functions.Like(u.Username, $"%{term}%"));
+            }
+
+            return await query.Take(limit).ToListAsync();
         }
 
         //Gets requested number of most popular profiles

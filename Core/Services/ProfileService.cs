@@ -41,6 +41,16 @@ namespace Core.Services
             return profileResponses;
         }
 
+        // Search for profiles based on search term
+        public async Task<List<ProfileResponse>> SearchProfilesAsync(string searchTerm, int limit = 6)
+        {
+            List<Profile> profiles = await _profileRepository.SearchProfilesAsync(searchTerm, limit);
+
+            var profileResponses = profiles.Select(p => p.ToProfileResponse()).ToList();
+
+            return profileResponses;
+        }
+
         // Gets requested number of most popular profiles
         public async Task<List<ProfileResponse>> GetPopularAsync(int limit)
         {
