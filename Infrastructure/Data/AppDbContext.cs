@@ -23,6 +23,9 @@ namespace Infrastructure.Data
         {
             base.OnModelCreating(modelBuilder);
 
+            modelBuilder.Entity<Profile>()
+                .HasIndex(p => new { p.Username, p.FirstName, p.LastName });
+
             modelBuilder.Entity<Follow>()
                 .HasIndex(f => new
                 {
