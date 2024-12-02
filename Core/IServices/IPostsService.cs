@@ -18,6 +18,12 @@ namespace Core.IServices
         public Task<List<PostResponse>> GetPostsAsync(int loadPage);
 
         /// <summary>
+        /// Get your feed, posts made by your friends or those you follow
+        /// </summary>
+        /// <returns>List of posts made by your friends or those you follow</returns>
+        public Task<List<PostResponse>> GetYourFeedAsync(int loadPage);
+
+        /// <summary>
         /// Get post by specified id
         /// </summary>
         /// <param name="postId">Id of needed post</param>

@@ -16,12 +16,15 @@ namespace Core.Services
     public class PostsService : IPostsService
     {
         private readonly IPostsRepository _postRepository;
+        private readonly IProfileRepository _profileRepository;
         private readonly IBlobStorageService _blobStorageService;
         private readonly Guid _currentUserId;
 
-        public PostsService(IPostsRepository postRepository, IBlobStorageService blobStorageService, ICurrentUserService currentUserService)
+        public PostsService(IPostsRepository postRepository, IProfileRepository profileRepository, 
+            IBlobStorageService blobStorageService, ICurrentUserService currentUserService)
         {
             _postRepository = postRepository;
+            _profileRepository = profileRepository;
             _blobStorageService = blobStorageService;
             _currentUserId = currentUserService.UserId ?? throw new UnauthorizedException("Unauthorized access.");
         }
@@ -32,6 +35,26 @@ namespace Core.Services
             List<Post> posts = await _postRepository.GetPostsAsync(loadPage);
 
             var postResponses = posts.Select(p => p.ToPostResponse(_currentUserId)).ToList();
+
+            return postResponses;
+        }
+
+        // Get your feed, posts made by your friends or those you follow
+        public async Task<List<PostResponse>> GetYourFeedAsync(int loadPage)
+        {
+            Profile currentUser = await _profileRepository.GetProfileByIdAsync(_currentUserId)
+                ?? throw new NotFoundException($"User not found, User ID: {_currentUserId}");
+
+            List<Guid> friendsIds =
+            [
+                .. currentUser.FriendsAsReceiver.Select(f => f.SenderId).ToList(),
+                .. currentUser.FriendsAsSender.Select(f => f.ReceiverId).ToList(),
+            ];
+
+            List<Guid> followingIds = currentUser.Following.Select(f => f.FollowedId).ToList();
+
+            List<Post> posts = await _postRepository.GetYourFeedAsync(friendsIds, followingIds, loadPage);
+            List<PostResponse> postResponses = posts.Select(p => p.ToPostResponse(_currentUserId)).ToList();
 
             return postResponses;
         }

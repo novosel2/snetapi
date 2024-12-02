@@ -29,6 +29,20 @@ namespace Infrastructure.Repositories
                 .ToListAsync();
         }
 
+        // Get your feed, posts made by your friends or those you follow
+        public async Task<List<Post>> GetYourFeedAsync(List<Guid> friends, List<Guid> followings, int loadPage)
+        {
+            return await _db.Posts
+                .Include(p => p.UserProfile)
+                .Include(p => p.Reactions)
+                .Include(p => p.FileUrls)
+                .OrderByDescending(p => p.CreatedOn)
+                .Where(p => friends.Contains(p.UserId) || followings.Contains(p.UserId))
+                .Skip(loadPage * 20)
+                .Take(20)
+                .ToListAsync();
+        }
+
         // Get post by id
         public async Task<Post?> GetPostByIdAsync(Guid postId)
         {

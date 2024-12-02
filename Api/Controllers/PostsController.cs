@@ -30,6 +30,17 @@ namespace Api.Controllers
         }
 
 
+        // GET: /api/posts/your-feed?page=0
+
+        [HttpGet("your-feed")]
+        public async Task<IActionResult> GetYourFeed(int page)
+        {
+            List<PostResponse> postResponses = await _postsService.GetYourFeedAsync(page);
+
+            return Ok(postResponses);
+        }
+
+
         // GET: /api/posts/31faddd4-c910-45c2-a68b-bf67b5abaa77
 
         [HttpGet("{postId}")]
