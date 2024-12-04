@@ -11,6 +11,13 @@ namespace Core.IServices
     public interface ICommentsService
     {
         /// <summary>
+        /// Gets comments by id
+        /// </summary>
+        /// <param name="postId">Id of post with comments</param>
+        /// <returns>List of comments</returns>
+        public Task<List<CommentResponse>> GetCommentsByPostIdAsync(Guid postId);
+
+        /// <summary>
         /// Adds a comment to database
         /// </summary>
         /// <param name="commentAddRequest">Comment object you want to add</param>

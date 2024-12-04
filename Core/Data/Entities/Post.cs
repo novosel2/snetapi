@@ -44,7 +44,6 @@ namespace Core.Data.Entities
                 Likes = Reactions.Count(r => r.Reaction == ReactionType.Like),
                 Dislikes = Reactions.Count(r => r.Reaction == ReactionType.Dislike),
                 UserReacted = Reactions.Any(r => r.UserId == currentUserId) ? Reactions.First(r => r.UserId == currentUserId).Reaction : ReactionType.NoReaction,
-                Comments = Comments.Select(c => c.ToCommentResponse(currentUserId)).ToList(),
                 CommentCount = CommentCount,
                 UserProfile = UserProfile!.ToProfileResponse(),
                 FileUrls = FileUrls.Select(fu => fu.Url).ToList()

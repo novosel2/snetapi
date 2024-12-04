@@ -51,5 +51,15 @@ namespace Core.Data.Entities
                 Following = Following.Count
             };
         }
+
+        public ProfileInformationDto ToProfileInformation()
+        {
+            return new ProfileInformationDto()
+            {
+                FirstName = FirstName,
+                LastName = LastName,
+                PictureUrl = PictureUrl
+            };
+        }
     }
 }

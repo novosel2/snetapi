@@ -10,6 +10,13 @@ namespace Core.IRepositories
     public interface ICommentsRepository
     {
         /// <summary>
+        /// Gets comments by post id
+        /// </summary>
+        /// <param name="postId">Post id with comments you want to get</param>
+        /// <returns>List of comments</returns>
+        public Task<List<Comment>> GetCommentsByPostIdAsync(Guid postId);
+
+        /// <summary>
         /// Gets comment by id
         /// </summary>
         /// <param name="commentId">Comment id you want to get</param>

@@ -18,8 +18,19 @@ namespace Api.Controllers
         }
 
 
+        // GET: /api/comments/31faddd4-c910-45c2-a68b-bf67b5abaa77
+
+        [HttpGet("{postId}")]
+        public async Task<IActionResult> GetCommentsByPostId(Guid postId)
+        {
+            List<CommentResponse> comments = await _commentsService.GetCommentsByPostIdAsync(postId);
+
+            return Ok(comments);
+        }
+
+
         // POST: /api/comments/add/31faddd4-c910-45c2-a68b-bf67b5abaa77
-        
+
         [HttpPost("add/{postId}")]
         public async Task<IActionResult> AddComment(Guid postId, CommentAddRequest commentAddRequest)
         {

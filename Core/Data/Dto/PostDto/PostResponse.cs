@@ -25,7 +25,6 @@ namespace Core.Data.Dto.PostDto
         public ReactionType UserReacted { get; set; } = ReactionType.NoReaction;
 
         public int CommentCount { get; set; } = 0;
-        public List<CommentResponse> Comments { get; set; } = [];
 
         public List<string> FileUrls { get; set; } = [];
     }

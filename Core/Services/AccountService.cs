@@ -44,7 +44,7 @@ namespace Core.Services
             
             string token = _tokenService.CreateToken(appUser);
 
-            UserResponse userResponse = UserResponse.CreateUserResonse(appUser, profile, token);
+            UserResponse userResponse = UserResponse.CreateUserResponse(appUser, profile, token);
 
             return userResponse;
         }
@@ -71,7 +71,7 @@ namespace Core.Services
             Profile profile = (await _profileService.GetProfileByIdAsync(appUser.Id)).ToProfile();
             string token = _tokenService.CreateToken(appUser);
 
-            UserResponse userResponse = UserResponse.CreateUserResonse(appUser, profile, token);
+            UserResponse userResponse = UserResponse.CreateUserResponse(appUser, profile, token);
 
             return userResponse;
         }

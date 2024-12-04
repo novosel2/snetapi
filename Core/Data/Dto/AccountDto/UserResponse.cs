@@ -11,9 +11,9 @@ namespace Core.Data.Dto.AccountDto
         public string Username { get; set; } = string.Empty;
         public string Email { get; set; } = string.Empty;
         public string? Token { get; set; }
-        public ProfileResponse Profile { get; set; } = new ProfileResponse();
+        public ProfileInformationDto Profile { get; set; } = new();
 
-        public static UserResponse CreateUserResonse(AppUser appUser, Profile profile, string? token = null)
+        public static UserResponse CreateUserResponse(AppUser appUser, Profile profile, string? token = null)
         {
             return new UserResponse
             {
@@ -21,7 +21,7 @@ namespace Core.Data.Dto.AccountDto
                 Username = appUser.UserName,
                 Email = appUser.Email,
                 Token = token,
-                Profile = profile.ToProfileResponse()
+                Profile = profile.ToProfileInformation()
             };
         }
     }

@@ -2,6 +2,7 @@
 using Core.IRepositories;
 using Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Hosting;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,6 +20,27 @@ namespace Infrastructure.Repositories
             _db = db;
         }
 
+        // Gets comments by post id
+        public async Task<List<Comment>> GetCommentsByPostIdAsync(Guid postId)
+        {
+            var comments = await _db.Comments
+                .Where(c => c.PostId == postId && c.ParentCommentId == null)
+                .Include(c => c.UserProfile)
+                .Include(c => c.Reactions)
+                .Include(c => c.CommentReplies)
+                    .ThenInclude(cr => cr.UserProfile)
+                .Include(c => c.CommentReplies)
+                    .ThenInclude(cr => cr.Reactions)
+                .OrderByDescending(c => c.CreatedOn)
+            .ToListAsync();
+
+            foreach (var comment in comments)
+            {
+                comment.CommentReplies = comment.CommentReplies.OrderByDescending(c => c.CreatedOn).ToList();
+            }
+
+            return comments;
+        }
 
         // Gets comment by id
         public async Task<Comment?> GetCommentByIdAsync(Guid commentId)

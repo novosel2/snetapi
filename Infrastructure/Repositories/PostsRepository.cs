@@ -52,25 +52,6 @@ namespace Infrastructure.Repositories
                 .Include(p => p.FileUrls)
                 .FirstOrDefaultAsync(p => p.Id == postId);
 
-            if (post == null)
-                return null;
-
-            post.Comments = await _db.Comments
-                .Where(c => c.PostId == postId && c.ParentCommentId == null)
-                .Include(c => c.UserProfile)
-                .Include(c => c.Reactions)
-                .Include(c => c.CommentReplies)
-                    .ThenInclude(cr => cr.UserProfile)
-                .Include(c => c.CommentReplies)
-                    .ThenInclude(cr => cr.Reactions)
-                .OrderByDescending(c => c.CreatedOn)
-                .ToListAsync();
-
-            foreach (var comment in post.Comments)
-            {
-                comment.CommentReplies = comment.CommentReplies.OrderByDescending(c => c.CreatedOn).ToList();
-            }
-
             return post;
         }
 

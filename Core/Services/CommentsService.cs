@@ -25,6 +25,16 @@ namespace Core.Services
             _currentUserId = currentUserService.UserId ?? throw new UnauthorizedException("Unauthorized access.");
         }
 
+        // Gets comments by post id
+        public async Task<List<CommentResponse>> GetCommentsByPostIdAsync(Guid postId)
+        {
+            List<Comment> comments = await _commentsRepository.GetCommentsByPostIdAsync(postId);
+
+            var commentResponses = comments.Select(c => c.ToCommentResponse(_currentUserId)).ToList();
+
+            return commentResponses;
+        }
+
         // Adds a comment to database
         public async Task AddCommentAsync(Guid postId, CommentAddRequest commentAddRequest)
         {
