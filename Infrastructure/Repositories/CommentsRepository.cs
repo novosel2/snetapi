@@ -25,10 +25,10 @@ namespace Infrastructure.Repositories
         {
             var comments = await _db.Comments
                 .Where(c => c.PostId == postId && c.ParentCommentId == null)
-                .Include(c => c.UserProfile)
+                .Include(c => c.User)
                 .Include(c => c.Reactions)
                 .Include(c => c.CommentReplies)
-                    .ThenInclude(cr => cr.UserProfile)
+                    .ThenInclude(cr => cr.User)
                 .Include(c => c.CommentReplies)
                     .ThenInclude(cr => cr.Reactions)
                 .OrderByDescending(c => c.CreatedOn)

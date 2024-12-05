@@ -4,6 +4,7 @@ using Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastructure.Migrations.AppDb
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241205204111_AddFollowCount")]
+    partial class AddFollowCount
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -52,7 +55,7 @@ namespace Infrastructure.Migrations.AppDb
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Comments", (string)null);
+                    b.ToTable("Comments");
                 });
 
             modelBuilder.Entity("Core.Data.Entities.CommentReaction", b =>
@@ -68,7 +71,7 @@ namespace Infrastructure.Migrations.AppDb
 
                     b.HasKey("CommentId", "UserId");
 
-                    b.ToTable("CommentReactions", (string)null);
+                    b.ToTable("CommentReactions");
                 });
 
             modelBuilder.Entity("Core.Data.Entities.FileUrl", b =>
@@ -81,7 +84,7 @@ namespace Infrastructure.Migrations.AppDb
 
                     b.HasKey("PostId", "Url");
 
-                    b.ToTable("FileUrls", (string)null);
+                    b.ToTable("FileUrls");
                 });
 
             modelBuilder.Entity("Core.Data.Entities.Follow", b =>
@@ -103,7 +106,7 @@ namespace Infrastructure.Migrations.AppDb
                     b.HasIndex("FollowerId", "FollowedId")
                         .IsUnique();
 
-                    b.ToTable("Follows", (string)null);
+                    b.ToTable("Follows");
                 });
 
             modelBuilder.Entity("Core.Data.Entities.FriendRequest", b =>
@@ -128,7 +131,7 @@ namespace Infrastructure.Migrations.AppDb
                     b.HasIndex("SenderId", "ReceiverId")
                         .IsUnique();
 
-                    b.ToTable("FriendRequests", (string)null);
+                    b.ToTable("FriendRequests");
                 });
 
             modelBuilder.Entity("Core.Data.Entities.Friendship", b =>
@@ -153,7 +156,7 @@ namespace Infrastructure.Migrations.AppDb
                     b.HasIndex("SenderId", "ReceiverId")
                         .IsUnique();
 
-                    b.ToTable("Friendships", (string)null);
+                    b.ToTable("Friendships");
                 });
 
             modelBuilder.Entity("Core.Data.Entities.Post", b =>
@@ -179,7 +182,7 @@ namespace Infrastructure.Migrations.AppDb
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Posts", (string)null);
+                    b.ToTable("Posts");
                 });
 
             modelBuilder.Entity("Core.Data.Entities.PostReaction", b =>
@@ -195,7 +198,7 @@ namespace Infrastructure.Migrations.AppDb
 
                     b.HasKey("PostId", "UserId");
 
-                    b.ToTable("PostReactions", (string)null);
+                    b.ToTable("PostReactions");
                 });
 
             modelBuilder.Entity("Core.Data.Entities.Profile", b =>
@@ -231,7 +234,7 @@ namespace Infrastructure.Migrations.AppDb
 
                     b.HasIndex("Username", "FirstName", "LastName");
 
-                    b.ToTable("Profiles", (string)null);
+                    b.ToTable("Profiles");
                 });
 
             modelBuilder.Entity("Core.Data.Entities.Comment", b =>

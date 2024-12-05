@@ -17,21 +17,21 @@ namespace Core.IServices
         /// Get all profiles from database
         /// </summary>
         /// <returns>List of profile responses</returns>
-        public Task<List<ProfileResponse>> GetProfilesAsync();
+        public Task<List<ProfileInformationDto>> GetProfilesAsync();
 
         /// <summary>
         /// Search for profiles based on search term
         /// </summary>
         /// <param name="searchTerm">Search term</param>
         /// <returns>List of found profiles</returns>
-        public Task<List<ProfileResponse>> SearchProfilesAsync(string searchTerm, int limit = 6);
+        public Task<List<ProfileInformationDto>> SearchProfilesAsync(string searchTerm, int limit = 6);
 
         /// <summary>
         /// Gets requested number of most popular profiles
         /// </summary>
         /// <param name="limit">Number of popular profiles you want to get</param>
         /// <returns>List of most popular profiles</returns>
-        public Task<List<ProfileResponse>> GetPopularAsync(int limit);
+        public Task<List<ProfileInformationDto>> GetPopularAsync(int limit);
 
         /// <summary>
         /// Gets a requested number of follow suggestions, based on current 
@@ -59,26 +59,26 @@ namespace Core.IServices
         /// Add profile to database
         /// </summary>
         /// <param name="appUser">User that is owner of this profile</param>
-        public Task<Profile> AddProfileAsync(AppUser appUser);
+        public Task AddProfileAsync(AppUser appUser);
 
         /// <summary>
         /// Updates profile with new information
         /// </summary>
         /// <param name="updateProfileDto">New information</param>
         /// <returns>User Response with new information</returns>
-        public Task<ProfileResponse> UpdateProfileAsync(UpdateProfileDto updateProfileDto);
+        public Task<ProfileInformationDto> UpdateProfileAsync(UpdateProfileDto updateProfileDto);
 
         /// <summary>
         /// Updates profile picture
         /// </summary>
         /// <param name="image">New profile picture</param>
-        public Task<ProfileResponse> UpdateProfilePictureAsync(IFormFile image);
+        public Task<ProfileInformationDto> UpdateProfilePictureAsync(IFormFile image);
 
         /// <summary>
         /// Deletes profile picture
         /// </summary>
         /// <returns>Profile response</returns>
-        public Task<ProfileResponse> DeleteProfilePictureAsync();
+        public Task<ProfileInformationDto> DeleteProfilePictureAsync();
 
         /// <summary>
         /// Deletes profile based on it's User ID

@@ -11,7 +11,7 @@ namespace Core.Data.Dto.ProfileDto
 {
     public class ProfileResponse
     {
-        public Guid Id { get; set; }
+        public Guid UserId { get; set; }
         public string Username { get; set; } = string.Empty;
         public string? FirstName { get; set; }
         public string? LastName { get; set; }
@@ -23,7 +23,7 @@ namespace Core.Data.Dto.ProfileDto
         {
             return new Profile()
             {
-                Id = Id,
+                Id = UserId,
                 Username = Username,
                 FirstName = FirstName,
                 LastName = LastName,

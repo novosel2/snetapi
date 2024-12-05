@@ -40,11 +40,17 @@ namespace Core.Services
         {
             AppUser appUser = registerUserDto.ToAppUser();
             await AddUserAsync(appUser, registerUserDto.Password);
-            Profile profile = await _profileService.AddProfileAsync(appUser);
+            await _profileService.AddProfileAsync(appUser);
+
+            Profile profile = new()
+            {
+                Id = appUser.Id,
+                Username = appUser.UserName
+            };
             
             string token = _tokenService.CreateToken(appUser);
 
-            UserResponse userResponse = UserResponse.CreateUserResponse(appUser, profile, token);
+            UserResponse userResponse = UserResponse.CreateUserResponse(profile, token);
 
             return userResponse;
         }
@@ -71,7 +77,7 @@ namespace Core.Services
             Profile profile = (await _profileService.GetProfileByIdAsync(appUser.Id)).ToProfile();
             string token = _tokenService.CreateToken(appUser);
 
-            UserResponse userResponse = UserResponse.CreateUserResponse(appUser, profile, token);
+            UserResponse userResponse = UserResponse.CreateUserResponse(profile, token);
 
             return userResponse;
         }

@@ -20,7 +20,7 @@ namespace Infrastructure.Repositories
         public async Task<List<Post>> GetPostsAsync(int loadPage)
         {
             return await _db.Posts
-                .Include(p => p.UserProfile)
+                .Include(p => p.User)
                 .Include(p => p.Reactions)
                 .Include(p => p.FileUrls)
                 .OrderByDescending(p => p.CreatedOn)
@@ -33,7 +33,7 @@ namespace Infrastructure.Repositories
         public async Task<List<Post>> GetYourFeedAsync(List<Guid> friends, List<Guid> followings, int loadPage)
         {
             return await _db.Posts
-                .Include(p => p.UserProfile)
+                .Include(p => p.User)
                 .Include(p => p.Reactions)
                 .Include(p => p.FileUrls)
                 .OrderByDescending(p => p.CreatedOn)
@@ -47,7 +47,7 @@ namespace Infrastructure.Repositories
         public async Task<Post?> GetPostByIdAsync(Guid postId)
         {
             var post = await _db.Posts
-                .Include(p => p.UserProfile)
+                .Include(p => p.User)
                 .Include(p => p.Reactions)
                 .Include(p => p.FileUrls)
                 .FirstOrDefaultAsync(p => p.Id == postId);
@@ -60,7 +60,7 @@ namespace Infrastructure.Repositories
         {
             return await _db.Posts
                 .Where(p => p.UserId == userId)
-                .Include(p => p.UserProfile)
+                .Include(p => p.User)
                 .Include(p => p.Reactions)
                 .Include(p => p.FileUrls)
                 .OrderByDescending(p => p.CreatedOn)

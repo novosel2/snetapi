@@ -30,10 +30,12 @@ namespace Core.Services
             {
                 throw new AlreadyExistsException($"Follow already exists, Current User ID: {_currentUserId} | {followedId}");
             }
-            if (!await _profileRepository.ProfileExistsAsync(followedId))
-            {
-                throw new NotFoundException($"User not found, User ID: {followedId}");
-            }
+
+            Profile currentUser = await _profileRepository.GetProfileByIdAsync(_currentUserId)
+                ?? throw new UnauthorizedException("Unauthorized access.");
+
+            Profile followedUser = await _profileRepository.GetProfileByIdAsync(followedId)
+                ?? throw new NotFoundException($"User not found, User ID: {followedId}");
 
             Follow follow = new Follow()
             {
@@ -42,6 +44,9 @@ namespace Core.Services
             };
 
             await _followsRepository.AddFollow(follow);
+
+            currentUser.FollowingCount++;
+            followedUser.FollowersCount++;
 
             if (!await _followsRepository.IsSavedAsync())
             {
@@ -55,7 +60,16 @@ namespace Core.Services
             Follow follow = await _followsRepository.GetFollowByIdsAsync(userId, _currentUserId)
                 ?? throw new NotFoundException($"Follow not found, User ID: {userId} | Current User ID: {_currentUserId}");
 
+            Profile currentUser = await _profileRepository.GetProfileByIdAsync(_currentUserId)
+                ?? throw new UnauthorizedException("Unauthorized access.");
+
+            Profile unfollowedUser = await _profileRepository.GetProfileByIdAsync(userId)
+                ?? throw new NotFoundException($"User not found, User ID: {userId}");
+
             _followsRepository.DeleteFollow(follow);
+
+            currentUser.FollowingCount--;
+            unfollowedUser.FollowersCount--;
 
             if (!await _followsRepository.IsSavedAsync())
             {

@@ -24,7 +24,7 @@ namespace Api.Controllers
         [HttpGet]
         public async Task<IActionResult> GetProfiles()
         {
-            List<ProfileResponse> profileResponses = await _profileService.GetProfilesAsync();
+            List<ProfileInformationDto> profileResponses = await _profileService.GetProfilesAsync();
 
             return Ok(profileResponses);
         }
@@ -35,7 +35,7 @@ namespace Api.Controllers
         [HttpGet("search")]
         public async Task<IActionResult> SearchProfilesAsync(string searchTerm, int limit = 6)
         {
-            List<ProfileResponse> profileResponses = await _profileService.SearchProfilesAsync(searchTerm, limit);
+            List<ProfileInformationDto> profileResponses = await _profileService.SearchProfilesAsync(searchTerm, limit);
 
             return Ok(profileResponses);
         }
@@ -45,7 +45,7 @@ namespace Api.Controllers
         [HttpGet("popular")]
         public async Task<IActionResult> GetMostPopular(int limit = 10)
         {
-            List<ProfileResponse> profileResponses = await _profileService.GetPopularAsync(limit);
+            List<ProfileInformationDto> profileResponses = await _profileService.GetPopularAsync(limit);
 
             return Ok(profileResponses);
         }
@@ -88,7 +88,7 @@ namespace Api.Controllers
         [HttpPut("update-profile")]
         public async Task<IActionResult> UpdateProfile(UpdateProfileDto updateProfileDto)
         {
-            ProfileResponse profileResponse = await _profileService.UpdateProfileAsync(updateProfileDto);
+            ProfileInformationDto profileResponse = await _profileService.UpdateProfileAsync(updateProfileDto);
 
             return Ok(profileResponse);
         }
@@ -99,7 +99,7 @@ namespace Api.Controllers
         [HttpPut("update-profile-picture")]
         public async Task<IActionResult> UpdateProfilePicture(IFormFile image)
         {
-            ProfileResponse profileResponse = await _profileService.UpdateProfilePictureAsync(image);
+            ProfileInformationDto profileResponse = await _profileService.UpdateProfilePictureAsync(image);
 
             return Ok(profileResponse);
         }
@@ -110,7 +110,7 @@ namespace Api.Controllers
         [HttpDelete("delete-profile-picture")]
         public async Task<IActionResult> DeleteProfilePicture()
         {
-            ProfileResponse profileResponse = await _profileService.DeleteProfilePictureAsync();
+            ProfileInformationDto profileResponse = await _profileService.DeleteProfilePictureAsync();
 
             return Ok(profileResponse);
         }

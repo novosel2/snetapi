@@ -8,7 +8,7 @@ namespace Core.Data.Dto.ProfileDto
 {
     public class SuggestedProfileDto
     {
-        public ProfileResponse Profile { get; set; } = new ProfileResponse();
+        public ProfileInformationDto User { get; set; } = new();
         public int Mutual { get; set; } = 0;
     }
 }

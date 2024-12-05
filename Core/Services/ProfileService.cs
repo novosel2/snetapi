@@ -32,31 +32,31 @@ namespace Core.Services
 
         
         // Get all profiles
-        public async Task<List<ProfileResponse>> GetProfilesAsync()
+        public async Task<List<ProfileInformationDto>> GetProfilesAsync()
         {
             List<Profile> profiles = await _profileRepository.GetProfilesAsync();
 
-            List<ProfileResponse> profileResponses = profiles.Select(p => p.ToProfileResponse()).ToList();
+            List<ProfileInformationDto> profileResponses = profiles.Select(p => p.ToProfileInformation()).ToList();
 
             return profileResponses;
         }
 
         // Search for profiles based on search term
-        public async Task<List<ProfileResponse>> SearchProfilesAsync(string searchTerm, int limit = 6)
+        public async Task<List<ProfileInformationDto>> SearchProfilesAsync(string searchTerm, int limit = 6)
         {
             List<Profile> profiles = await _profileRepository.SearchProfilesAsync(searchTerm, limit);
 
-            var profileResponses = profiles.Select(p => p.ToProfileResponse()).ToList();
+            var profileResponses = profiles.Select(p => p.ToProfileInformation()).ToList();
 
             return profileResponses;
         }
 
         // Gets requested number of most popular profiles
-        public async Task<List<ProfileResponse>> GetPopularAsync(int limit)
+        public async Task<List<ProfileInformationDto>> GetPopularAsync(int limit)
         {
             List<Profile> profiles = await _profileRepository.GetPopularAsync(limit);
 
-            List<ProfileResponse> profileResponses = profiles.Select(p => p.ToProfileResponse()).ToList();
+            List<ProfileInformationDto> profileResponses = profiles.Select(p => p.ToProfileInformation()).ToList();
 
             return profileResponses;
         }
@@ -97,17 +97,17 @@ namespace Core.Services
                     if (currentUser.Following.Select(f => f.FollowedId).Any(f => f == follow.FollowedId))
                         continue;
 
-                    var followedProfile = follow.Followed.ToProfileResponse();
+                    var followedProfile = follow.Followed.ToProfileInformation();
 
-                    if (suggestedUsers.TryGetValue(followedProfile.Id, out var existingSuggesdtion))
+                    if (suggestedUsers.TryGetValue(followedProfile.UserId, out var existingSuggesdtion))
                     {
                         existingSuggesdtion.Mutual++;
                     }
                     else
                     {
-                        suggestedUsers[followedProfile.Id] = new SuggestedProfileDto
+                        suggestedUsers[followedProfile.UserId] = new SuggestedProfileDto
                         {
-                            Profile = followedProfile,
+                            User = followedProfile,
                             Mutual = 1
                         };
                     }
@@ -158,7 +158,7 @@ namespace Core.Services
         }
 
         // Add profile
-        public async Task<Profile> AddProfileAsync(AppUser appUser)
+        public async Task AddProfileAsync(AppUser appUser)
         {
             Profile profile = new Profile()
             {
@@ -172,12 +172,10 @@ namespace Core.Services
             {
                 throw new DbSavingFailedException("Failed to save added profile.");
             }
-
-            return profile;
         }
 
         // Update profile with new information
-        public async Task<ProfileResponse> UpdateProfileAsync(UpdateProfileDto updateProfileDto)
+        public async Task<ProfileInformationDto> UpdateProfileAsync(UpdateProfileDto updateProfileDto)
         {
             Profile existingProfile = await GetProfileAsync(_currentUserId);
             string oldUsername = existingProfile.Username;
@@ -198,11 +196,11 @@ namespace Core.Services
                 await _userManager.SetUserNameAsync(user, updatedProfile.Username);
             }
 
-            return updatedProfile.ToProfileResponse();
+            return updatedProfile.ToProfileInformation();
         }
 
         // Update profile picture
-        public async Task<ProfileResponse> UpdateProfilePictureAsync(IFormFile image)
+        public async Task<ProfileInformationDto> UpdateProfilePictureAsync(IFormFile image)
         {
             string pictureUrl = await _blobStorageService.UpdateProfilePictureByUserId(_currentUserId, image);
 
@@ -226,11 +224,11 @@ namespace Core.Services
                 }
             }
 
-            return updatedProfile.ToProfileResponse();
+            return updatedProfile.ToProfileInformation();
         }
 
         // Deletes profile picture from user and blob storage
-        public async Task<ProfileResponse> DeleteProfilePictureAsync()
+        public async Task<ProfileInformationDto> DeleteProfilePictureAsync()
         {
             Profile profile = await GetProfileAsync(_currentUserId);
 
@@ -255,7 +253,7 @@ namespace Core.Services
                 }
             }
 
-            return updatedProfile.ToProfileResponse();
+            return updatedProfile.ToProfileInformation();
         }
 
         // Deletes profile from database

@@ -11,13 +11,13 @@ namespace Core.Data.Dto.PostDto
 {
     public class PostResponse
     {
-        public Guid Id { get; set; }
+        public Guid PostId { get; set; }
 
         public string Content { get; set; } = string.Empty;
 
         public DateTime CreatedOn { get; set; }
 
-        public ProfileResponse? UserProfile { get; set; }
+        public ProfileInformationDto? User { get; set; }
 
         public int Likes { get; set; } = 0;
         public int Dislikes { get; set; } = 0;

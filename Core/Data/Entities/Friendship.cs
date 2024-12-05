@@ -35,7 +35,7 @@ namespace Core.Data.Entities
         {
             var friendshipResponse = new FriendshipResponse()
             {
-                Id = Id,
+                FriendshipId = Id,
                 CreatedOn = CreatedOn
             };
 

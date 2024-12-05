@@ -17,9 +17,9 @@ namespace Core.Data.Entities
         public DateTime CreatedOn { get; set; }
 
         [Required]
-        [ForeignKey(nameof(UserProfile))]
+        [ForeignKey(nameof(User))]
         public Guid UserId { get; set; }
-        public Profile? UserProfile { get; set; }
+        public Profile? User { get; set; }
 
         public int CommentCount { get; set; } = 0;
         public List<Comment> Comments { get; set; } = [];
@@ -38,14 +38,14 @@ namespace Core.Data.Entities
         {
             var postResponse = new PostResponse()
             {
-                Id = Id,
+                PostId = Id,
                 Content = Content,
                 CreatedOn = CreatedOn,
                 Likes = Reactions.Count(r => r.Reaction == ReactionType.Like),
                 Dislikes = Reactions.Count(r => r.Reaction == ReactionType.Dislike),
                 UserReacted = Reactions.Any(r => r.UserId == currentUserId) ? Reactions.First(r => r.UserId == currentUserId).Reaction : ReactionType.NoReaction,
                 CommentCount = CommentCount,
-                UserProfile = UserProfile!.ToProfileResponse(),
+                User = User!.ToProfileInformation(),
                 FileUrls = FileUrls.Select(fu => fu.Url).ToList()
             };
 

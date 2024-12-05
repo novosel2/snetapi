@@ -9,7 +9,7 @@ namespace Core.Data.Dto.FriendsDto
 {
     public class FriendshipResponse
     {
-        public Guid Id { get; set; }
+        public Guid FriendshipId { get; set; }
 
         public ProfileResponse User { get; set; } = new ProfileResponse();
 

@@ -33,6 +33,12 @@ namespace Core.Data.Entities
         public List<Follow> Following { get; set; } = [];
 
         [Required]
+        public int FollowersCount { get; set; } = 0;
+
+        [Required]
+        public int FollowingCount { get; set; } = 0;
+
+        [Required]
         public int PreviousFollowers { get; set; } = 0;
 
         [NotMapped]
@@ -42,13 +48,13 @@ namespace Core.Data.Entities
         {
             return new ProfileResponse()
             {
-                Id = Id,
+                UserId = Id,
                 Username = Username,
                 FirstName = FirstName,
                 LastName = LastName,
                 PictureUrl = PictureUrl,
-                Followers = Followers.Count,
-                Following = Following.Count
+                Followers = FollowersCount,
+                Following = FollowingCount
             };
         }
 
@@ -56,6 +62,8 @@ namespace Core.Data.Entities
         {
             return new ProfileInformationDto()
             {
+                UserId = Id,
+                Username = Username,
                 FirstName = FirstName,
                 LastName = LastName,
                 PictureUrl = PictureUrl

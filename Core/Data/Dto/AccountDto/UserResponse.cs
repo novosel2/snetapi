@@ -7,21 +7,15 @@ namespace Core.Data.Dto.AccountDto
 {
     public class UserResponse
     {
-        public Guid Id { get; set; }
-        public string Username { get; set; } = string.Empty;
-        public string Email { get; set; } = string.Empty;
+        public ProfileInformationDto User { get; set; } = new();
         public string? Token { get; set; }
-        public ProfileInformationDto Profile { get; set; } = new();
 
-        public static UserResponse CreateUserResponse(AppUser appUser, Profile profile, string? token = null)
+        public static UserResponse CreateUserResponse(Profile profile, string token)
         {
             return new UserResponse
             {
-                Id = appUser.Id,
-                Username = appUser.UserName,
-                Email = appUser.Email,
-                Token = token,
-                Profile = profile.ToProfileInformation()
+                User = profile.ToProfileInformation(),
+                Token = token
             };
         }
     }

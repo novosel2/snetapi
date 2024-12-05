@@ -36,7 +36,7 @@ namespace Core.Data.Entities
         {
             var friendRequestResponse = new FriendRequestResponse()
             {
-                Id = Id,
+                FriendRequestId = Id,
                 CreatedOn = CreatedOn
             };
 

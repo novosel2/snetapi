@@ -24,8 +24,6 @@ namespace Infrastructure.Repositories
         public async Task<List<Profile>> GetProfilesAsync()
         {
             return await _db.Profiles
-                .Include(p => p.Followers)
-                .Include(p => p.Following)
                 .ToListAsync();
         }
 
@@ -53,8 +51,6 @@ namespace Infrastructure.Repositories
         public async Task<List<Profile>> GetPopularAsync(int limit)
         {
             return await _db.Profiles
-                .Include(p => p.Followers)
-                .Include(p => p.Following)
                 .Select(user => new Profile()
                 {
                     Id = user.Id,
@@ -79,8 +75,6 @@ namespace Infrastructure.Repositories
         public async Task<Profile?> GetProfileByIdAsync(Guid id)
         {
             return await _db.Profiles
-                .Include(p => p.Followers)
-                .Include(p => p.Following)
                 .Include(p => p.FriendRequestsAsSender)
                 .Include(p => p.FriendRequestsAsReceiver)
                 .Include(p => p.FriendsAsSender)

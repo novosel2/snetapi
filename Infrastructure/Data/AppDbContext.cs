@@ -87,7 +87,7 @@ namespace Infrastructure.Data
                 .OnDelete(DeleteBehavior.NoAction);
 
             modelBuilder.Entity<Post>()
-                .HasOne(p => p.UserProfile)
+                .HasOne(p => p.User)
                 .WithMany()
                 .HasForeignKey(p => p.UserId);
 
@@ -126,7 +126,7 @@ namespace Infrastructure.Data
                 .HasForeignKey(pr => pr.ParentCommentId);
 
             modelBuilder.Entity<Comment>()
-                .HasOne(c => c.UserProfile)
+                .HasOne(c => c.User)
                 .WithMany()
                 .HasForeignKey(c => c.UserId)
                 .OnDelete(DeleteBehavior.NoAction);
