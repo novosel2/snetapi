@@ -79,6 +79,8 @@ namespace Infrastructure.Repositories
                 .Include(p => p.FriendRequestsAsReceiver)
                 .Include(p => p.FriendsAsSender)
                 .Include(p => p.FriendsAsReceiver)
+                .Include(p => p.Followers)
+                .Include(p => p.Following)
                 .FirstOrDefaultAsync(up => up.Id == id);
         }
 
