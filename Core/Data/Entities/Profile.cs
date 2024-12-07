@@ -32,6 +32,8 @@ namespace Core.Data.Entities
         public List<Follow> Followers { get; set; } = [];
         public List<Follow> Following { get; set; } = [];
 
+        public string? Description { get; set; }
+
         [Required]
         public int FollowersCount { get; set; } = 0;
 

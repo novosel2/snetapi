@@ -21,6 +21,7 @@ namespace Core.Data.Entities
         public Guid UserId { get; set; }
         public Profile? User { get; set; }
 
+        [Required]
         public int CommentCount { get; set; } = 0;
         public List<Comment> Comments { get; set; } = [];
         public List<PostReaction> Reactions { get; set; } = [];
