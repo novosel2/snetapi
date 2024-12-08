@@ -3,6 +3,8 @@ using Core.Exceptions;
 using Core.IRepositories;
 using Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Hosting;
+using Microsoft.IdentityModel.Tokens;
 using System.Data;
 
 namespace Infrastructure.Repositories
@@ -16,16 +18,17 @@ namespace Infrastructure.Repositories
             _db = db;
         }
 
-        // Get posts from database
-        public async Task<List<Post>> GetPostsAsync(int loadPage)
+
+        // Get popular feed, most popular posts in last 3 days
+        public async Task<List<Post>> GetPopularFeedAsync(int loadPage)
         {
             return await _db.Posts
+                .OrderByDescending(p => p.PopularityScore)
+                .Skip(loadPage * 20)
+                .Take(20)
                 .Include(p => p.User)
                 .Include(p => p.Reactions)
                 .Include(p => p.FileUrls)
-                .OrderByDescending(p => p.CreatedOn)
-                .Skip(loadPage * 20)
-                .Take(20)
                 .ToListAsync();
         }
 
@@ -33,13 +36,13 @@ namespace Infrastructure.Repositories
         public async Task<List<Post>> GetYourFeedAsync(List<Guid> friends, List<Guid> followings, int loadPage)
         {
             return await _db.Posts
-                .Include(p => p.User)
-                .Include(p => p.Reactions)
-                .Include(p => p.FileUrls)
                 .OrderByDescending(p => p.CreatedOn)
                 .Where(p => friends.Contains(p.UserId) || followings.Contains(p.UserId))
                 .Skip(loadPage * 20)
                 .Take(20)
+                .Include(p => p.User)
+                .Include(p => p.Reactions)
+                .Include(p => p.FileUrls)
                 .ToListAsync();
         }
 
@@ -55,17 +58,30 @@ namespace Infrastructure.Repositories
             return post;
         }
 
+        // Get posts from database for popularity score update
+        public async Task<List<Post>> GetPostsForScoreUpdateAsync(int batchStart = 0, int batchSize = 1000)
+        {
+            var twoMonthsAgo = DateTime.Now.AddMonths(-2);
+
+            return await _db.Posts
+                .Where(p => p.CreatedOn >= twoMonthsAgo)
+                .OrderBy(p => p.Id)
+                .Skip(batchStart)
+                .Take(batchSize)
+                .ToListAsync();
+        }
+
         // Get posts by user id
         public async Task<List<Post>> GetPostsByUserIdAsync(Guid userId, int loadPage)
         {
             return await _db.Posts
                 .Where(p => p.UserId == userId)
-                .Include(p => p.User)
-                .Include(p => p.Reactions)
-                .Include(p => p.FileUrls)
                 .OrderByDescending(p => p.CreatedOn)
                 .Skip(loadPage * 20)
                 .Take(20)
+                .Include(p => p.User)
+                .Include(p => p.Reactions)
+                .Include(p => p.FileUrls)
                 .ToListAsync();
         }
 

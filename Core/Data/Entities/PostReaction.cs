@@ -1,4 +1,5 @@
 ﻿using Core.Enums;
+using Microsoft.AspNetCore.Http.HttpResults;
 using System.ComponentModel.DataAnnotations;
 
 namespace Core.Data.Entities
@@ -14,5 +15,8 @@ namespace Core.Data.Entities
 
         [Required]
         public ReactionType Reaction { get; set; }
+
+        [Required]
+        public DateTime CreatedOn { get; set; } = DateTime.UtcNow;
     }
 }

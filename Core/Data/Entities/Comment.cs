@@ -36,11 +36,6 @@ namespace Core.Data.Entities
 
         public List<Comment> CommentReplies { get; set; } = [];
 
-        public Comment()
-        {
-            var cetZone = TimeZoneInfo.FindSystemTimeZoneById("Central European Standard Time");
-            CreatedOn = TimeZoneInfo.ConvertTimeFromUtc(CreatedOn, cetZone);
-        }
 
         public CommentResponse ToCommentResponse(Guid currentUserId)
         {

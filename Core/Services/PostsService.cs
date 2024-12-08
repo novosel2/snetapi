@@ -29,10 +29,11 @@ namespace Core.Services
             _currentUserId = currentUserService.UserId ?? throw new UnauthorizedException("Unauthorized access.");
         }
 
-        // Get all posts from database
-        public async Task<List<PostResponse>> GetPostsAsync(int loadPage)
+
+        // Get popular feed, most popular posts in last 3 days, then sort by date
+        public async Task<List<PostResponse>> GetPopularFeedAsync(int loadPage)
         {
-            List<Post> posts = await _postRepository.GetPostsAsync(loadPage);
+            List<Post> posts = await _postRepository.GetPopularFeedAsync(loadPage);
 
             var postResponses = posts.Select(p => p.ToPostResponse(_currentUserId)).ToList();
 

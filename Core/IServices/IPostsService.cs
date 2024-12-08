@@ -12,10 +12,10 @@ namespace Core.IServices
     public interface IPostsService
     {
         /// <summary>
-        /// Get all posts from database
+        /// Get popular feed, most popular posts in last 3 days
         /// </summary>
-        /// <returns>List of post responses</returns>
-        public Task<List<PostResponse>> GetPostsAsync(int loadPage);
+        /// <returns>List of posts</returns>
+        public Task<List<PostResponse>> GetPopularFeedAsync(int loadPage);
 
         /// <summary>
         /// Get your feed, posts made by your friends or those you follow

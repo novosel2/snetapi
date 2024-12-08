@@ -23,14 +23,8 @@ namespace Core.Data.Entities
         public Profile? SenderUser { get; set; }
 
         [Required]
-        public DateTime CreatedOn { get; set; }
+        public DateTime CreatedOn { get; set; } = DateTime.UtcNow;
 
-        public FriendRequest()
-        {
-            TimeZoneInfo cetZone = TimeZoneInfo.FindSystemTimeZoneById("Central European Standard Time");
-
-            CreatedOn = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, cetZone);
-        }
 
         public FriendRequestResponse ToFriendRequestResponse(Guid currentUserId)
         {

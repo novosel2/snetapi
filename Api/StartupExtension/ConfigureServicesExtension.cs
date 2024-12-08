@@ -1,4 +1,5 @@
 ﻿using Api.Filters.ExceptionFilters;
+using Core.BackgroundServices;
 using Core.Data.Entities.Identity;
 using Core.IRepositories;
 using Core.IServices;
@@ -121,6 +122,7 @@ namespace Api.StartupExtension
 
             services.AddSingleton<IBlobStorageService, BlobStorageService>();
             services.AddHostedService<UpdatePreviousFollowersService>();
+            services.AddHostedService<UpdatePopularityScoresService>();
 
             return services;
         }

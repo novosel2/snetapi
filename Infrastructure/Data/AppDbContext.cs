@@ -23,8 +23,40 @@ namespace Infrastructure.Data
         {
             base.OnModelCreating(modelBuilder);
 
+            #region KEYS
+
+            modelBuilder.Entity<FileUrl>()
+                .HasKey(fu => new
+                {
+                    fu.PostId,
+                    fu.Url
+                });
+
+            modelBuilder.Entity<PostReaction>()
+                .HasKey(pr => new
+                {
+                    pr.PostId,
+                    pr.UserId
+                });
+
+            modelBuilder.Entity<CommentReaction>()
+                .HasKey(cr => new
+                {
+                    cr.CommentId,
+                    cr.UserId
+                });
+
+            #endregion
+
+            #region INDEXES
+
             modelBuilder.Entity<Profile>()
-                .HasIndex(p => new { p.Username, p.FirstName, p.LastName });
+                .HasIndex(p => new 
+                { 
+                    p.Username, 
+                    p.FirstName, 
+                    p.LastName 
+                });
 
             modelBuilder.Entity<Follow>()
                 .HasIndex(f => new
@@ -33,18 +65,6 @@ namespace Infrastructure.Data
                     f.FollowedId
                 })
                 .IsUnique();
-
-            modelBuilder.Entity<Follow>()
-                .HasOne(f => f.Follower)
-                .WithMany(p => p.Following)
-                .HasForeignKey(f => f.FollowerId)
-                .OnDelete(DeleteBehavior.NoAction);
-
-            modelBuilder.Entity<Follow>()
-                .HasOne(f => f.Followed)
-                .WithMany(p => p.Followers)
-                .HasForeignKey(f => f.FollowedId)
-                .OnDelete(DeleteBehavior.NoAction);
 
             modelBuilder.Entity<FriendRequest>()
                 .HasIndex(fr => new
@@ -61,6 +81,22 @@ namespace Infrastructure.Data
                     fs.ReceiverId
                 })
                 .IsUnique();
+
+            #endregion
+
+            #region RELATIONS
+
+            modelBuilder.Entity<Follow>()
+                .HasOne(f => f.Follower)
+                .WithMany(p => p.Following)
+                .HasForeignKey(f => f.FollowerId)
+                .OnDelete(DeleteBehavior.NoAction);
+
+            modelBuilder.Entity<Follow>()
+                .HasOne(f => f.Followed)
+                .WithMany(p => p.Followers)
+                .HasForeignKey(f => f.FollowedId)
+                .OnDelete(DeleteBehavior.NoAction);
 
             modelBuilder.Entity<Friendship>()
                 .HasOne(fs => fs.SenderUser)
@@ -92,23 +128,9 @@ namespace Infrastructure.Data
                 .HasForeignKey(p => p.UserId);
 
             modelBuilder.Entity<FileUrl>()
-                .HasKey(fu => new
-                {
-                    fu.PostId,
-                    fu.Url
-                });
-
-            modelBuilder.Entity<FileUrl>()
                 .HasOne(fu => fu.Post)
                 .WithMany(p => p.FileUrls)
                 .HasForeignKey(fu => fu.PostId);
-
-            modelBuilder.Entity<PostReaction>()
-                .HasKey(pr => new 
-                {
-                    pr.PostId,
-                    pr.UserId
-                });
 
             modelBuilder.Entity<PostReaction>()
                 .HasOne(pr => pr.Post)
@@ -132,16 +154,11 @@ namespace Infrastructure.Data
                 .OnDelete(DeleteBehavior.NoAction);
 
             modelBuilder.Entity<CommentReaction>()
-                .HasKey(cr => new
-                {
-                    cr.CommentId,
-                    cr.UserId
-                });
-
-            modelBuilder.Entity<CommentReaction>()
                 .HasOne(cr => cr.Comment)
                 .WithMany(c => c.Reactions)
                 .HasForeignKey(cr => cr.CommentId);
+
+            #endregion
         }
     }
 }

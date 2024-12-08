@@ -14,7 +14,7 @@ namespace Core.Data.Entities
         public string Content { get; set; } = string.Empty;
 
         [Required]
-        public DateTime CreatedOn { get; set; }
+        public DateTime CreatedOn { get; set; } = DateTime.UtcNow;
 
         [Required]
         [ForeignKey(nameof(User))]
@@ -28,12 +28,9 @@ namespace Core.Data.Entities
 
         public List<FileUrl> FileUrls { get; set; } = [];
 
-        public Post()
-        {
-            TimeZoneInfo cetZone = TimeZoneInfo.FindSystemTimeZoneById("Central European Standard Time");
+        [Required]
+        public double PopularityScore { get; set; } = double.MinValue;
 
-            CreatedOn = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, cetZone);
-        }
 
         public PostResponse ToPostResponse(Guid currentUserId)
         {

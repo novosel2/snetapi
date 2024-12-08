@@ -19,12 +19,12 @@ namespace Api.Controllers
         }
 
 
-        // GET: /api/posts?page=0
+        // GET: /api/posts/popular-feed/popular?page=0
 
-        [HttpGet]
-        public async Task<IActionResult> GetPosts(int page)
+        [HttpGet("popular-feed")]
+        public async Task<IActionResult> GetPopularFeed(int page)
         {
-            List<PostResponse> postResponses = await _postsService.GetPostsAsync(page);
+            List<PostResponse> postResponses = await _postsService.GetPopularFeedAsync(page);
 
             return Ok(postResponses);
         }

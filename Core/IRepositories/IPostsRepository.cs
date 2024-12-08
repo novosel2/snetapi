@@ -10,17 +10,17 @@ namespace Core.IRepositories
     public interface IPostsRepository
     {
         /// <summary>
-        /// Get all posts from database
+        /// Get popular feed, most popular posts in last 3 days
         /// </summary>
         /// <returns>List of posts</returns>
-        public Task<List<Post>> GetPostsAsync(int loadPage);
+        public Task<List<Post>> GetPopularFeedAsync(int loadPage);
 
         /// <summary>
         /// Get your feed, posts made by your friends or those you follow
         /// </summary>
         /// <param name="friends">List of your friends ids</param>
         /// <param name="followings">List of your following ids</param>
-        /// <returns></returns>
+        /// <returns>List of posts</returns>
         public Task<List<Post>> GetYourFeedAsync(List<Guid> friends, List<Guid> followings, int loadPage);
 
         /// <summary>
@@ -29,6 +29,12 @@ namespace Core.IRepositories
         /// <param name="postId">Id of needed post</param>
         /// <returns>Post</returns>
         public Task<Post?> GetPostByIdAsync(Guid postId);
+
+        /// <summary>
+        /// Get posts for popularity score update
+        /// </summary>
+        /// <returns>List of posts that need to be updated</returns>
+        public Task<List<Post>> GetPostsForScoreUpdateAsync(int batchStart, int batchSize);
 
         /// <summary>
         /// Get all posts made by a specified user
