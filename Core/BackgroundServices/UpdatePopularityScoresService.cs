@@ -14,7 +14,7 @@ namespace Core.BackgroundServices
     public class UpdatePopularityScoresService : BackgroundService
     {
         private readonly IServiceScopeFactory _scopeFactory;
-        private readonly TimeSpan _interval = TimeSpan.FromSeconds(10);
+        private readonly TimeSpan _interval = TimeSpan.FromMinutes(20);
 
         public UpdatePopularityScoresService(IServiceScopeFactory scopeFactory)
         {
