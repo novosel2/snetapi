@@ -10,11 +10,13 @@ namespace Core.Services
     public class PostReactionsService : IPostReactionsService
     {
         private readonly IPostReactionsRepository _postReactionsRepository;
+        private readonly IPostsRepository _postsRepository;
         private readonly Guid UserId;
 
-        public PostReactionsService(IPostReactionsRepository postReactionsRepository, ICurrentUserService currentUserService)
+        public PostReactionsService(IPostReactionsRepository postReactionsRepository, IPostsRepository postsRepository, ICurrentUserService currentUserService)
         {
             _postReactionsRepository = postReactionsRepository;
+            _postsRepository = postsRepository;
             UserId = currentUserService.UserId ?? throw new UnauthorizedException("Unauthorized access.");
         }
 
@@ -24,6 +26,10 @@ namespace Core.Services
             if (await _postReactionsRepository.PostReactionExistsAsync(UserId, postId))
             {
                 throw new AlreadyExistsException($"Post reaction on post already exists.");
+            }
+            if (!await _postsRepository.PostExistsAsync(postId))
+            {
+                throw new NotFoundException($"Post not found, Post ID: {postId}");
             }
 
             var postReaction = new PostReaction()
@@ -43,6 +49,11 @@ namespace Core.Services
 
         public async Task UpdatePostReaction(Guid postId)
         {
+            if (!await _postsRepository.PostExistsAsync(postId))
+            {
+                throw new NotFoundException($"Post not found, Post ID: {postId}");
+            }
+
             PostReaction postReaction = await _postReactionsRepository.GetPostReactionByIdAsync(UserId, postId)
                 ?? throw new NotFoundException($"Post reaction not found, PostID: {postId} UserID: {UserId}");
 
@@ -56,6 +67,11 @@ namespace Core.Services
 
         public async Task DeletePostReaction(Guid postId)
         {
+            if (!await _postsRepository.PostExistsAsync(postId))
+            {
+                throw new NotFoundException($"Post not found, Post ID: {postId}");
+            }
+
             PostReaction postReaction = await _postReactionsRepository.GetPostReactionByIdAsync(UserId, postId)
                 ?? throw new NotFoundException($"Post reaction not found, PostID: {postId} UserID: {UserId}");
 

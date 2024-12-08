@@ -14,11 +14,14 @@ namespace Core.Services
     public class CommentReactionsService : ICommentReactionsService
     {
         private readonly ICommentReactionsRepository _commentReactionsRepository;
+        private readonly ICommentsRepository _commentsRepository;
         private readonly Guid UserId;
 
-        public CommentReactionsService(ICommentReactionsRepository commentReactionsRepository, ICurrentUserService currentUserService)
+        public CommentReactionsService(ICommentReactionsRepository commentReactionsRepository, 
+            ICommentsRepository commentsRepository, ICurrentUserService currentUserService)
         {
             _commentReactionsRepository = commentReactionsRepository;
+            _commentsRepository = commentsRepository;
             UserId = currentUserService.UserId ?? throw new UnauthorizedException("Unauthorized access.");
         }
 
@@ -28,6 +31,11 @@ namespace Core.Services
             if (await _commentReactionsRepository.CommentReactionExistsAsync(UserId, commentId))
             {
                 throw new AlreadyExistsException($"Post reaction on post already exists.");
+            }
+
+            if (!await _commentsRepository.CommentExistsAsync(commentId))
+            {
+                throw new NotFoundException($"Comment not found, Comment ID: {commentId}");
             }
 
             var commentReaction = new CommentReaction()
@@ -47,6 +55,11 @@ namespace Core.Services
 
         public async Task UpdateCommentReaction(Guid commentId)
         {
+            if (!await _commentsRepository.CommentExistsAsync(commentId))
+            {
+                throw new NotFoundException($"Comment not found, Comment ID: {commentId}");
+            }
+
             CommentReaction commentReaction = await _commentReactionsRepository.GetCommentReactionByIdAsync(UserId, commentId)
                 ?? throw new NotFoundException($"Post reaction not found, PostID: {commentId} UserID: {UserId}");
 
@@ -60,6 +73,11 @@ namespace Core.Services
 
         public async Task DeleteCommentReaction(Guid commentId)
         {
+            if (!await _commentsRepository.CommentExistsAsync(commentId))
+            {
+                throw new NotFoundException($"Comment not found, Comment ID: {commentId}");
+            }
+
             CommentReaction commentReaction = await _commentReactionsRepository.GetCommentReactionByIdAsync(UserId, commentId)
                 ?? throw new NotFoundException($"Post reaction not found, PostID: {commentId} UserID: {UserId}");
 
