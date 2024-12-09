@@ -54,7 +54,7 @@ namespace Core.Services
 
             List<Guid> followingIds = currentUser.Following.Select(f => f.FollowedId).ToList();
 
-            List<Post> posts = await _postRepository.GetYourFeedAsync(friendsIds, followingIds, loadPage);
+            List<Post> posts = await _postRepository.GetYourFeedAsync(friendsIds, followingIds, loadPage, _currentUserId);
             List<PostResponse> postResponses = posts.Select(p => p.ToPostResponse(_currentUserId)).ToList();
 
             return postResponses;

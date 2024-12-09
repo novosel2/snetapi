@@ -21,7 +21,7 @@ namespace Core.IRepositories
         /// <param name="friends">List of your friends ids</param>
         /// <param name="followings">List of your following ids</param>
         /// <returns>List of posts</returns>
-        public Task<List<Post>> GetYourFeedAsync(List<Guid> friends, List<Guid> followings, int loadPage);
+        public Task<List<Post>> GetYourFeedAsync(List<Guid> friends, List<Guid> followings, int loadPage, Guid currentUserId);
 
         /// <summary>
         /// Get post by specified id

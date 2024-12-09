@@ -33,11 +33,11 @@ namespace Infrastructure.Repositories
         }
 
         // Get your feed, posts made by your friends or those you follow
-        public async Task<List<Post>> GetYourFeedAsync(List<Guid> friends, List<Guid> followings, int loadPage)
+        public async Task<List<Post>> GetYourFeedAsync(List<Guid> friends, List<Guid> followings, int loadPage, Guid currentUserId)
         {
             return await _db.Posts
                 .OrderByDescending(p => p.CreatedOn)
-                .Where(p => friends.Contains(p.UserId) || followings.Contains(p.UserId))
+                .Where(p => friends.Contains(p.UserId) || followings.Contains(p.UserId) || p.UserId == currentUserId)
                 .Skip(loadPage * 20)
                 .Take(20)
                 .Include(p => p.User)
