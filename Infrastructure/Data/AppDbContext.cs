@@ -55,7 +55,7 @@ namespace Infrastructure.Data
                 { 
                     p.Username, 
                     p.FirstName, 
-                    p.LastName 
+                    p.LastName
                 });
 
             modelBuilder.Entity<Follow>()
@@ -81,6 +81,28 @@ namespace Infrastructure.Data
                     fs.ReceiverId
                 })
                 .IsUnique();
+
+            modelBuilder.Entity<Post>()
+                .HasIndex(p => new
+                {
+                    p.CreatedOn,
+                    p.PopularityScore,
+                    p.UserId
+                });
+
+            modelBuilder.Entity<PostReaction>()
+                .HasIndex(pr => new
+                {
+                    pr.PostId,
+                    pr.CreatedOn
+                });
+
+            modelBuilder.Entity<Comment>()
+                .HasIndex(c => new
+                {
+                    c.PostId,
+                    c.CreatedOn
+                });
 
             #endregion
 

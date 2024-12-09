@@ -16,7 +16,7 @@ namespace Core.IRepositories
         /// </summary>
         /// <param name="searchTerm">Search term</param>
         /// <returns>List of found profiles</returns>
-        public Task<List<Profile>> SearchProfilesAsync(string searchTerm, int limit = 6);
+        public Task<List<Profile>> SearchProfilesAsync(string searchTerm, Guid currentUserId, int limit = 6);
 
         /// <summary>
         /// Gets requested number of most popular profiles

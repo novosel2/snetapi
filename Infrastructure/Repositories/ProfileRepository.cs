@@ -28,7 +28,7 @@ namespace Infrastructure.Repositories
         }
 
         // Search for profiles based on search term
-        public async Task<List<Profile>> SearchProfilesAsync(string searchTerm, int limit = 6)
+        public async Task<List<Profile>> SearchProfilesAsync(string searchTerm, Guid currentUserId, int limit = 6)
         {
             if (string.IsNullOrWhiteSpace(searchTerm))
                 return new List<Profile>();
@@ -44,7 +44,10 @@ namespace Infrastructure.Repositories
                     EF.Functions.Like(u.Username, $"%{term}%"));
             }
 
-            return await query.Take(limit).ToListAsync();
+            return await query
+                .Where(p => p.Id != currentUserId)
+                .Take(limit)
+                .ToListAsync();
         }
 
         //Gets requested number of most popular profiles

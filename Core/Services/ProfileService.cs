@@ -44,7 +44,7 @@ namespace Core.Services
         // Search for profiles based on search term
         public async Task<List<ProfileInformationDto>> SearchProfilesAsync(string searchTerm, int limit = 6)
         {
-            List<Profile> profiles = await _profileRepository.SearchProfilesAsync(searchTerm, limit);
+            List<Profile> profiles = await _profileRepository.SearchProfilesAsync(searchTerm, _currentUserId, limit);
 
             var profileResponses = profiles.Select(p => p.ToProfileInformation()).ToList();
 
