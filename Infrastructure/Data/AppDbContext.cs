@@ -100,6 +100,7 @@ namespace Infrastructure.Data
             modelBuilder.Entity<Comment>()
                 .HasIndex(c => new
                 {
+                    c.UserId,
                     c.PostId,
                     c.CreatedOn
                 });
