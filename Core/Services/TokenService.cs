@@ -23,7 +23,7 @@ namespace Core.Services
 
         public string CreateToken(AppUser appUser)
         {
-            List<Claim> claims = new List<Claim>()
+            List<Claim> claims = new()
             {
                 new Claim(JwtRegisteredClaimNames.NameId, appUser.Id.ToString()),
                 new Claim(JwtRegisteredClaimNames.Name, appUser.Email),
