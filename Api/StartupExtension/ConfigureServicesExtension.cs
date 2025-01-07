@@ -62,10 +62,24 @@ namespace Api.StartupExtension
                 });
             });
 
+            var databaseServer = Environment.GetEnvironmentVariable("DATABASE_SERVER") ?? "localhost";
+            var databaseUser = Environment.GetEnvironmentVariable("DATABASE_USER") ?? "defaultUser";
+            var databasePassword = Environment.GetEnvironmentVariable("DATABASE_PASSWORD") ?? "defaultPassword";
+
+            var authConnection = config.GetConnectionString("AuthConnection")!
+                .Replace("${DATABASE_SERVER}", databaseServer)
+                .Replace("${DATABASE_USER}", databaseUser)
+                .Replace("${DATABASE_PASSWORD}", databasePassword);
+
+            var appConnection = config.GetConnectionString("AppConnection")!
+                .Replace("${DATABASE_SERVER}", databaseServer)
+                .Replace("${DATABASE_USER}", databaseUser)
+                .Replace("${DATABASE_PASSWORD}", databasePassword);
+
             services.AddDbContext<AuthDbContext>(options 
-                => options.UseSqlServer(config.GetConnectionString("AuthConnection")));
+                => options.UseSqlServer(authConnection));
             services.AddDbContext<AppDbContext>(options
-                => options.UseSqlServer(config.GetConnectionString("AppConnection")));
+                => options.UseSqlServer(appConnection));
 
             services.AddIdentity<AppUser, AppRole>(options =>
             {
