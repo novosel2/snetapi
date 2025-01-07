@@ -108,7 +108,7 @@ namespace Api.StartupExtension
                     ValidIssuer = config["JWT:Issuer"],
                     ValidateIssuerSigningKey = true,
                     IssuerSigningKey = new SymmetricSecurityKey(
-                            Encoding.UTF8.GetBytes(config["JWT:SigningKey"]!)),
+                            Encoding.UTF8.GetBytes(Environment.GetEnvironmentVariable("JWT_SIGNING_KEY")!)),
                     ValidateLifetime = true
                 };
             });
