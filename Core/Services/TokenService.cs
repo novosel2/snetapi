@@ -18,7 +18,7 @@ namespace Core.Services
         {
             _config = config;
             _signingKey = new SymmetricSecurityKey(
-                Encoding.UTF8.GetBytes(_config["JWT:SigningKey"]!));
+                Encoding.UTF8.GetBytes(Environment.GetEnvironmentVariable("JWT_SIGNING_KEY")!));
         }
 
         public string CreateToken(AppUser appUser)

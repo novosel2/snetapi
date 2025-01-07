@@ -29,7 +29,7 @@ namespace Core.Data.Entities
         public List<FileUrl> FileUrls { get; set; } = [];
 
         [Required]
-        public double PopularityScore { get; set; } = double.MinValue;
+        public double PopularityScore { get; set; } = 0;
 
 
         public PostResponse ToPostResponse(Guid currentUserId)
