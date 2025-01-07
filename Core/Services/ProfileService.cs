@@ -180,7 +180,14 @@ namespace Core.Services
             Profile existingProfile = await GetProfileAsync(_currentUserId);
             string oldUsername = existingProfile.Username;
 
+            AppUser? appUser = await _userManager.FindByNameAsync(updateProfileDto.Username);
+            if(appUser != null && appUser.UserName != existingProfile.Username)
+            {
+                throw new AlreadyExistsException("Username taken");
+            }
+
             Profile updatedProfile = updateProfileDto.ToProfile(_currentUserId);
+            updatedProfile.PictureUrl = existingProfile.PictureUrl;
 
             _profileRepository.UpdateProfile(existingProfile, updatedProfile);
 
