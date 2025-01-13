@@ -13,14 +13,16 @@ namespace Core.Data.Dto.CommentDto
         [Required]
         public string Content { get; set; } = string.Empty;
 
-        public Comment ToComment(Guid commentId, Guid currentUserId, Guid postId)
+        public Comment ToComment(Comment existingComment)
         {
             return new Comment()
             {
-                Id = commentId,
+                Id = existingComment.Id,
                 Content = Content,
-                UserId = currentUserId,
-                PostId = postId
+                UserId = existingComment.UserId,
+                PostId = existingComment.PostId,
+                ParentCommentId = existingComment.ParentCommentId,
+                CreatedOn = existingComment.CreatedOn
             };
         }
     }

@@ -60,7 +60,7 @@ namespace Core.BackgroundServices
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine($"Error updating Popularity Scores: {ex.Message}");
+                    Console.WriteLine($"!!! Error updating Popularity Scores: {ex.Message}");
                 }
 
                 await Task.Delay(_interval, stoppingToken);

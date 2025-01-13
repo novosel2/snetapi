@@ -74,7 +74,7 @@ namespace Core.Services
             Comment existingComment = await _commentsRepository.GetCommentByIdAsync(commentId)
                 ?? throw new NotFoundException($"Comment not found, Comment ID: {commentId}");
 
-            Comment updatedComment = updatedCommentRequest.ToComment(existingComment.Id, _currentUserId, existingComment.PostId);
+            Comment updatedComment = updatedCommentRequest.ToComment(existingComment);
 
             if (existingComment.UserId != _currentUserId)
             {

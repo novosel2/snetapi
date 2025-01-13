@@ -22,7 +22,10 @@ namespace Api.StartupExtension
             {
                 options.AddPolicy("newPolicy", builder =>
                 {
-                    builder.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod();
+                    builder
+                    .AllowAnyOrigin()
+                    .AllowAnyHeader()
+                    .AllowAnyMethod();
                 });
             });
 
