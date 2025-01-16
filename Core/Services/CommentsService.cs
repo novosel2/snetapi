@@ -15,13 +15,16 @@ namespace Core.Services
     public class CommentsService : ICommentsService
     {
         private readonly ICommentsRepository _commentsRepository;
+        private readonly IProfileRepository _profileRepository;
         private readonly IPostsRepository _postsRepository;
         private readonly Guid _currentUserId;
 
-        public CommentsService(ICommentsRepository commentsRepository, IPostsRepository postsRepository, ICurrentUserService currentUserService)
+        public CommentsService(ICommentsRepository commentsRepository, IPostsRepository postsRepository,
+            IProfileRepository profileRepository ,ICurrentUserService currentUserService)
         {
             _commentsRepository = commentsRepository;
             _postsRepository = postsRepository;
+            _profileRepository = profileRepository;
             _currentUserId = currentUserService.UserId ?? throw new UnauthorizedException("Unauthorized access.");
         }
 
@@ -36,7 +39,7 @@ namespace Core.Services
         }
 
         // Adds a comment to database
-        public async Task AddCommentAsync(Guid postId, CommentAddRequest commentAddRequest)
+        public async Task<CommentResponse> AddCommentAsync(Guid postId, CommentAddRequest commentAddRequest)
         {
             Comment comment = commentAddRequest.ToComment(_currentUserId, postId);
 
@@ -50,10 +53,14 @@ namespace Core.Services
             {
                 throw new DbSavingFailedException("Failed to save added comment to database.");
             }
+
+            comment.User = await _profileRepository.GetProfileByIdAsync(_currentUserId);
+
+            return comment.ToCommentResponse(_currentUserId);
         }
 
         // Adds a comment reply to database
-        public async Task AddCommentReplyAsync(Guid commentId, CommentAddRequest commentAddRequest)
+        public async Task<CommentReplyDto> AddCommentReplyAsync(Guid commentId, CommentAddRequest commentAddRequest)
         {
             Comment parentComment = await _commentsRepository.GetCommentByIdAsync(commentId)
                 ?? throw new NotFoundException($"Comment not found, Comment ID: {commentId}");
@@ -66,6 +73,10 @@ namespace Core.Services
             {
                 throw new DbSavingFailedException("Failed to save added comment to database.");
             }
+
+            commentReply.User = await _profileRepository.GetProfileByIdAsync(_currentUserId);
+
+            return commentReply.ToCommentReply(_currentUserId);
         }
 
         // Updates comment in database with new information

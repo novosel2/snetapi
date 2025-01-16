@@ -41,7 +41,7 @@ namespace Core.IServices
         /// Adds post to database
         /// </summary>
         /// <param name="postAddRequest">Post we want to add</param>
-        public Task AddPostAsync(PostAddRequest postAddRequest);
+        public Task<PostResponse> AddPostAsync(PostAddRequest postAddRequest);
 
         /// <summary>
         /// Updates post with new information

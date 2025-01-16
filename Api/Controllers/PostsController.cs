@@ -68,9 +68,9 @@ namespace Api.Controllers
         [HttpPost("add-post")]
         public async Task<IActionResult> AddPost([FromForm]PostAddRequest postAddRequest)
         {
-            await _postsService.AddPostAsync(postAddRequest);
+            PostResponse postResponse = await _postsService.AddPostAsync(postAddRequest);
 
-            return Ok();
+            return Ok(postResponse);
         }
 
 

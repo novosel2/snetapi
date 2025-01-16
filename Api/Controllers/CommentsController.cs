@@ -34,9 +34,9 @@ namespace Api.Controllers
         [HttpPost("add/{postId}")]
         public async Task<IActionResult> AddComment(Guid postId, CommentAddRequest commentAddRequest)
         {
-            await _commentsService.AddCommentAsync(postId, commentAddRequest);
+            CommentResponse commentResponse = await _commentsService.AddCommentAsync(postId, commentAddRequest);
 
-            return Ok();
+            return Ok(commentResponse);
         }
 
 
@@ -45,9 +45,9 @@ namespace Api.Controllers
         [HttpPost("add-reply/{commentId}")]
         public async Task<IActionResult> AddCommentReply(Guid commentId, CommentAddRequest commentAddRequest)
         {
-            await _commentsService.AddCommentReplyAsync(commentId, commentAddRequest);
+            CommentReplyDto commentReply = await _commentsService.AddCommentReplyAsync(commentId, commentAddRequest);
 
-            return Ok();
+            return Ok(commentReply);
         }
 
 

@@ -82,7 +82,7 @@ namespace Core.Services
         }
 
         // Add post to database
-        public async Task AddPostAsync(PostAddRequest postAddRequest)
+        public async Task<PostResponse> AddPostAsync(PostAddRequest postAddRequest)
         {
             Post post = postAddRequest.ToPost(_currentUserId);
             
@@ -105,6 +105,10 @@ namespace Core.Services
             {
                 throw new DbSavingFailedException("Failed to save added post.");
             }
+
+            post.User = await _profileRepository.GetProfileByIdAsync(_currentUserId);
+
+            return post.ToPostResponse(_currentUserId);
         }
 
         // Update existing post with updated information

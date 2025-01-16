@@ -22,14 +22,14 @@ namespace Core.IServices
         /// </summary>
         /// <param name="commentAddRequest">Comment object you want to add</param>
         /// <param name="postId">Post id we want to add comment to</param>
-        public Task AddCommentAsync(Guid postId, CommentAddRequest commentAddRequest);
+        public Task<CommentResponse> AddCommentAsync(Guid postId, CommentAddRequest commentAddRequest);
 
         /// <summary>
         /// Adds a comment reply to database
         /// </summary>
         /// <param name="commentId">Parent comment id</param>
         /// <param name="commentAddRequest">Comment object you want to add</param>
-        public Task AddCommentReplyAsync(Guid commentId, CommentAddRequest commentAddRequest);
+        public Task<CommentReplyDto> AddCommentReplyAsync(Guid commentId, CommentAddRequest commentAddRequest);
 
         /// <summary>
         /// Deletes comment from database
