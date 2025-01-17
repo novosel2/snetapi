@@ -51,6 +51,9 @@ namespace Infrastructure.Data
             #region INDEXES
 
             modelBuilder.Entity<Profile>()
+                .HasIndex(p => p.Id);
+
+            modelBuilder.Entity<Profile>()
                 .HasIndex(p => new 
                 { 
                     p.Username, 

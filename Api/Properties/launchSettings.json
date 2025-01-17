@@ -18,7 +18,7 @@
         "JWT_SIGNING_KEY": "3ynr1H0uDGzFdWw6kYPW9UiEH4xSXm4QpF72mZvfDDYEzROUCPFNGL2jZveEvbfPt8DToWGXEQho3xn88qGR3A=="
       },
       "dotnetRunMessages": true,
-      "applicationUrl": "https://localhost:7089"
+      "applicationUrl": "https://localhost:8000"
     },
     "IIS Express": {
       "commandName": "IISExpress",

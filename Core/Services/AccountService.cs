@@ -5,6 +5,7 @@ using Core.Exceptions;
 using Core.IServices;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using StackExchange.Profiling;
 
 namespace Core.Services
 {
@@ -59,7 +60,7 @@ namespace Core.Services
         public async Task<UserResponse> LoginUserAsync(LoginUserDto loginUserDto)
         {
             AppUser? appUser = await _userManager.Users
-                .FirstOrDefaultAsync(u => u.Email == loginUserDto.Name || u.UserName == loginUserDto.Name);
+                        .FirstOrDefaultAsync(u => u.Email == loginUserDto.Name || u.UserName == loginUserDto.Name);
 
             // Check if user exists
             if (appUser == null)
@@ -68,13 +69,13 @@ namespace Core.Services
             }
 
             // Check if login information is correct
-            var loginResult = await _signInManager.CheckPasswordSignInAsync(appUser, loginUserDto.Password, false);
-            if (!loginResult.Succeeded)
+            if (! await _userManager.CheckPasswordAsync(appUser, loginUserDto.Password))
             {
                 throw new UnauthorizedException("Email/Username or Password is invalid");
             }
 
-            Profile profile = (await _profileService.GetProfileByIdAsync(appUser.Id)).ToProfile();
+            Profile profile = (await _profileService.GetProfileByIdAsync_NoInclude(appUser.Id)).ToProfile();
+
             string token = _tokenService.CreateToken(appUser);
 
             UserResponse userResponse = UserResponse.CreateUserResponse(profile, token);

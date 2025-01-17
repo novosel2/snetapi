@@ -6,10 +6,14 @@ using Core.IServices;
 using Core.Services;
 using Infrastructure.Data;
 using Infrastructure.Repositories;
+using Microsoft.ApplicationInsights.AspNetCore.Extensions;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using StackExchange.Profiling;
+using StackExchange.Profiling.Data;
 using System.Text;
 
 namespace Api.StartupExtension
@@ -18,6 +22,14 @@ namespace Api.StartupExtension
     {
         public static IServiceCollection ConfigureServices(this IServiceCollection services, IConfiguration config)
         {
+            // TELEMETRY AND PERFORMANCE CHECKS
+            services.AddApplicationInsightsTelemetry();
+            services.Configure<ApplicationInsightsServiceOptions>(options =>
+            {
+                options.EnableDependencyTrackingTelemetryModule = true;
+                options.EnableRequestTrackingTelemetryModule = true;
+            });
+
             services.AddCors(options =>
             {
                 options.AddPolicy("newPolicy", builder =>
@@ -79,10 +91,10 @@ namespace Api.StartupExtension
                 .Replace("${DATABASE_USER}", databaseUser)
                 .Replace("${DATABASE_PASSWORD}", databasePassword);
 
-            services.AddDbContext<AuthDbContext>(options 
-                => options.UseSqlServer(authConnection));
-            services.AddDbContext<AppDbContext>(options
-                => options.UseSqlServer(appConnection));
+            services.AddDbContext<AuthDbContext>(options =>
+                options.UseSqlServer(authConnection));
+            services.AddDbContext<AppDbContext>(options =>
+                options.UseSqlServer(appConnection));
 
             services.AddIdentity<AppUser, AppRole>(options =>
             {

@@ -131,6 +131,15 @@ namespace Core.Services
             return profile.ToProfileResponse();
         }
 
+        // Get profile by id WITHOUT INCLUDING
+        public async Task<ProfileResponse> GetProfileByIdAsync_NoInclude(Guid userId)
+        {
+            Profile profile = await _profileRepository.GetProfileByIdAsync_NoInclude(userId)
+                ?? throw new NotFoundException($"Profile not found, ID: {userId}");
+
+            return profile.ToProfileResponse();
+        }
+
         // Get friendship status between current user and requested user
         public async Task<ProfileFriendshipStatusDto> GetProfileFriendshipStatusAsync(Guid userId)
         {

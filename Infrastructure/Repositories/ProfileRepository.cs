@@ -84,6 +84,14 @@ namespace Infrastructure.Repositories
                 .Include(p => p.FriendsAsReceiver)
                 .Include(p => p.Followers)
                 .Include(p => p.Following)
+                .AsSingleQuery()
+                .FirstOrDefaultAsync(up => up.Id == id);
+        }
+
+        // Return profile from database based on ID WITHOUT INCLUDING
+        public async Task<Profile?> GetProfileByIdAsync_NoInclude(Guid id)
+        {
+            return await _db.Profiles
                 .FirstOrDefaultAsync(up => up.Id == id);
         }
 

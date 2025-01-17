@@ -1,11 +1,7 @@
 ﻿using Core.Data.Dto.AccountDto;
-using Core.Data.Dto.ProfileDto;
-using Core.Exceptions;
 using Core.IServices;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
 
 namespace Api.Controllers
 {
@@ -38,7 +34,6 @@ namespace Api.Controllers
         public async Task<IActionResult> LoginUser(LoginUserDto loginUserDto)
         {
             UserResponse userResponse = await _accountService.LoginUserAsync(loginUserDto);
-
             return Ok(userResponse);
         }
 

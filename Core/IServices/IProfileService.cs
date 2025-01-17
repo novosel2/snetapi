@@ -49,6 +49,13 @@ namespace Core.IServices
         public Task<ProfileResponse> GetProfileByIdAsync(Guid profileId);
 
         /// <summary>
+        /// Get profile by profile id
+        /// </summary>
+        /// <param name="profileId">Profile id</param>
+        /// <returns>User profile with specified profile id WITHOUT IRRELEVANT INFORMATION</returns>
+        public Task<ProfileResponse> GetProfileByIdAsync_NoInclude(Guid profileId);
+
+        /// <summary>
         /// Get friendship status between current user and requested user
         /// </summary>
         /// <param name="profileId">User id we want to check status</param>

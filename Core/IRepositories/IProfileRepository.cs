@@ -33,6 +33,13 @@ namespace Core.IRepositories
         public Task<Profile?> GetProfileByIdAsync(Guid id);
 
         /// <summary>
+        /// Gets user profile by id
+        /// </summary>
+        /// <param name="id">Id we want to find</param>
+        /// <returns>User Profile without irrelevant information</returns>
+        public Task<Profile?> GetProfileByIdAsync_NoInclude(Guid id);
+
+        /// <summary>
         /// Adds a user profile to database
         /// </summary>
         /// <param name="profile">Profile we want to add</param>

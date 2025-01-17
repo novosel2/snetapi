@@ -20,6 +20,12 @@ namespace Infrastructure.Data
         {
             base.OnModelCreating(builder);
 
+            builder.Entity<AppUser>()
+                .HasIndex(u => u.UserName);
+
+            builder.Entity<AppUser>()
+                .HasIndex(u => u.Email);
+
             List<AppRole> roles = new List<AppRole>();
             List<string>? roleNames = _config.GetSection("IdentityRoles").Get<List<string>>();
 
