@@ -12,7 +12,6 @@ namespace Core.Services
     public class AccountService : IAccountService
     {
         private readonly UserManager<AppUser> _userManager;
-        private readonly SignInManager<AppUser> _signInManager;
         private readonly IProfileService _profileService;
         private readonly IFriendRequestsService _friendRequestsService;
         private readonly IFriendshipsService _friendshipsService;
@@ -20,12 +19,11 @@ namespace Core.Services
         private readonly ITokenService _tokenService;
         private readonly Guid _currentUserId;
 
-        public AccountService(UserManager<AppUser> userManager, SignInManager<AppUser> signInManager, 
-            ITokenService tokenService, IProfileService profileService, ICurrentUserService currentUserService,
-            IFriendRequestsService friendRequestsService, IFriendshipsService friendshipsService, IFollowsService followsService)
+        public AccountService(UserManager<AppUser> userManager, ITokenService tokenService, IProfileService profileService, 
+            ICurrentUserService currentUserService, IFriendRequestsService friendRequestsService, 
+            IFriendshipsService friendshipsService, IFollowsService followsService)
         {
             _userManager = userManager;
-            _signInManager = signInManager;
             _profileService = profileService;
             _tokenService = tokenService;
             _currentUserId = currentUserService.UserId.GetValueOrDefault();

@@ -118,6 +118,7 @@ namespace Core.Services
                 ?? throw new NotFoundException($"Post not found, ID: {existingPostId}");
 
             Post updatedPost = postUpdateRequest.ToPost(existingPostId, _currentUserId);
+            updatedPost.CommentCount = existingPost.CommentCount;
 
             foreach (var existingFile in existingPost.FileUrls)
             {

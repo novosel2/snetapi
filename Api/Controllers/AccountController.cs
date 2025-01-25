@@ -23,7 +23,6 @@ namespace Api.Controllers
         public async Task<IActionResult> RegisterUser(RegisterUserDto registerUserDto)
         {
             UserResponse userResponse = await _accountService.RegisterUserAsync(registerUserDto);
-
             return Ok(userResponse);
         }
 
@@ -45,7 +44,6 @@ namespace Api.Controllers
         public async Task<IActionResult> DeleteUser()
         {
             await _accountService.DeleteUserAsync();
-
             return Ok();
         }
     }
