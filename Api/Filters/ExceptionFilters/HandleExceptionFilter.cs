@@ -64,6 +64,11 @@ namespace Api.Filters.ExceptionFilters
                 _logger.LogError(exception.Message);
                 problemDetails = CreateProblemDetails(400, "Unsupported file type", exception.Message);
             }
+            else if (exception is BadRequestException)
+            {
+                _logger.LogError(exception.Message);
+                problemDetails = CreateProblemDetails(400, "Bad Request", exception.Message);
+            }
             else
             {
                 return;

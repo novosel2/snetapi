@@ -84,6 +84,11 @@ namespace Core.Services
         // Add post to database
         public async Task<PostResponse> AddPostAsync(PostAddRequest postAddRequest)
         {
+            if (string.IsNullOrEmpty(postAddRequest.Content) && postAddRequest.Files.Count == 0)
+            {
+                throw new BadRequestException("Content or picture is required.");
+            }
+
             Post post = postAddRequest.ToPost(_currentUserId);
             
             List<FileUrl> fileUrls = [];

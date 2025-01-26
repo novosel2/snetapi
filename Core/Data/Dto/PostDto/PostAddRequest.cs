@@ -11,8 +11,7 @@ namespace Core.Data.Dto.PostDto
 {
     public class PostAddRequest
     {
-        [Required]
-        public string Content { get; set; } = string.Empty;
+        public string? Content { get; set; } = string.Empty;
 
         public List<IFormFile> Files { get; set; } = [];
 

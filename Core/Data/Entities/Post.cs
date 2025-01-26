@@ -10,8 +10,7 @@ namespace Core.Data.Entities
         [Key]
         public Guid Id { get; set; }
 
-        [Required]
-        public string Content { get; set; } = string.Empty;
+        public string? Content { get; set; } = string.Empty;
 
         [Required]
         public DateTime CreatedOn { get; set; } = DateTime.UtcNow;
@@ -37,7 +36,7 @@ namespace Core.Data.Entities
             var postResponse = new PostResponse()
             {
                 PostId = Id,
-                Content = Content,
+                Content = Content ?? string.Empty,
                 CreatedOn = CreatedOn,
                 Likes = Reactions.Count(r => r.Reaction == ReactionType.Like),
                 Dislikes = Reactions.Count(r => r.Reaction == ReactionType.Dislike),
