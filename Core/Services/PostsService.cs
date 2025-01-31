@@ -90,19 +90,28 @@ namespace Core.Services
             }
 
             Post post = postAddRequest.ToPost(_currentUserId);
-            
-            List<FileUrl> fileUrls = [];
-            foreach (var file in postAddRequest.Files)
-            {
-                string url = await _blobStorageService.UploadPostFile(file);
-                fileUrls.Add(new FileUrl
-                {
-                    PostId = post.Id,
-                    Url = url
-                });
-            }
 
-            post.FileUrls = fileUrls;
+            var uploadTasks = postAddRequest.Files.Select(async file =>
+            {
+                try
+                {
+                    string url = await _blobStorageService.UploadPostFile(file);
+                    return new FileUrl
+                    {
+                        PostId = post.Id,
+                        Url = url
+                    };
+                }
+                catch (Exception ex)
+                {
+                    // Log the error and decide whether to rethrow or handle it gracefully
+                    Console.WriteLine($"Failed to upload file: {ex.Message}");
+                    return null;
+                }
+            });
+
+            // Filter out null FileUrls caused by failed uploads
+            post.FileUrls = (await Task.WhenAll(uploadTasks)).Where(fileUrl => fileUrl != null).ToList()!;
 
             await _postRepository.AddPostAsync(post);
 
@@ -121,32 +130,30 @@ namespace Core.Services
         {
             Post existingPost = await _postRepository.GetPostByIdAsync(existingPostId)
                 ?? throw new NotFoundException($"Post not found, ID: {existingPostId}");
-
-            Post updatedPost = postUpdateRequest.ToPost(existingPostId, _currentUserId);
-            updatedPost.CommentCount = existingPost.CommentCount;
-
-            foreach (var existingFile in existingPost.FileUrls)
-            {
-                await _blobStorageService.DeletePostFile(existingFile.Url);
-            }
-
-            List<FileUrl> fileUrls = [];
-            foreach (var file in postUpdateRequest.Files)
-            {
-                string url = await _blobStorageService.UploadPostFile(file);
-                fileUrls.Add(new FileUrl()
-                {
-                    PostId = existingPostId,
-                    Url = url
-                });
-            }
-
-            existingPost.FileUrls = fileUrls;
-
+            
             if (existingPost.UserId != _currentUserId)
             {
                 throw new ForbiddenException("You do not have permission to update this post.");
             }
+
+            Post updatedPost = postUpdateRequest.ToPost(existingPostId, _currentUserId);
+            updatedPost.CommentCount = existingPost.CommentCount;
+
+            var deleteTasks = existingPost.FileUrls.Select(fileUrl => _blobStorageService.DeletePostFile(fileUrl.Url));
+
+            await Task.WhenAll(deleteTasks);
+
+            var uploadTasks = postUpdateRequest.Files.Select(async file =>
+            {
+                string url = await _blobStorageService.UploadPostFile(file);
+                return new FileUrl
+                {
+                    PostId = existingPostId,
+                    Url = url
+                };
+            });
+
+            updatedPost.FileUrls = (await Task.WhenAll(uploadTasks)).ToList();
 
             _postRepository.UpdatePost(existingPost, updatedPost);
 
