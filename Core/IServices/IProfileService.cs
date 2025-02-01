@@ -20,6 +20,13 @@ namespace Core.IServices
         public Task<List<ProfileInformationDto>> GetProfilesAsync();
 
         /// <summary>
+        /// Get profiles based on list of user ids
+        /// </summary>
+        /// <param name="userIds">Profiles user ids you want to get</param>
+        /// <returns>List of profile information dtos</returns>
+        public Task<List<ProfileInformationDto>> GetProfilesBatchAsync(List<Guid> userIds);
+
+        /// <summary>
         /// Search for profiles based on search term
         /// </summary>
         /// <param name="searchTerm">Search term</param>
@@ -39,7 +46,7 @@ namespace Core.IServices
         /// </summary>
         /// <param name="limit">Number of suggestions you want to get</param>
         /// <returns>List of suggested profiles</returns>
-        public Task<List<SuggestedProfileDto>> GetFollowSuggestionsAsync(int limit);
+        public Task<List<Guid>> GetFollowSuggestionsAsync(int limit);
 
         /// <summary>
         /// Get profile by profile id

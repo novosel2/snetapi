@@ -24,9 +24,27 @@ namespace Infrastructure.Repositories
         {
             return await _db.Friendships
                 .Where(fs => fs.SenderId == userId || fs.ReceiverId == userId)
-                .Include(fs => fs.SenderUser).ThenInclude(su => su!.Following).ThenInclude(f => f.Followed)
-                .Include(fs => fs.ReceiverUser).ThenInclude(ru => ru!.Following).ThenInclude(f => f.Followed)
+                .Include(fs => fs.SenderUser)
+                .Include(fs => fs.ReceiverUser)
                 .ToListAsync();
+        }
+
+        // Gets your friends followings
+        public async Task<List<Guid>> GetFriendsFollowingsAsync(Guid userId)
+        {
+            var receiverFollowings = await _db.Friendships
+                .Where(fs => fs.SenderId == userId)
+                .Include(fs => fs.ReceiverUser).ThenInclude(fs => fs!.Following)
+                .SelectMany(fs => fs.ReceiverUser!.Following.Select(f => f.FollowedId))
+                .ToListAsync();
+
+            var senderFollowings = await _db.Friendships
+                .Where(fs => fs.ReceiverId == userId)
+                .Include(fs => fs.SenderUser).ThenInclude(fs => fs!.Following)
+                .SelectMany(fs => fs.SenderUser!.Following.Select(f => f.FollowedId))
+                .ToListAsync();
+
+            return [.. receiverFollowings, .. senderFollowings];
         }
 
         // Get friendship by id

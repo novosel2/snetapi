@@ -1,8 +1,9 @@
+using Api.Middleware;
 using Api.StartupExtension;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.ConfigureServices(builder.Configuration);
+builder.Services.ConfigureServices(builder.Configuration);  
 
 var app = builder.Build();
 
@@ -20,10 +21,13 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseCors("newPolicy");
 
+app.UseProfileCacheControl();
+
 app.UseRouting();
-app.MapControllers();
 
 app.UseAuthentication();
 app.UseAuthorization();
+
+app.MapControllers();
 
 app.Run();

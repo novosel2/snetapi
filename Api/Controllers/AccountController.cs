@@ -20,7 +20,7 @@ namespace Api.Controllers
         // POST: /api/account/register
 
         [HttpPost("register")]
-        public async Task<IActionResult> RegisterUser(RegisterUserDto registerUserDto)
+        public async Task<OkObjectResult> RegisterUser(RegisterUserDto registerUserDto)
         {
             UserResponse userResponse = await _accountService.RegisterUserAsync(registerUserDto);
             return Ok(userResponse);
@@ -30,7 +30,7 @@ namespace Api.Controllers
         // POST: /api/account/login
 
         [HttpPost("login")]
-        public async Task<IActionResult> LoginUser(LoginUserDto loginUserDto)
+        public async Task<OkObjectResult> LoginUser(LoginUserDto loginUserDto)
         {
             UserResponse userResponse = await _accountService.LoginUserAsync(loginUserDto);
             return Ok(userResponse);
@@ -41,7 +41,7 @@ namespace Api.Controllers
 
         [Authorize]
         [HttpDelete("delete-user")]
-        public async Task<IActionResult> DeleteUser()
+        public async Task<OkResult> DeleteUser()
         {
             await _accountService.DeleteUserAsync();
             return Ok();

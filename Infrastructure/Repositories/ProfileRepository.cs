@@ -27,6 +27,12 @@ namespace Infrastructure.Repositories
                 .ToListAsync();
         }
 
+        // Return profiles based on user ids
+        public async Task<List<Profile>> GetProfilesBatchAsync(List<Guid> userIds)
+        {
+            return await _db.Profiles.Where(p => userIds.Contains(p.Id)).ToListAsync();
+        }
+
         // Search for profiles based on search term
         public async Task<List<Profile>> SearchProfilesAsync(string searchTerm, Guid currentUserId, int limit = 6)
         {
@@ -39,9 +45,9 @@ namespace Infrastructure.Repositories
             foreach (var term in terms)
             {
                 query = query.Where(u =>
-                    EF.Functions.Like(u.FirstName, $"%{term}%") ||
-                    EF.Functions.Like(u.LastName, $"%{term}%") ||
-                    EF.Functions.Like(u.Username, $"%{term}%"));
+                    EF.Functions.ILike(u.FirstName ?? "", $"%{term}%") ||
+                    EF.Functions.ILike(u.LastName ?? "", $"%{term}%") ||
+                    EF.Functions.ILike(u.Username ?? "", $"%{term}%"));
             }
 
             return await query

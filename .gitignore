@@ -3,6 +3,7 @@
 /Api/appsettings.json
 .github
 /Api/Properties/PublishProfiles
+/Api/Properties/launchSettings.json
 
 # Created by https://www.toptal.com/developers/gitignore/api/aspnetcore
 # Edit at https://www.toptal.com/developers/gitignore?templates=aspnetcore
@@ -280,4 +281,3 @@ __pycache__/
 
 # End of https://www.toptal.com/developers/gitignore/api/aspnetcore
 
-/Api/Properties/launchSettings.json

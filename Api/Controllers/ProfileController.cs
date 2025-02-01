@@ -22,7 +22,7 @@ namespace Api.Controllers
         // GET: /api/profiles
 
         [HttpGet]
-        public async Task<IActionResult> GetProfiles()
+        public async Task<OkObjectResult> GetProfiles()
         {
             List<ProfileInformationDto> profileResponses = await _profileService.GetProfilesAsync();
 
@@ -33,7 +33,7 @@ namespace Api.Controllers
         // GET: /api/profiles/search?searchTerm=John+Doe&limit=6
 
         [HttpGet("search")]
-        public async Task<IActionResult> SearchProfilesAsync(string searchTerm, int limit = 6)
+        public async Task<OkObjectResult> SearchProfilesAsync(string searchTerm, int limit = 6)
         {
             List<ProfileInformationDto> profileResponses = await _profileService.SearchProfilesAsync(searchTerm, limit);
 
@@ -43,7 +43,7 @@ namespace Api.Controllers
 
         // GET: /api/profiles/popular
         [HttpGet("popular")]
-        public async Task<IActionResult> GetMostPopular(int limit = 10)
+        public async Task<OkObjectResult> GetMostPopular(int limit = 10)
         {
             List<ProfileInformationDto> profileResponses = await _profileService.GetPopularAsync(limit);
 
@@ -53,18 +53,19 @@ namespace Api.Controllers
 
         // GET: /api/profiles/follow-suggestions
         [HttpGet("follow-suggestions")]
-        public async Task<IActionResult> GetFollowSuggestions(int limit = 4)
+        public async Task<OkObjectResult> GetFollowSuggestions(int limit = 4)
         {
-            List<SuggestedProfileDto> suggestedUsers = await _profileService.GetFollowSuggestionsAsync(limit);
+            List<Guid> suggestedUserIds = await _profileService.GetFollowSuggestionsAsync(limit);
+            List<ProfileInformationDto> profiles = await _profileService.GetProfilesBatchAsync(suggestedUserIds);
 
-            return Ok(suggestedUsers);
+            return Ok(profiles);
         }
 
 
         // GET: /api/profiles/31faddd4-c910-45c2-a68b-bf67b5abaa77
 
         [HttpGet("{userId}")]
-        public async Task<IActionResult> GetProfileById(Guid userId)
+        public async Task<OkObjectResult> GetProfileById(Guid userId)
         {
             ProfileResponse profileResponse = await _profileService.GetProfileByIdAsync(userId);
 
@@ -75,7 +76,7 @@ namespace Api.Controllers
         // GET: /api/profiles/friendship-status/31faddd4-c910-45c2-a68b-bf67b5abaa77
 
         [HttpGet("friendship-status/{userId}")]
-        public async Task<IActionResult> GetFriendshipStatus(Guid userId)
+        public async Task<OkObjectResult> GetFriendshipStatus(Guid userId)
         {
             ProfileFriendshipStatusDto friendshipStatus = await _profileService.GetProfileFriendshipStatusAsync(userId);
 
@@ -86,7 +87,7 @@ namespace Api.Controllers
         // PUT: /api/profiles/update-profile
 
         [HttpPut("update-profile")]
-        public async Task<IActionResult> UpdateProfile(UpdateProfileDto updateProfileDto)
+        public async Task<OkObjectResult> UpdateProfile(UpdateProfileDto updateProfileDto)
         {
             ProfileInformationDto profileResponse = await _profileService.UpdateProfileAsync(updateProfileDto);
 
@@ -97,7 +98,7 @@ namespace Api.Controllers
         // PUT: /api/profiles/update-profile-picture
 
         [HttpPut("update-profile-picture")]
-        public async Task<IActionResult> UpdateProfilePicture(IFormFile image)
+        public async Task<OkObjectResult> UpdateProfilePicture(IFormFile image)
         {
             ProfileInformationDto profileResponse = await _profileService.UpdateProfilePictureAsync(image);
 
@@ -108,7 +109,7 @@ namespace Api.Controllers
         // DELETE: /api/profiles/delete-profile-picture
 
         [HttpDelete("delete-profile-picture")]
-        public async Task<IActionResult> DeleteProfilePicture()
+        public async Task<OkObjectResult> DeleteProfilePicture()
         {
             ProfileInformationDto profileResponse = await _profileService.DeleteProfilePictureAsync();
 

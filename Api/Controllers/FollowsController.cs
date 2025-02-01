@@ -20,7 +20,7 @@ namespace Api.Controllers
         // POST: api/follows/add-follow/31faddd4-c910-45c2-a68b-bf67b5abaa77
 
         [HttpPost("add-follow/{userId}")]
-        public async Task<IActionResult> AddFollow(Guid userId)
+        public async Task<OkResult> AddFollow(Guid userId)
         {
             await _followsService.AddFollowAsync(userId);
 
@@ -31,7 +31,7 @@ namespace Api.Controllers
         // DELETE: api/follows/delete-follow/31faddd4-c910-45c2-a68b-bf67b5abaa77
 
         [HttpDelete("unfollow/{userId}")]
-        public async Task<IActionResult> DeleteFollow(Guid userId)
+        public async Task<OkResult> DeleteFollow(Guid userId)
         {
             await _followsService.DeleteFollowAsync(userId);
 

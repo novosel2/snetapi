@@ -22,7 +22,7 @@ namespace Api.Controllers
         // GET: /api/posts/popular-feed/popular?page=0
 
         [HttpGet("popular-feed")]
-        public async Task<IActionResult> GetPopularFeed(int page)
+        public async Task<OkObjectResult> GetPopularFeed(int page)
         {
             List<PostResponse> postResponses = await _postsService.GetPopularFeedAsync(page);
 
@@ -33,7 +33,7 @@ namespace Api.Controllers
         // GET: /api/posts/your-feed?page=0
 
         [HttpGet("your-feed")]
-        public async Task<IActionResult> GetYourFeed(int page)
+        public async Task<OkObjectResult> GetYourFeed(int page)
         {
             List<PostResponse> postResponses = await _postsService.GetYourFeedAsync(page);
 
@@ -44,7 +44,7 @@ namespace Api.Controllers
         // GET: /api/posts/31faddd4-c910-45c2-a68b-bf67b5abaa77
 
         [HttpGet("{postId}")]
-        public async Task<IActionResult> GetPostById(Guid postId)
+        public async Task<OkObjectResult> GetPostById(Guid postId)
         {
             PostResponse postResponse = await _postsService.GetPostByIdAsync(postId);
 
@@ -55,7 +55,7 @@ namespace Api.Controllers
         // GET: /api/posts/user/31faddd4-c910-45c2-a68b-bf67b5abaa77?page=0
 
         [HttpGet("user/{userId}")]
-        public async Task<IActionResult> GetPostsByUserId(Guid userId, int page)
+        public async Task<OkObjectResult> GetPostsByUserId(Guid userId, int page)
         {
             List<PostResponse> postResponses = await _postsService.GetPostsByUserIdAsync(userId, page);
 
@@ -66,7 +66,7 @@ namespace Api.Controllers
         // POST: /api/posts/add-post
 
         [HttpPost("add-post")]
-        public async Task<IActionResult> AddPost([FromForm]PostAddRequest postAddRequest)
+        public async Task<OkObjectResult> AddPost([FromForm]PostAddRequest postAddRequest)
         {
             PostResponse postResponse = await _postsService.AddPostAsync(postAddRequest);
 
@@ -77,7 +77,7 @@ namespace Api.Controllers
         // PUT: /api/posts/update-post/31faddd4-c910-45c2-a68b-bf67b5abaa77
 
         [HttpPut("update-post/{postId}")]
-        public async Task<IActionResult> UpdatePost(Guid postId, [FromForm]PostUpdateRequest postUpdateRequest)
+        public async Task<OkResult> UpdatePost(Guid postId, [FromForm]PostUpdateRequest postUpdateRequest)
         {
             await _postsService.UpdatePostAsync(postId, postUpdateRequest);
 
@@ -88,7 +88,7 @@ namespace Api.Controllers
         // DELETE: /api/posts/delete-post/31faddd4-c910-45c2-a68b-bf67b5abaa77
 
         [HttpDelete("delete-post/{postId}")]
-        public async Task<IActionResult> DeletePost(Guid postId)
+        public async Task<OkResult> DeletePost(Guid postId)
         {
             await _postsService.DeletePostAsync(postId);
 

@@ -24,7 +24,7 @@ namespace Api.Controllers
         // POST: /api/reactions/posts/add/31faddd4-c910-45c2-a68b-bf67b5abaa77
 
         [HttpPost("posts/add/{postId}")]
-        public async Task<IActionResult> AddPostReaction(Guid postId, ReactionType reaction)
+        public async Task<OkResult> AddPostReaction(Guid postId, ReactionType reaction)
         {
             await _postReactionsService.AddPostReactionAsync(postId, reaction);
 
@@ -35,7 +35,7 @@ namespace Api.Controllers
         // PUT: /api/reactions/posts/update/31faddd4-c910-45c2-a68b-bf67b5abaa77
 
         [HttpPut("posts/update/{postId}")]
-        public async Task<IActionResult> UpdatePostReaction(Guid postId)
+        public async Task<OkResult> UpdatePostReaction(Guid postId)
         {
             await _postReactionsService.UpdatePostReaction(postId);
 
@@ -46,7 +46,7 @@ namespace Api.Controllers
         // DELETE /api/reactions/posts/remove/31faddd4-c910-45c2-a68b-bf67b5abaa77
 
         [HttpDelete("posts/delete/{postId}")]
-        public async Task<IActionResult> DeletePostReaction(Guid postId)
+        public async Task<OkResult> DeletePostReaction(Guid postId)
         {
             await _postReactionsService.DeletePostReaction(postId);
 
@@ -57,7 +57,7 @@ namespace Api.Controllers
         // POST: /api/reactions/comment/add/31faddd4-c910-45c2-a68b-bf67b5abaa77
 
         [HttpPost("comments/add/{commentId}")]
-        public async Task<IActionResult> AddCommentReaction(Guid commentId, ReactionType reaction)
+        public async Task<OkResult> AddCommentReaction(Guid commentId, ReactionType reaction)
         {
             await _commentReactionsService.AddCommentReactionAsync(commentId, reaction);
 
@@ -68,7 +68,7 @@ namespace Api.Controllers
         // PUT: /api/reactions/comment/update/31faddd4-c910-45c2-a68b-bf67b5abaa77
 
         [HttpPut("comments/update/{commentId}")]
-        public async Task<IActionResult> UpdateCommentReaction(Guid commentId)
+        public async Task<OkResult> UpdateCommentReaction(Guid commentId)
         {
             await _commentReactionsService.UpdateCommentReaction(commentId);
 
@@ -79,7 +79,7 @@ namespace Api.Controllers
         // DELETE /api/reactions/comment/remove/31faddd4-c910-45c2-a68b-bf67b5abaa77
 
         [HttpDelete("comments/delete/{commentId}")]
-        public async Task<IActionResult> DeleteCommentReaction(Guid commentId)
+        public async Task<OkResult> DeleteCommentReaction(Guid commentId)
         {
             await _commentReactionsService.DeleteCommentReaction(commentId);
 

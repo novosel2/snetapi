@@ -10,7 +10,14 @@ namespace Core.IRepositories
         /// </summary>
         /// <returns>List of profiles</returns>
         public Task<List<Profile>> GetProfilesAsync();
-        
+
+        /// <summary>
+        /// Get profiles based on user ids
+        /// </summary>
+        /// <param name="userIds">Profile user ids you want to get</param>
+        /// <returns>List of profiles</returns>
+        public Task<List<Profile>> GetProfilesBatchAsync(List<Guid> userIds);
+
         /// <summary>
         /// Search for profiles based on search term
         /// </summary>

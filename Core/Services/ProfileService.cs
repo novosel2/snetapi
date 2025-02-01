@@ -41,6 +41,16 @@ namespace Core.Services
             return profileResponses;
         }
 
+        // Get profiles based on user ids
+        public async Task<List<ProfileInformationDto>> GetProfilesBatchAsync(List<Guid> userIds)
+        {
+            List<Profile> profiles = await _profileRepository.GetProfilesBatchAsync(userIds);
+
+            var profileResponses  = profiles.Select(p => p.ToProfileInformation()).ToList();
+
+            return profileResponses;
+        }
+
         // Search for profiles based on search term
         public async Task<List<ProfileInformationDto>> SearchProfilesAsync(string searchTerm, int limit = 6)
         {
@@ -62,64 +72,24 @@ namespace Core.Services
         }
 
         // Gets a requested number of follow suggestions, based on current users friends followings
-        public async Task<List<SuggestedProfileDto>> GetFollowSuggestionsAsync(int limit)
+        public async Task<List<Guid>> GetFollowSuggestionsAsync(int limit)
         {
             Profile currentUser = await _profileRepository.GetProfileByIdAsync(_currentUserId)
                 ?? throw new UnauthorizedException("Unauthorized access.");
 
-            List<Friendship> currentUserFriendships = await _friendshipsRepository.GetFriendshipsByUserIdAsync(_currentUserId);
-            List<Profile> friends = new();
+            List<Guid> friendsFollowing = await _friendshipsRepository.GetFriendsFollowingsAsync(_currentUserId);
 
-            foreach (var friendship in currentUserFriendships)
-            {
-                if (friendship.SenderId == _currentUserId && friendship.ReceiverUser != null)
-                {
-                    friends.Add(friendship.ReceiverUser);
-                }
-                else if (friendship.ReceiverId == _currentUserId && friendship.SenderUser != null)
-                {
-                    friends.Add(friendship.SenderUser);
-                }
-            }
+            var currentUserFollowingIds = currentUser.Following.Select(f => f.FollowedId).ToHashSet();
 
-            Dictionary<Guid, SuggestedProfileDto> suggestedUsers = new();
+            HashSet<Guid> suggestedUserIds = friendsFollowing
+                .Where(followedId => !currentUserFollowingIds.Contains(followedId) && followedId != _currentUserId)
+                .ToHashSet();
 
-            foreach (var friend in friends)
-            {
-                if (friend!.Following == null)
-                    continue;
-
-                foreach (var follow in friend.Following)
-                {
-                    if (follow.Followed == null || follow.Followed.Id == _currentUserId)
-                        continue;
-
-                    if (currentUser.Following.Select(f => f.FollowedId).Any(f => f == follow.FollowedId))
-                        continue;
-
-                    var followedProfile = follow.Followed.ToProfileInformation();
-
-                    if (suggestedUsers.TryGetValue(followedProfile.UserId, out var existingSuggesdtion))
-                    {
-                        existingSuggesdtion.Mutual++;
-                    }
-                    else
-                    {
-                        suggestedUsers[followedProfile.UserId] = new SuggestedProfileDto
-                        {
-                            User = followedProfile,
-                            Mutual = 1
-                        };
-                    }
-                }
-            }
-
-            List<SuggestedProfileDto> suggestedProfiles = suggestedUsers.Values
-                .OrderByDescending(s => s.Mutual)
+            var random = new Random();
+            return suggestedUserIds
+                .OrderBy(x => random.Next())
                 .Take(limit)
                 .ToList();
-
-            return suggestedProfiles;
         }
 
         // Get profile by id

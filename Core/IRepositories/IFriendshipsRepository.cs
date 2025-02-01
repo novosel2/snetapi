@@ -17,6 +17,13 @@ namespace Core.IRepositories
         public Task<List<Friendship>> GetFriendshipsByUserIdAsync(Guid userId);
 
         /// <summary>
+        /// Get your friends followings
+        /// </summary>
+        /// <param name="userId">Current user</param>
+        /// <returns>List of ids your friends follow</returns>
+        public Task<List<Guid>> GetFriendsFollowingsAsync(Guid userId);
+
+        /// <summary>
         /// Gets friendship by id
         /// </summary>
         /// <param name="friendshipId">Friendship id</param>
