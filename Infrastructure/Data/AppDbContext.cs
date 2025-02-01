@@ -54,6 +54,15 @@ namespace Infrastructure.Data
                 .HasIndex(p => p.Id);
 
             modelBuilder.Entity<Profile>()
+                .HasIndex(p => p.Username);
+
+            modelBuilder.Entity<Profile>()
+                .HasIndex(p => p.FirstName);
+
+            modelBuilder.Entity<Profile>()
+                .HasIndex(p => p.LastName);
+
+            modelBuilder.Entity<Profile>()
                 .HasIndex(p => new 
                 { 
                     p.Username, 
@@ -86,6 +95,18 @@ namespace Infrastructure.Data
                 .IsUnique();
 
             modelBuilder.Entity<Post>()
+                .HasIndex(p => p.Id);
+
+            modelBuilder.Entity<Post>()
+                .HasIndex(p => p.UserId);
+
+            modelBuilder.Entity<Post>()
+                .HasIndex(p => p.CreatedOn);
+
+            modelBuilder.Entity<Post>()
+                .HasIndex(p => p.PopularityScore);
+
+            modelBuilder.Entity<Post>()
                 .HasIndex(p => new
                 {
                     p.CreatedOn,
@@ -99,6 +120,17 @@ namespace Infrastructure.Data
                     pr.PostId,
                     pr.CreatedOn
                 });
+
+            modelBuilder.Entity<PostReaction>()
+                .HasIndex(pr => new
+                {
+                    pr.PostId,
+                    pr.UserId
+                });
+
+            modelBuilder.Entity<FileUrl>()
+                .HasIndex(f => f.PostId);
+
 
             modelBuilder.Entity<Comment>()
                 .HasIndex(c => new

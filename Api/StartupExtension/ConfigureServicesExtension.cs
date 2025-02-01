@@ -92,9 +92,9 @@ namespace Api.StartupExtension
                 .Replace("${DATABASE_PASSWORD}", databasePassword);
 
             services.AddDbContext<AuthDbContext>(options =>
-                options.UseSqlServer(authConnection));
+                options.UseNpgsql(authConnection));
             services.AddDbContext<AppDbContext>(options =>
-                options.UseSqlServer(appConnection));
+                options.UseNpgsql(appConnection));
 
             services.AddIdentity<AppUser, AppRole>(options =>
             {

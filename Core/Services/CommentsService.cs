@@ -110,13 +110,17 @@ namespace Core.Services
             {
                 throw new UnauthorizedException("You do not have permission to delete this comment.");
             }
-
+            
             Post post = await _postsRepository.GetPostByIdAsync(comment.PostId)
-                ?? throw new NotFoundException($"Post not found, ID: {comment.PostId}");
+            ?? throw new NotFoundException($"Post not found, ID: {comment.PostId}");
 
-            --post.CommentCount;
+            if (comment.ParentCommentId == null)
+            {
+                --post.CommentCount;
+            }
+
             post.Comments.Remove(comment);
-
+            
             if (!await _commentsRepository.IsSavedAsync())
             {
                 throw new DbSavingFailedException("Failed to save comment deletion to database.");
