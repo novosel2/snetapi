@@ -26,6 +26,14 @@ namespace Infrastructure.Repositories
                 .FirstOrDefaultAsync(f => f.FollowedId == userId && f.FollowerId == currentUserId || f.FollowedId == currentUserId && f.FollowerId == userId);
         }
 
+        // Get all follows by user id
+        public async Task<List<Follow>> GetAllFollowsByUserIdAsync(Guid userId)
+        {
+            return await _db.Follows
+                .Where(f => f.FollowerId == userId)
+                .ToListAsync();
+        }
+
         // Add follow to database
         public async Task AddFollow(Follow follow)
         {

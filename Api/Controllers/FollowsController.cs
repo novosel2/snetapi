@@ -17,6 +17,16 @@ namespace Api.Controllers
         }
 
 
+        // GET: api/follows/get-followed/31faddd4-c910-45c2-a68b-bf67b5abaa77
+        [HttpGet("get-followed/{userId}")]
+        public async Task<OkObjectResult> GetFollowedByUserId(Guid userId)
+        {
+            List<Guid> followedIds = await _followsService.GetFollowedByUserIdAsync(userId);
+
+            return Ok(followedIds);
+        }
+
+
         // POST: api/follows/add-follow/31faddd4-c910-45c2-a68b-bf67b5abaa77
 
         [HttpPost("add-follow/{userId}")]

@@ -23,6 +23,16 @@ namespace Core.Services
             _currentUserId = currentUserService.UserId.GetValueOrDefault();
         }
 
+        // Get all user ids that specified user follows
+        public async Task<List<Guid>> GetFollowedByUserIdAsync(Guid userId)
+        {
+            List<Follow> follows = await _followsRepository.GetAllFollowsByUserIdAsync(userId);
+
+            var followedIds = follows.Select(f => f.FollowedId).ToList();
+
+            return followedIds;
+        }
+
         // Adds a follow to the database
         public async Task AddFollowAsync(Guid followedId)
         {
