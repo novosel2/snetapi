@@ -15,7 +15,10 @@
       "launchUrl": "swagger",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development",
-        "JWT_SIGNING_KEY": "3ynr1H0uDGzFdWw6kYPW9UiEH4xSXm4QpF72mZvfDDYEzROUCPFNGL2jZveEvbfPt8DToWGXEQho3xn88qGR3A=="
+        "JWT_SIGNING_KEY": "3ynr1H0uDGzFdWw6kYPW9UiEH4xSXm4QpF72mZvfDDYEzROUCPFNGL2jZveEvbfPt8DToWGXEQho3xn88qGR3A==",
+        "DATABASE_SERVER": "localhost",
+        "DATABASE_USER": "postgres",
+        "DATABASE_PASSWORD": "pass"
       },
       "dotnetRunMessages": true,
       "applicationUrl": "https://localhost:8000"

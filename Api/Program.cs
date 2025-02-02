@@ -1,4 +1,3 @@
-using Api.Middleware;
 using Api.StartupExtension;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -20,8 +19,6 @@ app.UseHttpsRedirection();
 
 app.UseStaticFiles();
 app.UseCors("newPolicy");
-
-app.UseProfileCacheControl();
 
 app.UseRouting();
 
