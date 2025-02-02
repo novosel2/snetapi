@@ -17,7 +17,6 @@ app.UseSwaggerUI();
 app.UseHsts();
 app.UseHttpsRedirection();
 
-app.UseStaticFiles();
 app.UseCors("newPolicy");
 
 app.UseRouting();
