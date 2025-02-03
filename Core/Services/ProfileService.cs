@@ -190,6 +190,8 @@ namespace Core.Services
         {
             string pictureUrl = await _blobStorageService.UpdateProfilePictureByUserId(_currentUserId, image);
 
+            string pictureUrlTimeStamped = $"{pictureUrl}?{DateTimeOffset.UtcNow.ToUnixTimeSeconds()}";
+
             Profile profile = await GetProfileAsync(_currentUserId);
             Profile updatedProfile = new Profile()
             {
@@ -197,17 +199,14 @@ namespace Core.Services
                 FirstName = profile.FirstName,
                 LastName = profile.LastName,
                 Username = profile.Username,
-                PictureUrl = pictureUrl
+                PictureUrl = pictureUrlTimeStamped
             };
 
-            if (await _profileRepository.IsUrlDifferentAsync(_currentUserId, pictureUrl))
-            {
-                _profileRepository.UpdateProfile(profile, updatedProfile);
+            _profileRepository.UpdateProfile(profile, updatedProfile);
 
-                if (! await _profileRepository.IsSavedAsync())
-                {
-                    throw new DbSavingFailedException("Failed to save new Picture Url to database.");
-                }
+            if (! await _profileRepository.IsSavedAsync())
+            {
+                throw new DbSavingFailedException("Failed to save new Picture Url to database.");
             }
 
             return updatedProfile.ToProfileInformation();

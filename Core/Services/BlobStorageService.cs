@@ -1,5 +1,6 @@
 ﻿using Azure.Storage.Blobs;
 using Core.Exceptions;
+using Core.Helpers;
 using Core.IServices;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
@@ -33,16 +34,19 @@ namespace Core.Services
         {
             string extension = Path.GetExtension(image.FileName);
 
-            if (extension != ".jpg" && extension != ".jpeg" && extension != ".png")
+            if (extension != ".jpg" && extension != ".jpeg" && extension != ".png" && extension != ".webp")
             {
-                throw new UnsupportedFileTypeException("Unsupported file type for profile picture. (use .jpg .jpeg .png)");
+                throw new UnsupportedFileTypeException("Unsupported file type for profile picture. (use .jpg .jpeg .png .webp)");
             }
 
             string blobName = userId.ToString() + extension;
 
             var blobClient = new BlobClient(_connectionString, _profileContainer, blobName);
 
-            using var stream = image.OpenReadStream();
+            byte[] imageBytes = await ConvertToByteArrayAsync(image);
+            byte[] processedImage = ImageHelper.ProcessImage(imageBytes, width: 1024, height: 1024, quality: 80);
+
+            using var stream = new MemoryStream(processedImage);
             await blobClient.UploadAsync(stream, overwrite: true);
 
             return _baseUrl + _profileContainer + $"/{blobName}";
@@ -70,7 +74,10 @@ namespace Core.Services
 
             var blobClient = new BlobClient(_connectionString, _postsContainer, blobName);
 
-            using var stream = file.OpenReadStream();
+            byte[] imageBytes = await ConvertToByteArrayAsync(file);
+            byte[] processedImage = ImageHelper.ProcessImage(imageBytes, width: 1024, height: 1024, quality: 90);
+
+            using var stream = new MemoryStream(processedImage);
             await blobClient.UploadAsync(stream, overwrite: true);
 
             return _baseUrl + _postsContainer + $"/{blobName}";
@@ -84,6 +91,14 @@ namespace Core.Services
             var blobClient = new BlobClient(_connectionString, _postsContainer, blobName);
 
             await blobClient.DeleteIfExistsAsync();
+        }
+
+
+        private static async Task<byte[]> ConvertToByteArrayAsync(IFormFile file)
+        {
+            using var memoryStream = new MemoryStream();
+            await file.CopyToAsync(memoryStream);
+            return memoryStream.ToArray();
         }
     }
 }
