@@ -17,7 +17,7 @@ namespace Infrastructure.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "8.0.12")
+                .HasAnnotation("ProductVersion", "9.0.1")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
@@ -51,15 +51,15 @@ namespace Infrastructure.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("610dd1a6-c082-4bdc-9cba-4dd657b32f4e"),
-                            Name = "user",
-                            NormalizedName = "USER"
+                            Id = new Guid("90a2abac-0cd4-417b-b172-e8991b2cb152"),
+                            Name = "admin",
+                            NormalizedName = "ADMIN"
                         },
                         new
                         {
-                            Id = new Guid("d1ab970f-2e1f-460a-b245-754e5fbb9888"),
-                            Name = "admin",
-                            NormalizedName = "ADMIN"
+                            Id = new Guid("738d1e13-98fb-4683-95f6-4888c6383593"),
+                            Name = "user",
+                            NormalizedName = "USER"
                         });
                 });
 

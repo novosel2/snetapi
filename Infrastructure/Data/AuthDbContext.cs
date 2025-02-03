@@ -3,6 +3,7 @@ using Core.Data.Entities.Identity;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.Extensions.Configuration;
 
 namespace Infrastructure.Data
@@ -26,22 +27,19 @@ namespace Infrastructure.Data
             builder.Entity<AppUser>()
                 .HasIndex(u => u.Email);
 
-            List<AppRole> roles = new List<AppRole>();
-            List<string>? roleNames = _config.GetSection("IdentityRoles").Get<List<string>>();
-
-            if (roleNames != null)
+            // Static list of roles
+            List<AppRole> roles = new List<AppRole>
             {
-                foreach (var roleName in roleNames)
-                {
-                    roles.Add(new AppRole
-                    {
-                        Name = roleName,
-                        NormalizedName = roleName.ToUpper()
-                    });
-                }
-            }
+                new AppRole { Name = "admin", NormalizedName = "ADMIN" },
+                new AppRole { Name = "user", NormalizedName = "USER" }
+            };
 
             builder.Entity<AppRole>().HasData(roles);
+        }
+
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            optionsBuilder.ConfigureWarnings(warnings => warnings.Ignore(RelationalEventId.PendingModelChangesWarning));
         }
     }
 }

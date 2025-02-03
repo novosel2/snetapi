@@ -15,6 +15,12 @@ namespace Core.Data.Dto.ProfileDto
         [Required]
         public string LastName { get; set; } = string.Empty;
 
+        [MaxLength(100)]
+        public string? Description { get; set; }
+
+        [MaxLength(60)]
+        public string? Occupation { get; set; }
+
         public Profile ToProfile(Guid userId)
         {
             return new Profile()
@@ -22,7 +28,9 @@ namespace Core.Data.Dto.ProfileDto
                 Id = userId,
                 Username = Username,
                 FirstName = FirstName,
-                LastName = LastName
+                LastName = LastName,
+                Description = Description,
+                Occupation = Occupation
             };
         }
     }

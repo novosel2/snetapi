@@ -17,7 +17,7 @@ namespace Infrastructure.Migrations.AppDb
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "8.0.12")
+                .HasAnnotation("ProductVersion", "9.0.1")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
@@ -236,6 +236,9 @@ namespace Infrastructure.Migrations.AppDb
                         .HasColumnType("integer");
 
                     b.Property<string>("LastName")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Occupation")
                         .HasColumnType("text");
 
                     b.Property<string>("PictureUrl")

@@ -19,6 +19,8 @@ namespace Core.Data.Entities
 
         public string? FirstName { get; set; }
         public string? LastName { get; set; }
+        public string? Description { get; set; }
+        public string? Occupation { get; set; }
 
         [Required]
         public string PictureUrl { get; set; } = "https://snetblobstorage.blob.core.windows.net/snetprofiles/default.jpg";
@@ -31,8 +33,6 @@ namespace Core.Data.Entities
 
         public List<Follow> Followers { get; set; } = [];
         public List<Follow> Following { get; set; } = [];
-
-        public string? Description { get; set; } = string.Empty;
 
         [Required]
         public int FollowersCount { get; set; } = 0;
@@ -54,6 +54,8 @@ namespace Core.Data.Entities
                 Username = Username,
                 FirstName = FirstName,
                 LastName = LastName,
+                Description = Description,
+                Occupation = Occupation,
                 PictureUrl = PictureUrl,
                 Followers = FollowersCount,
                 Following = FollowingCount
@@ -69,6 +71,23 @@ namespace Core.Data.Entities
                 FirstName = FirstName,
                 LastName = LastName,
                 PictureUrl = PictureUrl
+            };
+        }
+
+        public Profile FillExistingInformation(Profile existingProfile)
+        {
+            return new Profile()
+            {
+                Id = Id,
+                Occupation = Occupation,
+                Description = Description,
+                FirstName = FirstName,
+                LastName = LastName,
+                Username = Username,
+                PreviousFollowers = existingProfile.FollowingCount,
+                FollowingCount = existingProfile.FollowingCount,
+                FollowersCount = existingProfile.FollowingCount,
+                PictureUrl = existingProfile.PictureUrl,
             };
         }
     }

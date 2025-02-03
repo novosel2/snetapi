@@ -175,7 +175,7 @@ namespace Core.Services
             }
 
             Profile updatedProfile = updateProfileDto.ToProfile(_currentUserId);
-            updatedProfile.PictureUrl = existingProfile.PictureUrl;
+            updatedProfile.FillExistingInformation(existingProfile);
 
             _profileRepository.UpdateProfile(existingProfile, updatedProfile);
 
