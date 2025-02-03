@@ -180,6 +180,10 @@ namespace Core.Services
             {
                 throw new DbSavingFailedException("Failed to save post deletion.");
             }
+
+            var deleteTasks = post.FileUrls.Select(fileUrl => _blobStorageService.DeletePostFile(fileUrl.Url));
+
+            await Task.WhenAll(deleteTasks);
         }
     }
 }
