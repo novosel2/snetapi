@@ -101,6 +101,15 @@ namespace Core.Services
             return profile.ToProfileResponse();
         }
 
+        // Get profile by username
+        public async Task<ProfileResponse> GetProfileByUsernameAsync(string username)
+        {
+            Profile? profile = await _profileRepository.GetProfileByUsernameAsync(username)
+                ?? throw new NotFoundException($"User not found, Username: {username}");
+
+            return profile.ToProfileResponse();
+        }
+
         // Get profile by id WITHOUT INCLUDING
         public async Task<ProfileResponse> GetProfileByIdAsync_NoInclude(Guid userId)
         {

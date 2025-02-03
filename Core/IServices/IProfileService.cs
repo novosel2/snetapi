@@ -56,6 +56,13 @@ namespace Core.IServices
         public Task<ProfileResponse> GetProfileByIdAsync(Guid profileId);
 
         /// <summary>
+        /// Get profile by username
+        /// </summary>
+        /// <param name="username">Username of profile you want to get</param>
+        /// <returns>User profile with specified username</returns>
+        public Task<ProfileResponse> GetProfileByUsernameAsync(string username);
+
+        /// <summary>
         /// Get profile by profile id
         /// </summary>
         /// <param name="profileId">Profile id</param>

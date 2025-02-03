@@ -40,6 +40,13 @@ namespace Core.IRepositories
         public Task<Profile?> GetProfileByIdAsync(Guid id);
 
         /// <summary>
+        /// Gets user profile by username
+        /// </summary>
+        /// <param name="username">Username of profile you want to get</param>
+        /// <returns>User profile if found</returns>
+        public Task<Profile?> GetProfileByUsernameAsync(string username);
+
+        /// <summary>
         /// Gets user profile by id
         /// </summary>
         /// <param name="id">Id we want to find</param>

@@ -73,6 +73,17 @@ namespace Api.Controllers
         }
 
 
+        // GET: /api/profiles/username/novosel2
+
+        [HttpGet("username/{username}")]
+        public async Task<OkObjectResult> GetProfileByUsername(string username)
+        {
+            ProfileResponse profileResponse = await _profileService.GetProfileByUsernameAsync(username);
+
+            return Ok(profileResponse);
+        }
+
+
         // GET: /api/profiles/friendship-status/31faddd4-c910-45c2-a68b-bf67b5abaa77
 
         [HttpGet("friendship-status/{userId}")]

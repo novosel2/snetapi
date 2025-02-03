@@ -43,11 +43,13 @@ namespace Core.Services
 
             var blobClient = new BlobClient(_connectionString, _profileContainer, blobName);
 
-            byte[] imageBytes = await ConvertToByteArrayAsync(image);
-            byte[] processedImage = ImageHelper.ProcessImage(imageBytes, width: 1024, height: 1024, quality: 80);
+            using var outputStream = new MemoryStream();
+            await using var inputStream = image.OpenReadStream();
 
-            using var stream = new MemoryStream(processedImage);
-            await blobClient.UploadAsync(stream, overwrite: true);
+            ImageHelper.ProcessImage(inputStream, outputStream, width: 1024, height: 1024, quality: 75);
+
+            outputStream.Seek(0, SeekOrigin.Begin);
+            await blobClient.UploadAsync(outputStream, overwrite: true);
 
             return _baseUrl + _profileContainer + $"/{blobName}";
         }
@@ -74,11 +76,13 @@ namespace Core.Services
 
             var blobClient = new BlobClient(_connectionString, _postsContainer, blobName);
 
-            byte[] imageBytes = await ConvertToByteArrayAsync(file);
-            byte[] processedImage = ImageHelper.ProcessImage(imageBytes, width: 1024, height: 1024, quality: 90);
+            using var outputStream = new MemoryStream();
+            await using var inputStream = file.OpenReadStream();
 
-            using var stream = new MemoryStream(processedImage);
-            await blobClient.UploadAsync(stream, overwrite: true);
+            ImageHelper.ProcessImage(inputStream, outputStream, width: 1024, height: 1024, quality: 75);
+
+            outputStream.Seek(0, SeekOrigin.Begin);
+            await blobClient.UploadAsync(outputStream, overwrite: true);
 
             return _baseUrl + _postsContainer + $"/{blobName}";
         }

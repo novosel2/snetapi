@@ -21,13 +21,14 @@ namespace Core.Services
                 Encoding.UTF8.GetBytes(Environment.GetEnvironmentVariable("JWT_SIGNING_KEY")!));
         }
 
-        public string CreateToken(AppUser appUser)
+        public string CreateToken(AppUser appUser, string role)
         {
             List<Claim> claims = new()
             {
                 new Claim(JwtRegisteredClaimNames.NameId, appUser.Id.ToString()),
                 new Claim(JwtRegisteredClaimNames.Name, appUser.Email),
-                new Claim(JwtRegisteredClaimNames.GivenName, appUser.UserName)
+                new Claim(JwtRegisteredClaimNames.GivenName, appUser.UserName),
+                new Claim(ClaimTypes.Role, role)
             };
 
             var credentials = new SigningCredentials(_signingKey, SecurityAlgorithms.HmacSha512);

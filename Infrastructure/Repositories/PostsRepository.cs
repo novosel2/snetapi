@@ -36,7 +36,7 @@ namespace Infrastructure.Repositories
         public async Task<List<Post>> GetYourFeedAsync(List<Guid> friends, List<Guid> followings, int loadPage, Guid currentUserId)
         {
             return await _db.Posts
-                .Where(p => followings.Contains(p.UserId) || p.UserId == currentUserId)
+                .Where(p => followings.Contains(p.UserId) || friends.Contains(p.UserId) || p.UserId == currentUserId)
                 .OrderByDescending(p => p.CreatedOn)
                 .Skip(loadPage * 20)
                 .Take(20)

@@ -8,8 +8,8 @@ namespace Core.IServices
         /// <summary>
         /// Creates a JWT for specified user
         /// </summary>
-        /// <param name="user">User that requested JWT</param>
+        /// <param name="appUser">User that requested JWT</param>
         /// <returns>Json Web Token as a string</returns>
-        public string CreateToken(AppUser appUser);
+        public string CreateToken(AppUser appUser, string role);
     }
 }

@@ -94,6 +94,12 @@ namespace Infrastructure.Repositories
                 .FirstOrDefaultAsync(up => up.Id == id);
         }
 
+        // Return profile from database based on username
+        public async Task<Profile?> GetProfileByUsernameAsync(string username)
+        {
+            return await _db.Profiles.SingleOrDefaultAsync(p => p.Username == username);
+        }
+
         // Return profile from database based on ID WITHOUT INCLUDING
         public async Task<Profile?> GetProfileByIdAsync_NoInclude(Guid id)
         {

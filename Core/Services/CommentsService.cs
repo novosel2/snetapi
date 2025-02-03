@@ -18,6 +18,7 @@ namespace Core.Services
         private readonly IProfileRepository _profileRepository;
         private readonly IPostsRepository _postsRepository;
         private readonly Guid _currentUserId;
+        private readonly string _role;
 
         public CommentsService(ICommentsRepository commentsRepository, IPostsRepository postsRepository,
             IProfileRepository profileRepository ,ICurrentUserService currentUserService)
@@ -26,6 +27,7 @@ namespace Core.Services
             _postsRepository = postsRepository;
             _profileRepository = profileRepository;
             _currentUserId = currentUserService.UserId ?? throw new UnauthorizedException("Unauthorized access.");
+            _role = currentUserService.Role ?? "user";
         }
 
         // Gets comments by post id
@@ -87,7 +89,7 @@ namespace Core.Services
 
             Comment updatedComment = updatedCommentRequest.ToComment(existingComment);
 
-            if (existingComment.UserId != _currentUserId)
+            if (existingComment.UserId != _currentUserId && _role != "admin")
             {
                 throw new UnauthorizedException("You do not have permission to update this comment.");
             }
@@ -106,7 +108,7 @@ namespace Core.Services
             Comment comment = await _commentsRepository.GetCommentByIdAsync(commentId)
                 ?? throw new NotFoundException($"Comment not found, Comment ID: {commentId}");
 
-            if (comment.UserId != _currentUserId && comment.Post!.UserId != _currentUserId)
+            if (comment.UserId != _currentUserId && comment.Post!.UserId != _currentUserId && _role != "admin")
             {
                 throw new UnauthorizedException("You do not have permission to delete this comment.");
             }

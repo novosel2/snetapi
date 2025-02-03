@@ -46,8 +46,10 @@ namespace Core.Services
                 Id = appUser.Id,
                 Username = appUser.UserName
             };
-            
-            string token = _tokenService.CreateToken(appUser);
+
+            string role = await _userManager.IsInRoleAsync(appUser, "admin") ? "admin" : "user";
+
+            string token = _tokenService.CreateToken(appUser, role);
 
             UserResponse userResponse = UserResponse.CreateUserResponse(profile, token);
 
@@ -74,7 +76,9 @@ namespace Core.Services
 
             Profile profile = (await _profileService.GetProfileByIdAsync_NoInclude(appUser.Id)).ToProfile();
 
-            string token = _tokenService.CreateToken(appUser);
+            string role = await _userManager.IsInRoleAsync(appUser, "admin") ? "admin" : "user";
+
+            string token = _tokenService.CreateToken(appUser, role);
 
             UserResponse userResponse = UserResponse.CreateUserResponse(profile, token);
 

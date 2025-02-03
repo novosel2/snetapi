@@ -11,9 +11,9 @@ namespace Core.Helpers
 {
     public static class ImageHelper
     {
-        public static byte[] ProcessImage(byte[] imageBytes, int width, int height, int quality = 85)
+        public static void ProcessImage(Stream inputStream, Stream outputStream, int width, int height, int quality = 85)
         {
-            using var image = Image.Load(imageBytes);
+            using var image = Image.Load(inputStream);
 
             if (image.Size.Width > width || image.Size.Height > height)
             {
@@ -24,10 +24,7 @@ namespace Core.Helpers
                 }));
             }
 
-            using var outputStream = new MemoryStream();
             image.Save(outputStream, new JpegEncoder { Quality = quality });
-
-            return outputStream.ToArray();
         }
     }
 }

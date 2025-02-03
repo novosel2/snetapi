@@ -19,6 +19,7 @@ namespace Core.Services
         private readonly IProfileRepository _profileRepository;
         private readonly IBlobStorageService _blobStorageService;
         private readonly Guid _currentUserId;
+        private readonly string _role;
 
         public PostsService(IPostsRepository postRepository, IProfileRepository profileRepository, 
             IBlobStorageService blobStorageService, ICurrentUserService currentUserService)
@@ -27,6 +28,7 @@ namespace Core.Services
             _profileRepository = profileRepository;
             _blobStorageService = blobStorageService;
             _currentUserId = currentUserService.UserId ?? throw new UnauthorizedException("Unauthorized access.");
+            _role = currentUserService.Role ?? "user";
         }
 
 
@@ -91,29 +93,19 @@ namespace Core.Services
 
             Post post = postAddRequest.ToPost(_currentUserId);
 
-            var uploadTasks = postAddRequest.Files.Select(async file =>
-            {
-                try
-                {
-                    string url = await _blobStorageService.UploadPostFile(file);
-                    return new FileUrl
-                    {
-                        PostId = post.Id,
-                        Url = url
-                    };
-                }
-                catch (Exception ex)
-                {
-                    // Log the error and decide whether to rethrow or handle it gracefully
-                    Console.WriteLine($"Failed to upload file: {ex.Message}");
-                    return null;
-                }
-            });
+            var postTask = _postRepository.AddPostAsync(post);
 
-            // Filter out null FileUrls caused by failed uploads
-            post.FileUrls = (await Task.WhenAll(uploadTasks)).Where(fileUrl => fileUrl != null).ToList()!;
+            var uploadTasks = postAddRequest.Files.Select(file => _blobStorageService.UploadPostFile(file));
+            post.FileUrls = (await Task.WhenAll(uploadTasks))
+                .Where(url => url != null)
+                .Select(url => new FileUrl
+                {
+                    PostId = post.Id,
+                    Url = url
+                })
+                .ToList();
 
-            await _postRepository.AddPostAsync(post);
+            await postTask;
 
             if (!await _postRepository.IsSavedAsync())
             {
@@ -131,7 +123,7 @@ namespace Core.Services
             Post existingPost = await _postRepository.GetPostByIdAsync(existingPostId)
                 ?? throw new NotFoundException($"Post not found, ID: {existingPostId}");
             
-            if (existingPost.UserId != _currentUserId)
+            if (existingPost.UserId != _currentUserId && _role != "admin")
             {
                 throw new ForbiddenException("You do not have permission to update this post.");
             }
@@ -169,7 +161,7 @@ namespace Core.Services
             Post post = await _postRepository.GetPostByIdAsync(postId)
                 ?? throw new NotFoundException($"Post not found, ID: {postId}");
 
-            if (post.UserId != _currentUserId)
+            if (post.UserId != _currentUserId && _role != "admin")
             {
                 throw new ForbiddenException("You do not have permission to delete this post.");
             }

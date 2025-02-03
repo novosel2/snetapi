@@ -173,8 +173,6 @@ namespace Api.StartupExtension
             services.AddScoped<IFriendshipsRepository, FriendshipsRepository>();
             services.AddScoped<IFollowsRepository, FollowsRepository>();
 
-            //services.Decorate<IPostsRepository, CachedPostsRepository>();
-
             services.AddSingleton<IBlobStorageService, BlobStorageService>();
 
             // Register hosted services for background tasks
