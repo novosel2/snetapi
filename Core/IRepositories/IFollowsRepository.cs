@@ -21,7 +21,14 @@ namespace Core.IRepositories
         /// </summary>
         /// <param name="userId">User id</param>
         /// <returns>List of follows where user id is the one following</returns>
-        public Task<List<Follow>> GetAllFollowsByUserIdAsync(Guid userId);
+        public Task<List<Follow>> GetAllFollowedByUserIdAsync(Guid userId);
+
+        /// <summary>
+        /// Get all follows where user id is followed
+        /// </summary>
+        /// <param name="userId">User id</param>
+        /// <returns>List of follows where user id is followed</returns>
+        public Task<List<Follow>> GetAllFollowingUserIdAsync(Guid userId);
 
         /// <summary>
         /// Adds a follow to the database

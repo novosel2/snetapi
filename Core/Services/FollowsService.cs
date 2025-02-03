@@ -26,7 +26,7 @@ namespace Core.Services
         // Get all user ids that specified user follows
         public async Task<List<Guid>> GetFollowedByUserIdAsync(Guid userId)
         {
-            List<Follow> follows = await _followsRepository.GetAllFollowsByUserIdAsync(userId);
+            List<Follow> follows = await _followsRepository.GetAllFollowedByUserIdAsync(userId);
 
             var followedIds = follows.Select(f => f.FollowedId).ToList();
 

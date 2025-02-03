@@ -26,11 +26,19 @@ namespace Infrastructure.Repositories
                 .FirstOrDefaultAsync(f => f.FollowedId == userId && f.FollowerId == currentUserId || f.FollowedId == currentUserId && f.FollowerId == userId);
         }
 
-        // Get all follows by user id
-        public async Task<List<Follow>> GetAllFollowsByUserIdAsync(Guid userId)
+        // Get all follows where by user id is following
+        public async Task<List<Follow>> GetAllFollowedByUserIdAsync(Guid userId)
         {
             return await _db.Follows
                 .Where(f => f.FollowerId == userId)
+                .ToListAsync();
+        }
+
+        // Get all follows where user id is followed
+        public async Task<List<Follow>> GetAllFollowingUserIdAsync(Guid userId)
+        {
+            return await _db.Follows
+                .Where(f => f.FollowedId == userId)
                 .ToListAsync();
         }
 

@@ -1,4 +1,5 @@
 ﻿using Core.Data.Dto.AccountDto;
+using Core.Exceptions;
 using Core.IServices;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;

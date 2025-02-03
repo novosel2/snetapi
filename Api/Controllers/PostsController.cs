@@ -30,7 +30,7 @@ namespace Api.Controllers
         }
 
 
-        // GET: /api/posts/your-feed?page=0
+        // GET: /api/posts/your-feed?page=1
 
         [HttpGet("your-feed")]
         public async Task<OkObjectResult> GetYourFeed(int page)

@@ -36,7 +36,7 @@ namespace Infrastructure.Repositories
         public async Task<List<Post>> GetYourFeedAsync(List<Guid> friends, List<Guid> followings, int loadPage, Guid currentUserId)
         {
             return await _db.Posts
-                .Where(p => friends.Contains(p.UserId) || followings.Contains(p.UserId) || p.UserId == currentUserId)
+                .Where(p => followings.Contains(p.UserId) || p.UserId == currentUserId)
                 .OrderByDescending(p => p.CreatedOn)
                 .Skip(loadPage * 20)
                 .Take(20)
@@ -61,7 +61,7 @@ namespace Infrastructure.Repositories
         // Get posts from database for popularity score update
         public async Task<List<Post>> GetPostsForScoreUpdateAsync(int batchStart = 0, int batchSize = 1000)
         {
-            var twoMonthsAgo = DateTime.Now.AddMonths(-2);
+            var twoMonthsAgo = DateTime.UtcNow.AddMonths(-2);
 
             return await _db.Posts
                 .Where(p => p.CreatedOn >= twoMonthsAgo)
@@ -102,7 +102,6 @@ namespace Infrastructure.Repositories
         public void DeletePost(Post post)
         {
             _db.Posts.Remove(post);
-
         }
 
         // Check if post with id exists

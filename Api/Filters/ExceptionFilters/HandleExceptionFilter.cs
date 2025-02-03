@@ -74,8 +74,8 @@ namespace Api.Filters.ExceptionFilters
                 return;
             }
 
-            context.Result = new ObjectResult(problemDetails);
             context.ExceptionHandled = true;
+            context.Result = new ObjectResult(problemDetails);
         }
 
         private ProblemDetails CreateProblemDetails(int statusCode, string title, string detail)

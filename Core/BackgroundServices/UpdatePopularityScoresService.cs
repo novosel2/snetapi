@@ -57,6 +57,8 @@ namespace Core.BackgroundServices
                     {
                         throw new DbSavingFailedException("Failed to save popularity score changes to database.");
                     }
+
+                    Console.WriteLine("Successfully updated popularity scores!");
                 }
                 catch (Exception ex)
                 {

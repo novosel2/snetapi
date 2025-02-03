@@ -48,7 +48,7 @@ namespace Core.Data.Entities
                 Likes = Reactions.Count(r => r.Reaction is ReactionType.Like),
                 Dislikes = Reactions.Count(r => r.Reaction is ReactionType.Dislike),
                 UserReacted = Reactions.Any(r => r.UserId == currentUserId) ? Reactions.First(r => r.UserId == currentUserId).Reaction : ReactionType.NoReaction,
-                Replies = CommentReplies.Select(cr => cr.ToCommentReply(currentUserId)).ToList()
+                Replies = CommentReplies.Select(cr => cr.ToCommentReply(currentUserId)).OrderBy(c => c.CreatedOn).ToList()
             };
         }
 
