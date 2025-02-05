@@ -1,12 +1,12 @@
 ﻿using Api.Filters.ExceptionFilters;
 using Core.BackgroundServices;
+using Core.Data.Dto.StoragePathOptions;
 using Core.Data.Entities.Identity;
 using Core.IRepositories;
 using Core.IServices;
 using Core.Services;
 using Infrastructure.Data;
 using Infrastructure.Repositories;
-using Infrastructure.Repositories.Cached;
 using Microsoft.ApplicationInsights.AspNetCore.Extensions;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Data.SqlClient;
@@ -146,7 +146,7 @@ namespace Api.StartupExtension
                     ValidateIssuerSigningKey = true,
                     IssuerSigningKey = new SymmetricSecurityKey(
                             Encoding.UTF8.GetBytes(Environment.GetEnvironmentVariable("JWT_SIGNING_KEY")!)),
-                    ValidateLifetime = true
+                    ValidateLifetime = false
                 };
             });
 
@@ -174,6 +174,9 @@ namespace Api.StartupExtension
             services.AddScoped<IFollowsRepository, FollowsRepository>();
 
             services.AddSingleton<IBlobStorageService, BlobStorageService>();
+
+            var apiRootPath = Directory.GetCurrentDirectory();
+            services.AddSingleton(new StoragePathOptions { ApiRootPath = apiRootPath });
 
             // Register hosted services for background tasks
             // These services will run in the background of the application.

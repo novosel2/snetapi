@@ -175,7 +175,10 @@ namespace Core.Services
             }
 
             Profile updatedProfile = updateProfileDto.ToProfile(_currentUserId);
-            updatedProfile.FillExistingInformation(existingProfile);
+            updatedProfile.PictureUrl = existingProfile.PictureUrl;
+            updatedProfile.FollowersCount = existingProfile.FollowersCount;
+            updatedProfile.FollowingCount = existingProfile.FollowingCount;
+            updatedProfile.PreviousFollowers = existingProfile.PreviousFollowers;
 
             _profileRepository.UpdateProfile(existingProfile, updatedProfile);
 

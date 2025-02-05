@@ -2,15 +2,15 @@ using Api.StartupExtension;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.ConfigureServices(builder.Configuration);  
+builder.Services.ConfigureServices(builder.Configuration);
 
 var app = builder.Build();
 
 if (app.Environment.IsDevelopment())
 {
-    app.UseDeveloperExceptionPage();
 }
 
+app.UseDeveloperExceptionPage();
 app.UseSwagger();
 app.UseSwaggerUI();
 

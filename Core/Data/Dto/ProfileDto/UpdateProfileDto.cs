@@ -10,9 +10,11 @@ namespace Core.Data.Dto.ProfileDto
         public string Username { get; set; } = string.Empty;
 
         [Required]
+        [MaxLength(20)]
         public string FirstName { get; set; } = string.Empty;
 
         [Required]
+        [MaxLength(20)]
         public string LastName { get; set; } = string.Empty;
 
         [MaxLength(100)]

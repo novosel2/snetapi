@@ -1,4 +1,5 @@
 ﻿using Azure.Storage.Blobs;
+using Core.Data.Dto.StoragePathOptions;
 using Core.Exceptions;
 using Core.Helpers;
 using Core.IServices;
@@ -14,19 +15,28 @@ namespace Core.Services
 {
     public class BlobStorageService : IBlobStorageService
     {
-        private readonly string _connectionString;
-        private readonly string _profileContainer;
-        private readonly string _postsContainer;
         private readonly string _baseUrl;
         private readonly string _defaultPicture;
+        private readonly string _connectionString;
+        
+        private readonly string _profileContainer;
+        private readonly string _postsContainer;
+        private readonly string _videosContainer;
 
-        public BlobStorageService(IConfiguration config)
+        private readonly string _rootPath;
+        private readonly string _videosPath;
+
+        public BlobStorageService(IConfiguration config, StoragePathOptions options)
         {
             _connectionString = config["AzureBlobStorage:ConnectionString"]!;
             _profileContainer = config["AzureBlobStorage:ProfileContainer"]!;
             _postsContainer = config["AzureBlobStorage:PostsContainer"]!;
+            _videosContainer = config["AzureBlobStorage:VideosContainer"]!;
             _baseUrl = config["AzureBlobStorage:BaseUrl"]!;
             _defaultPicture = _baseUrl + _profileContainer + "/default.jpg";
+            _rootPath = options.ApiRootPath;
+            _videosPath = Path.Combine(_rootPath, "wwwroot", "videos");
+            Directory.CreateDirectory(_videosPath);
         }
 
         // Updates a profile picture
@@ -39,6 +49,8 @@ namespace Core.Services
                 throw new UnsupportedFileTypeException("Unsupported file type for profile picture. (use .jpg .jpeg .png .webp)");
             }
 
+            extension = ".jpeg";
+
             string blobName = userId.ToString() + extension;
 
             var blobClient = new BlobClient(_connectionString, _profileContainer, blobName);
@@ -46,7 +58,7 @@ namespace Core.Services
             using var outputStream = new MemoryStream();
             await using var inputStream = image.OpenReadStream();
 
-            ImageHelper.ProcessImage(inputStream, outputStream, width: 1024, height: 1024, quality: 75);
+            FileHelper.ProcessImage(inputStream, outputStream, width: 1024, height: 1024, quality: 75);
 
             outputStream.Seek(0, SeekOrigin.Begin);
             await blobClient.UploadAsync(outputStream, overwrite: true);
@@ -72,19 +84,58 @@ namespace Core.Services
         // Add post file to blob storage
         public async Task<string> UploadPostFile(IFormFile file)
         {
-            string blobName = Guid.NewGuid().ToString() + Path.GetExtension(file.FileName);
+            string extension = Path.GetExtension(file.FileName);
+            string blobName = Guid.NewGuid().ToString();
 
-            var blobClient = new BlobClient(_connectionString, _postsContainer, blobName);
+            var supportedImageTypes = new HashSet<string> { ".jpeg", ".jpg", ".png", ".webp" };
+            var supportedVideoTypes = new HashSet<string> { ".mp4", ".mov", ".avi", ".wvm", ".avchd", ".webm", ".flv" };
 
+            if (supportedImageTypes.Contains(extension))
+            {
+                blobName += ".jpeg";
+                extension = ".jpeg";
+            }
+            else if (supportedVideoTypes.Contains(extension))
+            {
+                blobName += ".mp4";
+                extension = ".mp4";
+            }
+            else
+            {
+                throw new UnsupportedFileTypeException($"Unsupported file type for post. (use .jpg .jpeg .png .webp, .mp4 .mov .avi .wvm .avchd .web .flv). [{extension}]");
+            }
+
+            BlobClient blobClient;
             using var outputStream = new MemoryStream();
             await using var inputStream = file.OpenReadStream();
 
-            ImageHelper.ProcessImage(inputStream, outputStream, width: 1024, height: 1024, quality: 75);
+            if (extension == ".jpeg")
+            {
+                blobClient = new BlobClient(_connectionString, _postsContainer, blobName);
+                FileHelper.ProcessImage(inputStream, outputStream, width: 1024, height: 1024, quality: 75);
+            }
+            else if (extension == ".mp4")
+            {
+                blobClient = new BlobClient(_connectionString, _videosContainer, blobName);
+
+                Console.WriteLine(_videosPath);
+
+                string videoPath = await SaveTempVideoAsync(file);
+                    
+                await FileHelper.ProcessVideoAsync(_rootPath, videoPath, outputStream);
+            }
+            else
+            {
+                throw new BadRequestException("Bad request for file post");
+            }
 
             outputStream.Seek(0, SeekOrigin.Begin);
             await blobClient.UploadAsync(outputStream, overwrite: true);
 
-            return _baseUrl + _postsContainer + $"/{blobName}";
+            if (extension == ".jpeg")
+                return _baseUrl + _postsContainer + $"/{blobName}";
+
+            return _baseUrl + _videosContainer + $"/{blobName}";
         }
 
         // Delete post file from blob storage
@@ -98,11 +149,17 @@ namespace Core.Services
         }
 
 
-        private static async Task<byte[]> ConvertToByteArrayAsync(IFormFile file)
+        private async Task<string> SaveTempVideoAsync(IFormFile file)
         {
-            using var memoryStream = new MemoryStream();
-            await file.CopyToAsync(memoryStream);
-            return memoryStream.ToArray();
+            var fileName = file.FileName;
+            var filePath = Path.Combine(_videosPath, fileName);
+
+            using (var fileStream = new FileStream(filePath, FileMode.Create))
+            {
+                await file.CopyToAsync(fileStream);
+            }
+
+            return filePath;
         }
     }
 }

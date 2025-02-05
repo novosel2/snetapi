@@ -63,6 +63,16 @@ namespace Api.Controllers
         }
 
 
+        // GET: /api/posts/username/novosel2?page=2
+
+        [HttpGet("username/{username}")]
+        public async Task<OkObjectResult> GetPostsByUsername(string username, int page)
+        {
+            List<PostResponse> postResponses = await _postsService.GetPostsByUsernameAsync(username, page);
+
+            return Ok(postResponses);
+        }
+
         // POST: /api/posts/add-post
 
         [HttpPost("add-post")]
@@ -77,11 +87,11 @@ namespace Api.Controllers
         // PUT: /api/posts/update-post/31faddd4-c910-45c2-a68b-bf67b5abaa77
 
         [HttpPut("update-post/{postId}")]
-        public async Task<OkResult> UpdatePost(Guid postId, [FromForm]PostUpdateRequest postUpdateRequest)
+        public async Task<OkObjectResult> UpdatePost(Guid postId, [FromForm]PostUpdateRequest postUpdateRequest)
         {
-            await _postsService.UpdatePostAsync(postId, postUpdateRequest);
+            PostResponse postResponse = await _postsService.UpdatePostAsync(postId, postUpdateRequest);
 
-            return Ok();
+            return Ok(postResponse);
         }
 
 

@@ -38,8 +38,7 @@ namespace Core.Services
                 Subject = new ClaimsIdentity(claims),
                 SigningCredentials = credentials,
                 Issuer = _config["JWT:Issuer"],
-                Audience = _config["JWT:Audience"],
-                Expires = DateTime.UtcNow + TimeSpan.FromHours(double.Parse(_config["JWT:Expiration"]!))
+                Audience = _config["JWT:Audience"]
             };
 
             var tokenHandler = new JwtSecurityTokenHandler();

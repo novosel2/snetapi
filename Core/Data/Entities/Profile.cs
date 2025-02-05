@@ -17,9 +17,14 @@ namespace Core.Data.Entities
         [Required]
         public string Username { get; set; } = string.Empty;
 
+        [MaxLength(20)]
         public string? FirstName { get; set; }
+        [MaxLength(20)]
         public string? LastName { get; set; }
+
+        [MaxLength(100)]
         public string? Description { get; set; }
+        [MaxLength(60)]
         public string? Occupation { get; set; }
 
         [Required]

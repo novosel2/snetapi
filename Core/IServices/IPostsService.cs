@@ -38,6 +38,13 @@ namespace Core.IServices
         public Task<List<PostResponse>> GetPostsByUserIdAsync(Guid userId, int loadPage);
 
         /// <summary>
+        /// Get all posts by username
+        /// </summary>
+        /// <param name="username">Username of user</param>
+        /// <returns>List of user responses</returns>
+        public Task<List<PostResponse>> GetPostsByUsernameAsync(string username, int loadPage);
+
+        /// <summary>
         /// Adds post to database
         /// </summary>
         /// <param name="postAddRequest">Post we want to add</param>
@@ -47,7 +54,7 @@ namespace Core.IServices
         /// Updates post with new information
         /// </summary>
         /// <param name="existingPostId">Existing post id we want to update</param>
-        public Task UpdatePostAsync(Guid existingPostId, PostUpdateRequest updatedPost);
+        public Task<PostResponse> UpdatePostAsync(Guid existingPostId, PostUpdateRequest updatedPost);
 
         /// <summary>
         /// Deletes a post from database

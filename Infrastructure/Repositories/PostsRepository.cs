@@ -85,6 +85,20 @@ namespace Infrastructure.Repositories
                 .ToListAsync();
         }
 
+        // Get posts by username
+        public async Task<List<Post>> GetPostsByUsernameAsync(string username, int loadPage)
+        {
+            return await _db.Posts
+                .Include(p => p.User)
+                .Where(p => p.User!.Username == username)
+                .OrderByDescending(p => p.CreatedOn)
+                .Skip(loadPage * 20)
+                .Take(20)
+                .Include(p => p.Reactions)
+                .Include(p => p.FileUrls)
+                .ToListAsync();
+        }
+
         // Add post to database
         public async Task AddPostAsync(Post post)
         {
@@ -102,6 +116,17 @@ namespace Infrastructure.Repositories
         public void DeletePost(Post post)
         {
             _db.Posts.Remove(post);
+        }
+
+
+        public void DeletePostFileUrls(Guid postId)
+        {
+            _db.FileUrls.RemoveRange(_db.FileUrls.Where(p => p.PostId == postId));
+        }   
+
+        public async Task UpdatePostFileUrls(List<FileUrl> fileUrls)
+        {
+            await _db.FileUrls.AddRangeAsync(fileUrls);
         }
 
         // Check if post with id exists

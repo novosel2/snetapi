@@ -72,13 +72,27 @@ namespace Core.Services
 
             return postResponse;
         }
-
+            
         // Get all posts by user id
         public async Task<List<PostResponse>> GetPostsByUserIdAsync(Guid userId, int loadPage)
         {
             List<Post> posts = await _postRepository.GetPostsByUserIdAsync(userId, loadPage);
 
             var postResponses = posts.Select(p => p.ToPostResponse(_currentUserId)).ToList();
+
+            return postResponses;
+        }
+
+        // Get all posts by username
+        public async Task<List<PostResponse>> GetPostsByUsernameAsync(string username, int loadPage)
+        {
+            List<Post> posts = await _postRepository.GetPostsByUsernameAsync(username, loadPage);
+
+            List<PostResponse> postResponses = [];
+            if (posts.Count > 0)
+            {
+                postResponses = posts.Select(p => p.ToPostResponse(posts[0].UserId)).ToList();
+            }
 
             return postResponses;
         }
@@ -93,7 +107,6 @@ namespace Core.Services
 
             Post post = postAddRequest.ToPost(_currentUserId);
 
-            var postTask = _postRepository.AddPostAsync(post);
 
             var uploadTasks = postAddRequest.Files.Select(file => _blobStorageService.UploadPostFile(file));
             post.FileUrls = (await Task.WhenAll(uploadTasks))
@@ -105,7 +118,7 @@ namespace Core.Services
                 })
                 .ToList();
 
-            await postTask;
+            await _postRepository.AddPostAsync(post);
 
             if (!await _postRepository.IsSavedAsync())
             {
@@ -118,7 +131,7 @@ namespace Core.Services
         }
 
         // Update existing post with updated information
-        public async Task UpdatePostAsync(Guid existingPostId, PostUpdateRequest postUpdateRequest)
+        public async Task<PostResponse> UpdatePostAsync(Guid existingPostId, PostUpdateRequest postUpdateRequest)
         {
             Post existingPost = await _postRepository.GetPostByIdAsync(existingPostId)
                 ?? throw new NotFoundException($"Post not found, ID: {existingPostId}");
@@ -145,14 +158,29 @@ namespace Core.Services
                 };
             });
 
-            updatedPost.FileUrls = (await Task.WhenAll(uploadTasks)).ToList();
+            List<FileUrl> fileUrls = (await Task.WhenAll(uploadTasks)).ToList();
+
+            var profile = await _profileRepository.GetProfileByIdAsync_NoInclude(_currentUserId);
+            updatedPost.User = profile;
 
             _postRepository.UpdatePost(existingPost, updatedPost);
+
+            if (existingPost.FileUrls.Count > 0)
+            {
+                _postRepository.DeletePostFileUrls(existingPostId);
+            }
+
+            if (fileUrls.Count > 0)
+            {
+                await _postRepository.UpdatePostFileUrls(fileUrls);
+            }
 
             if (!await _postRepository.IsSavedAsync())
             {
                 throw new DbSavingFailedException("Failed to save updated post.");
             }
+
+            return updatedPost.ToPostResponse(_currentUserId);
         }
 
         // Delete post from database

@@ -44,6 +44,13 @@ namespace Core.IRepositories
         public Task<List<Post>> GetPostsByUserIdAsync(Guid userId, int loadPage);
 
         /// <summary>
+        /// Get all posts by username
+        /// </summary>
+        /// <param name="username">Username you want to get</param>
+        /// <returns>List of posts</returns>
+        public Task<List<Post>> GetPostsByUsernameAsync(string username, int loadPage);
+
+        /// <summary>
         /// Adds post to database
         /// </summary>
         /// <param name="post">Post we want to add</param>
@@ -61,6 +68,18 @@ namespace Core.IRepositories
         /// </summary>
         /// <param name="post">Post we want to delete</param>
         public void DeletePost(Post post);
+
+        /// <summary>
+        /// Delete all post file urls
+        /// </summary>
+        /// <param name="postId">Post ID</param>
+        public void DeletePostFileUrls(Guid postId);
+
+        /// <summary>
+        /// Update post file urls
+        /// </summary>
+        /// <param name="fileUrls">New file urls</param>
+        public Task UpdatePostFileUrls(List<FileUrl> fileUrls);
 
         /// <summary>
         /// Checks if post with specified id exists
