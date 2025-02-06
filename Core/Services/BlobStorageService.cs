@@ -1,5 +1,4 @@
 ﻿using Azure.Storage.Blobs;
-using Core.Data.Dto.StoragePathOptions;
 using Core.Exceptions;
 using Core.Helpers;
 using Core.IServices;
@@ -23,10 +22,7 @@ namespace Core.Services
         private readonly string _postsContainer;
         private readonly string _videosContainer;
 
-        private readonly string _rootPath;
-        private readonly string _videosPath;
-
-        public BlobStorageService(IConfiguration config, StoragePathOptions options)
+        public BlobStorageService(IConfiguration config)
         {
             _connectionString = config["AzureBlobStorage:ConnectionString"]!;
             _profileContainer = config["AzureBlobStorage:ProfileContainer"]!;
@@ -34,9 +30,6 @@ namespace Core.Services
             _videosContainer = config["AzureBlobStorage:VideosContainer"]!;
             _baseUrl = config["AzureBlobStorage:BaseUrl"]!;
             _defaultPicture = _baseUrl + _profileContainer + "/default.jpg";
-            _rootPath = options.ApiRootPath;
-            _videosPath = Path.Combine(_rootPath, "wwwroot", "videos");
-            Directory.CreateDirectory(_videosPath);
         }
 
         // Updates a profile picture
@@ -48,8 +41,6 @@ namespace Core.Services
             {
                 throw new UnsupportedFileTypeException("Unsupported file type for profile picture. (use .jpg .jpeg .png .webp)");
             }
-
-            extension = ".jpeg";
 
             string blobName = userId.ToString() + extension;
 
@@ -114,16 +105,6 @@ namespace Core.Services
                 blobClient = new BlobClient(_connectionString, _postsContainer, blobName);
                 FileHelper.ProcessImage(inputStream, outputStream, width: 1024, height: 1024, quality: 75);
             }
-            else if (extension == ".mp4")
-            {
-                blobClient = new BlobClient(_connectionString, _videosContainer, blobName);
-
-                Console.WriteLine(_videosPath);
-
-                string videoPath = await SaveTempVideoAsync(file);
-                    
-                await FileHelper.ProcessVideoAsync(_rootPath, videoPath, outputStream);
-            }
             else
             {
                 throw new BadRequestException("Bad request for file post");
@@ -146,20 +127,6 @@ namespace Core.Services
             var blobClient = new BlobClient(_connectionString, _postsContainer, blobName);
 
             await blobClient.DeleteIfExistsAsync();
-        }
-
-
-        private async Task<string> SaveTempVideoAsync(IFormFile file)
-        {
-            var fileName = file.FileName;
-            var filePath = Path.Combine(_videosPath, fileName);
-
-            using (var fileStream = new FileStream(filePath, FileMode.Create))
-            {
-                await file.CopyToAsync(fileStream);
-            }
-
-            return filePath;
         }
     }
 }

@@ -119,13 +119,9 @@ namespace Infrastructure.Repositories
         }
 
 
-        public void DeletePostFileUrls(Guid postId)
-        {
-            _db.FileUrls.RemoveRange(_db.FileUrls.Where(p => p.PostId == postId));
-        }   
-
         public async Task UpdatePostFileUrls(List<FileUrl> fileUrls)
         {
+            _db.FileUrls.RemoveRange(_db.FileUrls.Where(f => f.PostId == fileUrls[0].PostId));
             await _db.FileUrls.AddRangeAsync(fileUrls);
         }
 

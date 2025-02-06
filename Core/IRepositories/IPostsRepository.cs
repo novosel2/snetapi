@@ -70,12 +70,6 @@ namespace Core.IRepositories
         public void DeletePost(Post post);
 
         /// <summary>
-        /// Delete all post file urls
-        /// </summary>
-        /// <param name="postId">Post ID</param>
-        public void DeletePostFileUrls(Guid postId);
-
-        /// <summary>
         /// Update post file urls
         /// </summary>
         /// <param name="fileUrls">New file urls</param>

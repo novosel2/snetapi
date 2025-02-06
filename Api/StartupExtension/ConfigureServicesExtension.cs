@@ -1,6 +1,5 @@
 ﻿using Api.Filters.ExceptionFilters;
 using Core.BackgroundServices;
-using Core.Data.Dto.StoragePathOptions;
 using Core.Data.Entities.Identity;
 using Core.IRepositories;
 using Core.IServices;
@@ -174,9 +173,6 @@ namespace Api.StartupExtension
             services.AddScoped<IFollowsRepository, FollowsRepository>();
 
             services.AddSingleton<IBlobStorageService, BlobStorageService>();
-
-            var apiRootPath = Directory.GetCurrentDirectory();
-            services.AddSingleton(new StoragePathOptions { ApiRootPath = apiRootPath });
 
             // Register hosted services for background tasks
             // These services will run in the background of the application.

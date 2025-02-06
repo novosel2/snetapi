@@ -159,21 +159,15 @@ namespace Core.Services
             });
 
             List<FileUrl> fileUrls = (await Task.WhenAll(uploadTasks)).ToList();
+            updatedPost.FileUrls = fileUrls;
 
             var profile = await _profileRepository.GetProfileByIdAsync_NoInclude(_currentUserId);
             updatedPost.User = profile;
 
             _postRepository.UpdatePost(existingPost, updatedPost);
 
-            if (existingPost.FileUrls.Count > 0)
-            {
-                _postRepository.DeletePostFileUrls(existingPostId);
-            }
-
             if (fileUrls.Count > 0)
-            {
                 await _postRepository.UpdatePostFileUrls(fileUrls);
-            }
 
             if (!await _postRepository.IsSavedAsync())
             {
