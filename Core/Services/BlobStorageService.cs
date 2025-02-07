@@ -24,7 +24,7 @@ namespace Core.Services
 
         public BlobStorageService(IConfiguration config)
         {
-            _connectionString = config["AzureBlobStorage:ConnectionString"]!;
+            _connectionString = config["BlobConnection"]!;
             _profileContainer = config["AzureBlobStorage:ProfileContainer"]!;
             _postsContainer = config["AzureBlobStorage:PostsContainer"]!;
             _videosContainer = config["AzureBlobStorage:VideosContainer"]!;

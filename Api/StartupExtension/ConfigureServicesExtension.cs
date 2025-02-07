@@ -8,12 +8,9 @@ using Infrastructure.Data;
 using Infrastructure.Repositories;
 using Microsoft.ApplicationInsights.AspNetCore.Extensions;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
-using StackExchange.Profiling;
-using StackExchange.Profiling.Data;
 using System.Text;
 
 namespace Api.StartupExtension
