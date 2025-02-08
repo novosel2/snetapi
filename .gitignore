@@ -282,3 +282,5 @@ __pycache__/
 # End of https://www.toptal.com/developers/gitignore/api/aspnetcore
 
 /Api/Properties/launchSettings.json
+/Api/ffmpeg.exe
+/Api/ffprobe.exe

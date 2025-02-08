@@ -24,5 +24,10 @@ namespace Core.Helpers
 
             image.Save(outputStream, new JpegEncoder { Quality = quality });
         }
+
+        public static void ProcessVideo()
+        {
+
+        }
     }
 }
