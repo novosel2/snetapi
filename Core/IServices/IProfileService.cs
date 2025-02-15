@@ -49,6 +49,14 @@ namespace Core.IServices
         public Task<List<Guid>> GetFollowSuggestionsAsync(int limit);
 
         /// <summary>
+        /// Gets a requested number of mutual friends between current user and specified user
+        /// </summary>
+        /// <param name="userId">User ID</param>
+        /// <param name="limit">Limit of returned friends</param>
+        /// <returns>List of ids</returns>
+        public Task<List<Guid>> GetMutualFriendsIdsAsync(Guid userId, int limit);
+
+        /// <summary>
         /// Get profile by profile id
         /// </summary>
         /// <param name="profileId">Profile id</param>

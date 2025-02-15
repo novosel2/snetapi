@@ -92,6 +92,37 @@ namespace Core.Services
                 .ToList();
         }
 
+        public async Task<List<Guid>> GetYouMightKnowAsync(int limit)
+        {
+            throw new NotImplementedException();
+        }
+
+        // Gets a requested number of mutual friends between current user and the specified user
+        public async Task<List<Guid>> GetMutualFriendsIdsAsync(Guid userId, int limit)
+        {
+            // get current user
+            Profile currentUser = await _profileRepository.GetProfileByIdAsync(_currentUserId)
+                ?? throw new UnauthorizedException("Unauthorized access");
+            // get user by userid
+            Profile user = await _profileRepository.GetProfileByIdAsync(userId)
+                ?? throw new NotFoundException($"User not found, User ID: {userId}");
+            // check mutual friendships
+            List<Guid> currentUserFriends = [.. currentUser.FriendsAsReceiver
+                .Select(f => f.SenderId).ToList(), .. currentUser.FriendsAsSender.Select(f => f.ReceiverId).ToList()];
+
+            List<Guid> userFriends = [.. user.FriendsAsReceiver
+                .Select(f => f.SenderId).ToList(), .. currentUser.FriendsAsSender.Select(f => f.ReceiverId).ToList()];
+
+            var mutual = currentUserFriends.Intersect(userFriends).ToList();
+
+            Random rnd = new Random();
+            mutual = mutual.OrderBy(_ => rnd.Next())
+                .Take(limit)
+                .ToList();
+
+            return mutual;
+        }
+
         // Get profile by id
         public async Task<ProfileResponse> GetProfileByIdAsync(Guid userId)
         {

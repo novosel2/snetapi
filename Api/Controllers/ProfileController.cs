@@ -62,6 +62,25 @@ namespace Api.Controllers
         }
 
 
+        // GET: /api/profiles/might-know
+        [HttpGet("might-know")]
+        public async Task<OkObjectResult> GetYouMightKnow(int limit = 4)
+        {
+            throw new NotImplementedException();
+        }
+
+
+        // GET: /api/profiles/mutual/31faddd4-c910-45c2-a68b-bf67b5abaa77
+        [HttpGet("mutual/{userId}")]
+        public async Task<OkObjectResult> GetMutualFriends(Guid userId, int limit = 4)
+        {
+            List<Guid> mutualIds = await _profileService.GetMutualFriendsIds(userId, limit);
+            List<ProfileInformationDto> mutualFriends = await _profileService.GetProfilesBatchAsync(mutualIds);
+
+            return Ok(mutualFriends);
+        }
+
+
         // GET: /api/profiles/31faddd4-c910-45c2-a68b-bf67b5abaa77
 
         [HttpGet("{userId}")]
