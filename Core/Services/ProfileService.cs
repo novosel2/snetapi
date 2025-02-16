@@ -92,11 +92,6 @@ namespace Core.Services
                 .ToList();
         }
 
-        public async Task<List<Guid>> GetYouMightKnowAsync(int limit)
-        {
-            throw new NotImplementedException();
-        }
-
         // Gets a requested number of mutual friends between current user and the specified user
         public async Task<List<Guid>> GetMutualFriendsIdsAsync(Guid userId, int limit)
         {
