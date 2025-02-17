@@ -24,6 +24,8 @@ namespace Infrastructure.Repositories
         public async Task<List<Profile>> GetProfilesAsync()
         {
             return await _db.Profiles
+                .Include(p => p.Followers)
+                .Include(p => p.Following)
                 .ToListAsync();
         }
 

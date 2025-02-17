@@ -8,7 +8,6 @@ using Core.IServices;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore.Storage;
-using System.Security.Claims;
 
 namespace Core.Services
 {
@@ -30,7 +29,7 @@ namespace Core.Services
             _currentUserId = currentUserService.UserId.GetValueOrDefault();
         }
 
-        
+
         // Get all profiles
         public async Task<List<ProfileInformationDto>> GetProfilesAsync()
         {
@@ -106,7 +105,7 @@ namespace Core.Services
                 .Select(f => f.SenderId).ToList(), .. currentUser.FriendsAsSender.Select(f => f.ReceiverId).ToList()];
 
             List<Guid> userFriends = [.. user.FriendsAsReceiver
-                .Select(f => f.SenderId).ToList(), .. currentUser.FriendsAsSender.Select(f => f.ReceiverId).ToList()];
+                .Select(f => f.SenderId).ToList(), .. user.FriendsAsSender.Select(f => f.ReceiverId).ToList()];
 
             var mutual = currentUserFriends.Intersect(userFriends).ToList();
 
