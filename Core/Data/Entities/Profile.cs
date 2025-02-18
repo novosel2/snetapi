@@ -22,7 +22,7 @@ namespace Core.Data.Entities
         [MaxLength(20)]
         public string? LastName { get; set; }
 
-        [MaxLength(100)]
+        [MaxLength(200)]
         public string? Description { get; set; }
         [MaxLength(60)]
         public string? Occupation { get; set; }

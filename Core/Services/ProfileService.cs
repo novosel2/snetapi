@@ -236,6 +236,10 @@ namespace Core.Services
                 FirstName = profile.FirstName,
                 LastName = profile.LastName,
                 Username = profile.Username,
+                Description = profile.Description,
+                Occupation = profile.Occupation,
+                FollowersCount = profile.FollowersCount,
+                FollowingCount = profile.FollowingCount,
                 PictureUrl = pictureUrlTimeStamped
             };
 

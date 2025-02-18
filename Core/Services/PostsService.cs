@@ -91,7 +91,7 @@ namespace Core.Services
             List<PostResponse> postResponses = [];
             if (posts.Count > 0)
             {
-                postResponses = posts.Select(p => p.ToPostResponse(posts[0].UserId)).ToList();
+                postResponses = posts.Select(p => p.ToPostResponse(_currentUserId)).ToList();
             }
 
             return postResponses;

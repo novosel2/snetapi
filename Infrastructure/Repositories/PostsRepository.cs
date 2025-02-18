@@ -89,11 +89,11 @@ namespace Infrastructure.Repositories
         public async Task<List<Post>> GetPostsByUsernameAsync(string username, int loadPage)
         {
             return await _db.Posts
-                .Include(p => p.User)
                 .Where(p => p.User!.Username == username)
                 .OrderByDescending(p => p.CreatedOn)
                 .Skip(loadPage * 20)
                 .Take(20)
+                .Include(p => p.User)
                 .Include(p => p.Reactions)
                 .Include(p => p.FileUrls)
                 .ToListAsync();
