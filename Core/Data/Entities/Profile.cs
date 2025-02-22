@@ -62,8 +62,8 @@ namespace Core.Data.Entities
                 Description = Description,
                 Occupation = Occupation,
                 PictureUrl = PictureUrl,
-                Followers = FollowersCount,
-                Following = FollowingCount
+                Followers = Followers.Count(),
+                Following = Following.Count()
             };
         }
 

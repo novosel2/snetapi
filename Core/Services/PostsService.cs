@@ -141,6 +141,15 @@ namespace Core.Services
                 throw new ForbiddenException("You do not have permission to update this post.");
             }
 
+            foreach (var file in postUpdateRequest.Files)
+            {
+                // Ensure it's an image based on MIME type
+                if (!file.ContentType.StartsWith("image/"))
+                {
+                    throw new BadRequestException("Uploaded file is not a valid image.");
+                }
+            }
+
             Post updatedPost = postUpdateRequest.ToPost(existingPostId, _currentUserId);
             updatedPost.CommentCount = existingPost.CommentCount;
 

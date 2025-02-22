@@ -99,7 +99,10 @@ namespace Infrastructure.Repositories
         // Return profile from database based on username
         public async Task<Profile?> GetProfileByUsernameAsync(string username)
         {
-            return await _db.Profiles.SingleOrDefaultAsync(p => p.Username == username);
+            return await _db.Profiles
+                .Include(p => p.Followers)
+                .Include(p => p.Following)
+                .SingleOrDefaultAsync(p => p.Username == username);
         }
 
         // Return profile from database based on ID WITHOUT INCLUDING
