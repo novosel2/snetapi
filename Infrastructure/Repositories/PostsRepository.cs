@@ -23,10 +23,7 @@ namespace Infrastructure.Repositories
         // Get popular feed, most popular posts in last 3 days
         public async Task<List<Post>> GetPopularFeedAsync(int loadPage)
         {
-            DateTime startDate = DateTime.SpecifyKind(DateTime.ParseExact("20/02/2025", "dd/MM/yyyy", CultureInfo.InvariantCulture), DateTimeKind.Utc);
-
             return await _db.Posts
-                .Where(p => p.CreatedOn >= startDate)
                 .OrderByDescending(p => p.PopularityScore)
                 .Skip(loadPage * 20)
                 .Take(20)
@@ -39,12 +36,9 @@ namespace Infrastructure.Repositories
         // Get your feed, posts made by your friends or those you follow
         public async Task<List<Post>> GetYourFeedAsync(List<Guid> friends, List<Guid> followings, int loadPage, Guid currentUserId)
         {
-            DateTime startDate = DateTime.SpecifyKind(DateTime.ParseExact("20/02/2025", "dd/MM/yyyy", CultureInfo.InvariantCulture), DateTimeKind.Utc);
-
             return await _db.Posts
                 .Where(p => followings.Contains(p.UserId) || friends.Contains(p.UserId) || p.UserId == currentUserId)
                 .OrderByDescending(p => p.CreatedOn)
-                .Where(p => p.CreatedOn >= startDate)
                 .Skip(loadPage * 20)
                 .Take(20)
                 .Include(p => p.User)
@@ -95,10 +89,8 @@ namespace Infrastructure.Repositories
         // Get posts by username
         public async Task<List<Post>> GetPostsByUsernameAsync(string username, int loadPage)
         {
-            DateTime startDate = DateTime.SpecifyKind(DateTime.ParseExact("20/02/2025", "dd/MM/yyyy", CultureInfo.InvariantCulture), DateTimeKind.Utc);
-
             return await _db.Posts
-                .Where(p => p.User!.Username == username && p.CreatedOn >= startDate)
+                .Where(p => p.User!.Username == username)
                 .OrderByDescending(p => p.CreatedOn)
                 .Skip(loadPage * 20)
                 .Take(20)
