@@ -4,6 +4,8 @@ using SixLabors.ImageSharp.Processing;
 using FFMpegCore.Pipes;
 using FFMpegCore;
 using Xabe.FFmpeg;
+using Microsoft.AspNetCore.Components.Forms;
+using System.Diagnostics;
 
 namespace Core.Helpers
 {
@@ -23,11 +25,6 @@ namespace Core.Helpers
             }
 
             image.Save(outputStream, new JpegEncoder { Quality = quality });
-        }
-
-        public static void ProcessVideo()
-        {
-
         }
     }
 }

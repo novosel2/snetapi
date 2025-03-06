@@ -76,20 +76,21 @@ namespace Core.Services
         public async Task<string> UploadPostFile(IFormFile file)
         {
             string extension = Path.GetExtension(file.FileName);
+            string type;
             string blobName = Guid.NewGuid().ToString();
 
-            var supportedImageTypes = new HashSet<string> { ".jpeg", ".jpg", ".png", ".webp" };
+            var supportedImageTypes = new HashSet<string> { ".jpeg", ".jpg", ".png", ".webp", ".jfif" };
             var supportedVideoTypes = new HashSet<string> { ".mp4", ".mov", ".avi", ".wvm", ".avchd", ".webm", ".flv" };
 
             if (supportedImageTypes.Contains(extension))
             {
                 blobName += ".jpeg";
-                extension = ".jpeg";
+                type = "image";
             }
             else if (supportedVideoTypes.Contains(extension))
             {
                 blobName += ".mp4";
-                extension = ".mp4";
+                type = "video";
             }
             else
             {
@@ -100,10 +101,15 @@ namespace Core.Services
             using var outputStream = new MemoryStream();
             await using var inputStream = file.OpenReadStream();
 
-            if (extension == ".jpeg")
+            if (type == "image")
             {
                 blobClient = new BlobClient(_connectionString, _postsContainer, blobName);
                 FileHelper.ProcessImage(inputStream, outputStream, width: 1024, height: 1024, quality: 75);
+            }
+            else if (type == "video")
+            {
+                blobClient = new BlobClient(_connectionString, _videosContainer, blobName);
+                inputStream.CopyTo(outputStream);
             }
             else
             {
