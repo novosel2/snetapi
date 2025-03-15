@@ -148,6 +148,12 @@ namespace Core.Services
                 {
                     throw new BadRequestException("Uploaded file is not a valid image.");
                 }
+
+                // Ensure it's a video based on MIME type
+                else if (!file.ContentType.StartsWith("video/"))
+                {
+                    throw new BadRequestException("Uploaded file is not a valid video.");
+                }
             }
 
             Post updatedPost = postUpdateRequest.ToPost(existingPostId, _currentUserId);
