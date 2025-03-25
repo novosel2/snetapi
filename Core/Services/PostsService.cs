@@ -107,7 +107,6 @@ namespace Core.Services
 
             Post post = postAddRequest.ToPost(_currentUserId);
 
-
             var uploadTasks = postAddRequest.Files.Select(file => _blobStorageService.UploadPostFile(file));
             post.FileUrls = (await Task.WhenAll(uploadTasks))
                 .Where(url => url != null)
@@ -144,15 +143,9 @@ namespace Core.Services
             foreach (var file in postUpdateRequest.Files)
             {
                 // Ensure it's an image based on MIME type
-                if (!file.ContentType.StartsWith("image/"))
+                if (!file.ContentType.StartsWith("image/") && !file.ContentType.StartsWith("video/"))
                 {
-                    throw new BadRequestException("Uploaded file is not a valid image.");
-                }
-
-                // Ensure it's a video based on MIME type
-                else if (!file.ContentType.StartsWith("video/"))
-                {
-                    throw new BadRequestException("Uploaded file is not a valid video.");
+                    throw new BadRequestException("Uploaded file is not a valid image or video.");
                 }
             }
 

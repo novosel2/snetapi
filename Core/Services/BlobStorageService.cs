@@ -119,7 +119,7 @@ namespace Core.Services
             outputStream.Seek(0, SeekOrigin.Begin);
             await blobClient.UploadAsync(outputStream, overwrite: true);
 
-            if (extension == ".jpeg")
+            if (type == "image")
                 return _baseUrl + _postsContainer + $"/{blobName}";
 
             return _baseUrl + _videosContainer + $"/{blobName}";
