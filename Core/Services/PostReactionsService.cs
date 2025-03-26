@@ -46,7 +46,7 @@ namespace Core.Services
                 throw new DbSavingFailedException("Failed to save added post reaction to database.");
             }
         }
-
+         
         public async Task UpdatePostReaction(Guid postId)
         {
             if (!await _postsRepository.PostExistsAsync(postId))
