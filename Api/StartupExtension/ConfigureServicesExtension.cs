@@ -82,13 +82,6 @@ namespace Api.StartupExtension
                 });
             });
 
-            // Register a Distributed Redis Cache
-            // This enables caching for the application
-            services.AddStackExchangeRedisCache(setup =>
-            {
-                setup.Configuration = config.GetConnectionString("RedisConnection");
-            });
-
             // Get database information from Environment Variables for dynamic configuration
             var databaseServer = Environment.GetEnvironmentVariable("DATABASE_SERVER") ?? "localhost";
             var databaseUser = Environment.GetEnvironmentVariable("DATABASE_USER") ?? "defaultUser";

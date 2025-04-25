@@ -44,7 +44,7 @@ namespace Api.Controllers
 
         // POST: /api/friends/friend-requests/send
 
-        [HttpPost("friend-requests/send/{recieverUserId}")]
+        [HttpPost("friend-requests/send/{receiverUserId}")]
         public async Task<OkResult> SendFriendRequest(Guid recieverUserId)
         {
             await _friendRequestsService.AddFriendRequestAsync(recieverUserId);

@@ -94,7 +94,8 @@ namespace Core.Services
             }
             else
             {
-                throw new UnsupportedFileTypeException($"Unsupported file type for post. (use .jpg .jpeg .png .webp, .mp4 .mov .avi .wvm .avchd .web .flv). [{extension}]");
+                throw new UnsupportedFileTypeException($"Unsupported file type for post. (use .jpg " +
+                    $".jpeg .png .webp, .mp4 .mov .avi .wvm .avchd .web .flv). [{extension}]");
             }
 
             BlobClient blobClient;
