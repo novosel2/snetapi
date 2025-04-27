@@ -23,13 +23,12 @@ namespace Core.Services
 
         public string CreateToken(AppUser appUser, string role)
         {
-            List<Claim> claims = new()
-            {
+            List<Claim> claims = [
                 new Claim(JwtRegisteredClaimNames.NameId, appUser.Id.ToString()),
                 new Claim(JwtRegisteredClaimNames.Name, appUser.Email),
                 new Claim(JwtRegisteredClaimNames.GivenName, appUser.UserName),
                 new Claim(ClaimTypes.Role, role)
-            };
+            ];
 
             var credentials = new SigningCredentials(_signingKey, SecurityAlgorithms.HmacSha512);
 

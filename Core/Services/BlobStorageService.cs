@@ -4,11 +4,6 @@ using Core.Helpers;
 using Core.IServices;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Core.Services
 {
@@ -72,7 +67,7 @@ namespace Core.Services
             return _defaultPicture;
         }
 
-        // Add post file to blob storage
+        // Add a post file to blob storage
         public async Task<string> UploadPostFile(IFormFile file)
         {
             string extension = Path.GetExtension(file.FileName);
@@ -102,19 +97,18 @@ namespace Core.Services
             using var outputStream = new MemoryStream();
             await using var inputStream = file.OpenReadStream();
 
-            if (type == "image")
+            switch (type)
             {
-                blobClient = new BlobClient(_connectionString, _postsContainer, blobName);
-                FileHelper.ProcessImage(inputStream, outputStream, width: 1024, height: 1024, quality: 75);
-            }
-            else if (type == "video")
-            {
-                blobClient = new BlobClient(_connectionString, _videosContainer, blobName);
-                inputStream.CopyTo(outputStream);
-            }
-            else
-            {
-                throw new BadRequestException("Bad request for file post");
+                case "image":
+                    blobClient = new BlobClient(_connectionString, _postsContainer, blobName);
+                    FileHelper.ProcessImage(inputStream, outputStream, width: 1024, height: 1024, quality: 75);
+                    break;
+                case "video":
+                    blobClient = new BlobClient(_connectionString, _videosContainer, blobName);
+                    inputStream.CopyTo(outputStream);
+                    break;
+                default:
+                    throw new BadRequestException("Bad request for file post");
             }
 
             outputStream.Seek(0, SeekOrigin.Begin);
@@ -126,10 +120,10 @@ namespace Core.Services
             return _baseUrl + _videosContainer + $"/{blobName}";
         }
 
-        // Delete post file from blob storage
+        // Delete a post file from blob storage
         public async Task DeletePostFile(string url)
         {
-            string blobName = url.Substring(url.LastIndexOf("/") + 1);
+            string blobName = url.Substring(url.LastIndexOf('/') + 1);
 
             var blobClient = new BlobClient(_connectionString, _postsContainer, blobName);
 
